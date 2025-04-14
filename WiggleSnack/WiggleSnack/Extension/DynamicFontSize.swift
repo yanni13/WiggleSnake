@@ -9,7 +9,7 @@ import SwiftUI
 
 extension Font {
     static func H1BoldFont() -> Font {
-        return Font.custom("Pretendard-Bold", size: 24)
+        return Font.custom("Pretendard-Bold", size: 20)
     }
 
     static func H1SemiboldFont() -> Font {
@@ -40,7 +40,7 @@ extension Font {
         return Font.custom("Pretendard-Medium", size: 12)
     }
 
-    static func B1SemiboldeFont() -> Font {
+    static func B1SemiboldFont() -> Font {
         return Font.custom("Pretendard-SemiBold", size: 14) // 0
     }
 
@@ -54,13 +54,5 @@ extension Font {
 
     static func B2RegularFont() -> Font {
         return Font.custom("Pretendard-Regular", size: 11)
-    }
-
-    static func B3MediumFont() -> Font {
-        return Font.custom("Pretendard-Medium", size: 9)
-    }
-
-    static func B4MediumFont() -> Font {
-        return Font.custom("Pretendard-Medium", size: 8)
     }
 }

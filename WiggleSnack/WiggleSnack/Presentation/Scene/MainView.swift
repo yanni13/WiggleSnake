@@ -11,20 +11,18 @@ struct MainView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Text("반가워요!\n오늘의 작은 도전, 시작해볼까요?")
-                    .font(.H2SemiboldFont())
+                Text("좋아요, \n오늘도 나만의 기록을 쌓아볼까요?")
+                    .font(.H1BoldFont())
                     .foregroundColor(.gray05)
                     .lineSpacing(3)
-                    .border(.black)
                     .padding(.horizontal, 19)
                     .padding(.top, 80)
                 
                 Spacer().frame(height: 12)
                 
-                Text("지렁이의 하루는 당신의 도전으로 시작돼요 ☀️")
+                Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
                     .font(.H5MediumFont())
                     .foregroundColor(.gray05)
-                    .border(.black)
                     .padding(.horizontal, 19)
 
                 // 지렁이 칸
