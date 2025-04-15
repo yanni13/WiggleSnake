@@ -41,7 +41,6 @@ struct MainView: View {
                     .font(.H1BoldFont())
                     .foregroundColor(.gray05)
                     .lineSpacing(3)
-                    .padding(.horizontal, 19)
                     .padding(.top, 34)
                 
                 Spacer().frame(height: 12)
@@ -49,14 +48,14 @@ struct MainView: View {
                 Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
                     .font(.H5MediumFont())
                     .foregroundColor(.gray05)
-                    .padding(.horizontal, 19)
                 
                 // 지렁이 칸
                 Spacer()
                 
-                
+
                 CustomBottomBtn(action: {
-                    
+                    path.append(NavigationRoute.challengeList)
+
                 }, label: "챌린지 리스트")
                 .buttonStyle(.plain)
                 .padding(.bottom, 34)
@@ -70,6 +69,8 @@ struct MainView: View {
                 switch route {
                 case .addChallenge:
                     AddChallengeView()
+                case .challengeList:
+                    ChallengeListView()
                 }
                 
                 
