@@ -35,6 +35,10 @@ extension Font {
     static func H5MediumFont() -> Font {
         return Font.custom("Pretendard-Medium", size: 15) // 0
     }
+    
+    static func H5SemiboldFont() -> Font {
+        return Font.custom("Pretendard-Semibold", size: 15) // 0
+    }
 
     static func H6MediumFont() -> Font {
         return Font.custom("Pretendard-Medium", size: 13) // 0
