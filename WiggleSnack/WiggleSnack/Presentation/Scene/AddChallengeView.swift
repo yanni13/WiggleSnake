@@ -10,6 +10,8 @@ import SwiftUI
 struct AddChallengeView: View {
     @State private var title: String = ""
     @State private var memo: String = ""
+    /// 카테고리 바텀시트를 보여주도록 하는 상태변수
+    @State private var isActiveCategory: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,6 +23,7 @@ struct AddChallengeView: View {
             categoryComponent()
             
             Spacer().frame(height: 25)
+            
             setDateComponent()
             
             Spacer().frame(height: 34)
@@ -33,13 +36,13 @@ struct AddChallengeView: View {
                 
             }, label: "확인")
             .padding(.bottom, 34)
-            
-            
+
         }
         .padding(.horizontal, 20)
         .navigationTitle("도전 일기 추가하기")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
+        .edgesIgnoringSafeArea(.bottom)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {
@@ -50,6 +53,15 @@ struct AddChallengeView: View {
                 }.offset(x: -10)
             }
         }
+        .sheet(isPresented: $isActiveCategory) {
+            Spacer().frame(height: 56)
+
+            CategoryListView()
+                .presentationDetents([.large, .large])
+                .presentationDragIndicator(.visible)
+                .presentationCornerRadius(20)
+        }
+        
     }
     
     @ViewBuilder
@@ -98,7 +110,7 @@ struct AddChallengeView: View {
             Spacer()
             
             Button(action: {
-                
+                isActiveCategory = true
             }, label: {
                 Text("카테고리를 선택해주세요")
                     .font(.H6MediumFont())
@@ -142,7 +154,7 @@ struct AddChallengeView: View {
     private func memoComponent() -> some View {
         VStack(alignment: .leading) {
             InquiryText(title: "다짐 및 도전 목표", isRequired: true)
-         
+            
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 6)
                     .foregroundColor(.gray01)
@@ -154,8 +166,8 @@ struct AddChallengeView: View {
                     .zIndex(0)
                     .colorMultiply(Color(.gray01))
                     .cornerRadius(6)
-                    
-
+                
+                
                 if memo.isEmpty {
                     Text("")
                         .font(.B1MediumFont())
@@ -168,11 +180,6 @@ struct AddChallengeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .frame(maxWidth: .infinity, maxHeight: 150)
             .clipShape(RoundedRectangle(cornerRadius: 4))
-
-
-
-//            .border(.black)
-            
         }
     }
 }

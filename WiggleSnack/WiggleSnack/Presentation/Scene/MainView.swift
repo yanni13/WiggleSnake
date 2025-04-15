@@ -9,25 +9,23 @@ import SwiftUI
 
 struct MainView: View {
     /// 도전기록 추가 뷰로 이동
-    @State private var isNavigateToAddView: Bool = false
     @State private var path = NavigationPath()
-
+    
+//    let navigationRoute: NavigationRoute = .addChallenge
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack(alignment: .leading) {
                 
                 // 상단 버튼
                 HStack(spacing: 0) {
                     Spacer()
                     
-                    Button(action: {
-                        isNavigateToAddView = true
-                    }, label: {
+                    NavigationLink(value: NavigationRoute.addChallenge) {
                         Image("icon_plus")
                             .resizable()
                             .frame(width: 44, height: 44)
-                    })
+                    }
                     
                     
                     Button(action: {
@@ -61,17 +59,20 @@ struct MainView: View {
                     
                 }, label: "챌린지 리스트")
                 .buttonStyle(.plain)
+                .padding(.bottom, 34)
                 
                 
             }
             .padding(.horizontal, 20)
+            .edgesIgnoringSafeArea(.bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                 case .addChallenge:
                     AddChallengeView()
-                    
                 }
+                
+                
             }
             
             

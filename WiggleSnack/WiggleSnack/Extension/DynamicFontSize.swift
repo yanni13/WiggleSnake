@@ -23,6 +23,10 @@ extension Font {
     static func H3SemiboldFont() -> Font {
         return Font.custom("Pretendard-SemiBold", size: 18) 
     }
+    
+    static func H3MediumFont() -> Font {
+        return Font.custom("Pretendard-Medium", size: 18)
+    }
 
     static func H4MediumFont() -> Font {
         return Font.custom("Pretendard-Medium", size: 17) // 0
