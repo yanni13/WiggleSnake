@@ -52,9 +52,10 @@ struct MainView: View {
                 // 지렁이 칸
                 Spacer()
                 
-                
+
                 CustomBottomBtn(action: {
-                    
+                    path.append(NavigationRoute.challengeList)
+
                 }, label: "챌린지 리스트")
                 .buttonStyle(.plain)
                 .padding(.bottom, 34)
@@ -68,6 +69,8 @@ struct MainView: View {
                 switch route {
                 case .addChallenge:
                     AddChallengeView()
+                case .challengeList:
+                    ChallengeListView()
                 }
                 
                 

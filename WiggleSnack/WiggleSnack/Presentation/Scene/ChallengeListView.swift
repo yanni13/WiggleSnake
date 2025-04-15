@@ -18,26 +18,32 @@ struct ChallengeListView: View {
     let textLabel = ["진행중", "완료"]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Picker("", selection: $selectedTab) {
-                ForEach(textLabel, id: \.self) {
-                    Text($0)
+        ScrollView {
+            VStack(alignment: .leading) {
+                Spacer().frame(height: 23)
+                
+                Picker("", selection: $selectedTab) {
+                    ForEach(textLabel, id: \.self) {
+                        Text($0)
+                    }
                 }
-            }
-            .pickerStyle(.segmented)
-            .background(.white)
-            
-            Spacer().frame(height: 38)
-            
-            Text("자기계발")
-                .font(.H5SemiboldFont())
-                .foregroundColor(.gray05)
-                .padding(.leading, 9)
-            
-            Spacer().frame(height: 13)
-            
-            ForEach($items) { $item in
-                ListComponent(item: $item)
+                .pickerStyle(.segmented)
+                .background(.white)
+                
+                Spacer().frame(height: 38)
+                
+                Text("자기계발")
+                    .font(.H3SemiboldFont())
+                    .foregroundColor(.gray05)
+                    .padding(.leading, 9)
+                
+                Spacer().frame(height: 13)
+                
+                ForEach($items) { $item in
+                    ListComponent(item: $item)
+                }
+                
+                Spacer()
             }
         }
         .navigationTitle(Text("나의 도전 일지"))
@@ -45,6 +51,16 @@ struct ChallengeListView: View {
         .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.bottom)
         .padding(.horizontal, 20)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    NavigationBackBtn()
+                        .padding(.leading, 5)
+                        .contentShape(Rectangle())
+                    
+                }.offset(x: -10)
+            }
+        }
     }
 }
 

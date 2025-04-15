@@ -7,4 +7,5 @@
 
 enum NavigationRoute: Hashable {
     case addChallenge
+    case challengeList
 }
