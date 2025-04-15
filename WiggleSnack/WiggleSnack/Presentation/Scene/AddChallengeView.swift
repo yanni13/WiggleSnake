@@ -10,56 +10,76 @@ import SwiftUI
 struct AddChallengeView: View {
     @State private var title: String = ""
     @State private var memo: String = ""
+    @State private var date: Date = Date()
+    @State private var startDate: Date = Date()
+    @State private var endDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
     @State private var isActiveCategory: Bool = false
+    /// datepicker을 보여주도록 하는 변수
+    @State private var isActivePicker: Bool = false
+    
+    
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Spacer().frame(height: 56)
-            titleComponent()
-            
-            Spacer().frame(height: 33)
-            
-            categoryComponent()
-            
-            Spacer().frame(height: 25)
-            
-            setDateComponent()
-            
-            Spacer().frame(height: 34)
-            
-            memoComponent()
-            
-            Spacer()
-            
-            CustomBottomBtn(action: {
+        ZStack {
+            VStack(alignment: .leading) {
+                Spacer().frame(height: 56)
+                titleComponent()
                 
-            }, label: "확인")
-            .padding(.bottom, 34)
-
-        }
-        .padding(.horizontal, 20)
-        .navigationTitle("도전 일기 추가하기")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .edgesIgnoringSafeArea(.bottom)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    NavigationBackBtn()
-                        .padding(.leading, 5)
-                        .contentShape(Rectangle())
+                Spacer().frame(height: 33)
+                
+                categoryComponent()
+                
+                Spacer().frame(height: 25)
+                
+                setDateComponent()
+                
+                Spacer().frame(height: 33)
+                
+                memoComponent()
+                
+                Spacer()
+                
+                CustomBottomBtn(action: {
                     
-                }.offset(x: -10)
+                }, label: "확인")
+                .padding(.bottom, 34)
+                
+                
+                
             }
-        }
-        .sheet(isPresented: $isActiveCategory) {
-            Spacer().frame(height: 56)
-
-            CategoryListView()
-                .presentationDetents([.large, .large])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(20)
+            .padding(.horizontal, 20)
+            .navigationTitle("도전 일기 추가하기")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .edgesIgnoringSafeArea(.bottom)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        NavigationBackBtn()
+                            .padding(.leading, 5)
+                            .contentShape(Rectangle())
+                        
+                    }.offset(x: -10)
+                }
+            }
+            .sheet(isPresented: $isActiveCategory) {
+                Spacer().frame(height: 56)
+                
+                CategoryListView()
+                    .presentationDetents([.large, .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(20)
+            }
+            .sheet(isPresented: $isActivePicker) {
+                DatePicker("", selection: $date, displayedComponents: .date)
+                    .presentationDetents([.medium, .medium])
+                    .datePickerStyle(.graphical)
+                    .edgesIgnoringSafeArea(.bottom)
+                    .padding(.horizontal, 20)
+                    .presentationCornerRadius(20)
+                
+            }
         }
         
     }
@@ -128,32 +148,55 @@ struct AddChallengeView: View {
     
     @ViewBuilder
     private func setDateComponent() -> some View {
-        HStack {
-            InquiryText(title: "기간", isRequired: true)
-            
-            Spacer()
-            
-            Button(action: {
+        VStack(spacing: 25) {
+            HStack {
+                InquiryText(title: "시작일", isRequired: true)
                 
-            }, label: {
-                Text("시작일 ~ 종료일")
-                    .font(.H6MediumFont())
-                    .foregroundColor(.gray03)
+                Spacer()
                 
+                Button(action: {
+                    isActivePicker = true
+                }, label: {
+                    
+                    Text("")
+                        .font(.H6MediumFont())
+                        .foregroundColor(.gray03)
+                    
+                    Image("icon_arrow_front_small")
+                        .resizable()
+                        .frame(width: 27, height: 27)
+                })
+                .buttonStyle(.plain)
                 
-                Image("icon_arrow_front_small")
-                    .resizable()
-                    .frame(width: 27, height: 27)
-            })
-            .buttonStyle(.plain)
+            }
             
+            HStack {
+                InquiryText(title: "종료일", isRequired: true)
+                
+                Spacer()
+                
+                Button(action: {
+                    isActivePicker = true
+                }, label: {
+                    Text("")
+                        .font(.H6MediumFont())
+                        .foregroundColor(.gray03)
+                    
+                    Image("icon_arrow_front_small")
+                        .resizable()
+                        .frame(width: 27, height: 27)
+                })
+                .buttonStyle(.plain)
+                
+            }
         }
+        
     }
     
     @ViewBuilder
     private func memoComponent() -> some View {
         VStack(alignment: .leading) {
-            InquiryText(title: "다짐 및 도전 목표", isRequired: true)
+            InquiryText(title: "다짐 및 도전 목표", isRequired: false)
             
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 6)
@@ -182,6 +225,8 @@ struct AddChallengeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 4))
         }
     }
+    
+    
 }
 
 #Preview {
