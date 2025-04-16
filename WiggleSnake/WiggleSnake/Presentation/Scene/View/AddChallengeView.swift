@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct AddChallengeView: View {
-    @State private var title: String = ""
-    @State private var memo: String = ""
+    @Environment(\.managedObjectContext) private var viewContext
+    @StateObject private var viewModel = AddChallengeViewModel()
+    @State private var selectedCategory: Int = 0
     @State private var date: Date = Date()
-    @State private var startDate: Date = Date()
-    @State private var endDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
     @State private var isActiveCategory: Bool = false
     /// datepicker을 보여주도록 하는 변수
@@ -23,7 +23,7 @@ struct AddChallengeView: View {
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {
-                Spacer().frame(height: 56)
+                Spacer().frame(height: 40)
                 titleComponent()
                 
                 Spacer().frame(height: 33)
@@ -40,13 +40,28 @@ struct AddChallengeView: View {
                 
                 Spacer()
                 
+                
                 CustomBottomBtn(action: {
-                    
+                    // 필수 입력값이 다 들어갔다면 -> 저장
+                    viewModel.formValid { success in
+                        if success {
+                            viewModel.saveChallenge(context: viewContext)
+                            print("✅ [AddChallengeView] 도전일기 저장완료")
+                            
+                        } else {
+                            viewModel.isValidForm = true
+                            print("❌ [AddChallengeView] 도전일기 저장 실패")
+                        }
+                        
+                    }
+
                 }, label: "확인")
                 .padding(.bottom, 34)
                 
-                
-                
+                //TODO: 폼이 유효하지 않을 때 alert 혹은 팝업
+//                if viewModel.isValidForm {
+//
+//                }
             }
             .padding(.horizontal, 20)
             .navigationTitle("도전 일기 추가하기")
@@ -66,7 +81,7 @@ struct AddChallengeView: View {
             .sheet(isPresented: $isActiveCategory) {
                 Spacer().frame(height: 56)
                 
-                CategoryListView()
+                CategoryListView(selectedIndex: $selectedCategory)
                     .presentationDetents([.large, .large])
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(20)
@@ -96,27 +111,22 @@ struct AddChallengeView: View {
                     .cornerRadius(4)
                 
                 
-                if title.isEmpty {
+                if viewModel.title.isEmpty {
                     Text("청소하기, 하루 5분 명상하기...")
                         .font(.H5MediumFont())
                         .foregroundColor(.gray02)
                         .padding(.leading, 17)
                 }
                 
-                TextField(text: $title, label: {
-                    
-                })
-                .offset(x: 17)
-                .onChange(of: title) { newValue in
-                    if newValue.count > 23 {
-                        title = String(newValue.prefix(23)) // 글자 수 제한
+                TextField("", text: $viewModel.title)
+                    .offset(x: 17)
+                    .onChange(of: viewModel.title) { newValue in
+                        if newValue.count > 23 {
+                            viewModel.title = String(newValue.prefix(23)) // 글자 수 제한
+                        }
                     }
-                }
-                .font(.H5MediumFont())
-                .foregroundColor(.gray05)
-                
-                
-                
+                    .font(.H5MediumFont())
+                    .foregroundColor(.gray05)
             }
             
         }
@@ -132,7 +142,9 @@ struct AddChallengeView: View {
             Button(action: {
                 isActiveCategory = true
             }, label: {
+//                Text(viewModel.selectedIndex >= 0 && viewModel.selectedIndex < viewModel.text.count ? "\(text[viewModel.selectedIndex])" : "카테고리를 선택해주세요")
                 Text("카테고리를 선택해주세요")
+
                     .font(.H6MediumFont())
                     .foregroundColor(.gray03)
                 
@@ -203,7 +215,7 @@ struct AddChallengeView: View {
                     .foregroundColor(.gray01)
                     .frame(maxWidth: .infinity, maxHeight: 150)
                 
-                TextEditor(text: $memo)
+                TextEditor(text: $viewModel.memo)
                     .font(.H5MediumFont())
                     .padding(.horizontal, 10)
                     .zIndex(0)
@@ -211,7 +223,7 @@ struct AddChallengeView: View {
                     .cornerRadius(6)
                 
                 
-                if memo.isEmpty {
+                if viewModel.memo.isEmpty {
                     Text("")
                         .font(.B1MediumFont())
                         .padding(.leading, 14)

@@ -15,6 +15,7 @@
 		D846DDD42DACD53900B9E375 /* WiggleSnake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiggleSnake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D87CF6AD2DAF5ACA00271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D87CF7042DAF5BB900271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
+		D87CF75D2DAF5D5B00271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -76,6 +77,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D87CF75E2DAF5D5B00271EF4 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,6 +135,10 @@
 			productRefGroup = D846DDD52DACD53900B9E375 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = D87CF75E2DAF5D5B00271EF4 /* Products */;
+					ProjectRef = D87CF75D2DAF5D5B00271EF4 /* WiggleSnake.xcodeproj */;
+				},
 				{
 					ProductGroup = D87CF7052DAF5BB900271EF4 /* Products */;
 					ProjectRef = D87CF7042DAF5BB900271EF4 /* WiggleSnake.xcodeproj */;
