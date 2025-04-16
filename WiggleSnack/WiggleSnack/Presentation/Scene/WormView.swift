@@ -19,7 +19,6 @@ struct WormView: View {
         }
         
         .clipped() // 화면 밖으로 나가는 부분 클리핑
-        .border(.black)
     }
 }
 
@@ -74,12 +73,11 @@ struct ImprovedWormCanvas: View {
                 segmentPath.move(to: startPoint)
                 segmentPath.addLine(to: endPoint)
                 
-                context.stroke(segmentPath, with: .color(.mint), style: StrokeStyle(lineWidth: thickness, lineCap: .round, lineJoin: .round))
+                context.stroke(segmentPath, with: .color(.mint01), style: StrokeStyle(lineWidth: thickness, lineCap: .round, lineJoin: .round))
             }
             
             // 머리 부분 그리기
             if let head = segments.first {
-                context.fill(Circle().path(in: CGRect(x: head.x - 5, y: head.y - 5, width: 10, height: 10)), with: .color(.black))
                 
                 // 눈 그리기
                 let headDirection = CGVector(
