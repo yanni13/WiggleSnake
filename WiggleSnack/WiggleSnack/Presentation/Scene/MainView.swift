@@ -37,20 +37,24 @@ struct MainView: View {
                     })
                 }
                 
-                Text("좋아요, \n오늘도 나만의 기록을 쌓아볼까요?")
-                    .font(.H1BoldFont())
-                    .foregroundColor(.gray05)
-                    .lineSpacing(3)
-                    .padding(.top, 34)
-                
-                Spacer().frame(height: 12)
-                
-                Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
-                    .font(.H5MediumFont())
-                    .foregroundColor(.gray05)
+                VStack(spacing: 0) {
+                    Text("좋아요, \n오늘도 나만의 기록을 쌓아볼까요?")
+                        .font(.H1BoldFont())
+                        .foregroundColor(.gray05)
+                        .lineSpacing(3)
+                        .padding(.top, 34)
+                    
+                    Spacer().frame(height: 12)
+                    
+                    Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
+                        .font(.H5MediumFont())
+                        .foregroundColor(.gray05)
+                }
+                .padding(.horizontal, 20)
+
                 
                 // 지렁이 칸
-                Spacer()
+                WormView()
                 
 
                 CustomBottomBtn(action: {
@@ -59,10 +63,10 @@ struct MainView: View {
                 }, label: "챌린지 리스트")
                 .buttonStyle(.plain)
                 .padding(.bottom, 34)
-                
+                .padding(.horizontal, 20)
+
                 
             }
-            .padding(.horizontal, 20)
             .edgesIgnoringSafeArea(.bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationDestination(for: NavigationRoute.self) { route in
