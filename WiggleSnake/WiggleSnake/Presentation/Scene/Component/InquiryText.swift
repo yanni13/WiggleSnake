@@ -14,7 +14,7 @@ struct InquiryText: View {
     var body: some View {
         HStack(spacing: 0) {
             Text(title)
-                .font(.H5MediumFont())
+                .font(.H4MediumFont())
                 .foregroundColor(.gray05)
             
             if isRequired {

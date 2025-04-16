@@ -152,7 +152,7 @@ struct AddChallengeView: View {
             }, label: {
                 Text(categoryValid ? CategoryIcon.allCases[selectedCategory].groupTitle : "카테고리를 선택해주세요")
 
-                    .font(.H6MediumFont())
+                    .font(.H5MediumFont())
                     .foregroundColor(categoryValid ? .gray05 : .gray03)
                 
                 
@@ -178,7 +178,7 @@ struct AddChallengeView: View {
                 }, label: {
                     
                     Text("")
-                        .font(.H6MediumFont())
+                        .font(.H5MediumFont())
                         .foregroundColor(.gray03)
                     
                     Image("icon_arrow_front_small")
@@ -198,7 +198,7 @@ struct AddChallengeView: View {
                     isActivePicker = true
                 }, label: {
                     Text("")
-                        .font(.H6MediumFont())
+                        .font(.H5MediumFont())
                         .foregroundColor(.gray03)
                     
                     Image("icon_arrow_front_small")
@@ -223,7 +223,7 @@ struct AddChallengeView: View {
                     .frame(maxWidth: .infinity, maxHeight: 150)
                 
                 TextEditor(text: $viewModel.memo)
-                    .font(.H5MediumFont())
+                    .font(.H4MediumFont())
                     .padding(.horizontal, 10)
                     .zIndex(0)
                     .colorMultiply(Color(.gray01))
@@ -232,7 +232,7 @@ struct AddChallengeView: View {
                 
                 if viewModel.memo.isEmpty {
                     Text("")
-                        .font(.B1MediumFont())
+                        .font(.H5MediumFont())
                         .padding(.leading, 14)
                         .padding(.top, 16)
                         .foregroundColor(.gray02)
