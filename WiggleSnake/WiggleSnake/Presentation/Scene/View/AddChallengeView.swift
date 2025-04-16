@@ -18,7 +18,14 @@ struct AddChallengeView: View {
     /// datepicker을 보여주도록 하는 변수
     @State private var isActivePicker: Bool = false
     
-    
+//    var selectedCategoryText: String {
+//        let categories = CategoryIcon.allCases
+//        guard viewModel.selectedCategory >= 0 && viewModel.selectedCategory < categories.count else {
+//            return "카테고리를 선택해주세요"
+//        }
+//        return categories[viewModel.selectedIndex].groupTitle
+//    }
+
     
     var body: some View {
         ZStack {
@@ -134,6 +141,7 @@ struct AddChallengeView: View {
     
     @ViewBuilder
     private func categoryComponent() -> some View {
+        let categoryValid = selectedCategory > 0 && selectedCategory < CategoryIcon.allCases.count
         HStack {
             InquiryText(title: "카테고리", isRequired: true)
             
@@ -142,11 +150,10 @@ struct AddChallengeView: View {
             Button(action: {
                 isActiveCategory = true
             }, label: {
-//                Text(viewModel.selectedIndex >= 0 && viewModel.selectedIndex < viewModel.text.count ? "\(text[viewModel.selectedIndex])" : "카테고리를 선택해주세요")
-                Text("카테고리를 선택해주세요")
+                Text(categoryValid ? CategoryIcon.allCases[selectedCategory].groupTitle : "카테고리를 선택해주세요")
 
                     .font(.H6MediumFont())
-                    .foregroundColor(.gray03)
+                    .foregroundColor(categoryValid ? .gray05 : .gray03)
                 
                 
                 Image("icon_arrow_front_small")
