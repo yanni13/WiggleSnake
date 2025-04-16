@@ -9,7 +9,7 @@ import Foundation
 
 struct ListItemModel: Identifiable {
     let id = UUID()
-    let category: CategoryIcon
+    var category: CategoryIcon
     let title: String
     let dateRange: String
     var isCompleted: Bool

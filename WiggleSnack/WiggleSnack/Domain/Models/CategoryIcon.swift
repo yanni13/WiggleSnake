@@ -20,4 +20,8 @@ enum CategoryIcon: String, CaseIterable {
         case .취미: return "🎨"
         }
     }
+    
+    var groupTitle: String {
+        return self.rawValue
+    }
 }
