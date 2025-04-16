@@ -12,26 +12,28 @@
 
 /* Begin PBXFileReference section */
 		D81714C72DAF2F1D007704BD /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		D846DDD42DACD53900B9E375 /* WiggleSnack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiggleSnack.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D846DDD42DACD53900B9E375 /* WiggleSnake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiggleSnake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D87CF6AD2DAF5ACA00271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
+		D87CF7042DAF5BB900271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D846DE4D2DACF3F800B9E375 /* Exceptions for "WiggleSnack" folder in "WiggleSnack" target */ = {
+		D87CF72C2DAF5C4D00271EF4 /* Exceptions for "WiggleSnake" folder in "WiggleSnake" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				WiggleSnake/Info.plist,
 			);
-			target = D846DDD32DACD53900B9E375 /* WiggleSnack */;
+			target = D846DDD32DACD53900B9E375 /* WiggleSnake */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D846DDD62DACD53900B9E375 /* WiggleSnack */ = {
+		D846DDD62DACD53900B9E375 /* WiggleSnake */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D846DE4D2DACF3F800B9E375 /* Exceptions for "WiggleSnack" folder in "WiggleSnack" target */,
+				D87CF72C2DAF5C4D00271EF4 /* Exceptions for "WiggleSnake" folder in "WiggleSnake" target */,
 			);
-			path = WiggleSnack;
+			name = WiggleSnake;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -51,7 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				D81714C72DAF2F1D007704BD /* .gitignore */,
-				D846DDD62DACD53900B9E375 /* WiggleSnack */,
+				D846DDD62DACD53900B9E375 /* WiggleSnake */,
 				D846DDD52DACD53900B9E375 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,17 +61,27 @@
 		D846DDD52DACD53900B9E375 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D846DDD42DACD53900B9E375 /* WiggleSnack.app */,
+				D846DDD42DACD53900B9E375 /* WiggleSnake.app */,
 			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D87CF6AE2DAF5ACA00271EF4 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D87CF7052DAF5BB900271EF4 /* Products */ = {
+			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D846DDD32DACD53900B9E375 /* WiggleSnack */ = {
+		D846DDD32DACD53900B9E375 /* WiggleSnake */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D846DDE72DACD53A00B9E375 /* Build configuration list for PBXNativeTarget "WiggleSnack" */;
+			buildConfigurationList = D846DDE72DACD53A00B9E375 /* Build configuration list for PBXNativeTarget "WiggleSnake" */;
 			buildPhases = (
 				D846DDD02DACD53900B9E375 /* Sources */,
 				D846DDD12DACD53900B9E375 /* Frameworks */,
@@ -80,13 +92,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D846DDD62DACD53900B9E375 /* WiggleSnack */,
+				D846DDD62DACD53900B9E375 /* WiggleSnake */,
 			);
-			name = WiggleSnack;
+			name = WiggleSnake;
 			packageProductDependencies = (
 			);
 			productName = WiggleSnack;
-			productReference = D846DDD42DACD53900B9E375 /* WiggleSnack.app */;
+			productReference = D846DDD42DACD53900B9E375 /* WiggleSnake.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -104,7 +116,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D846DDCF2DACD53900B9E375 /* Build configuration list for PBXProject "WiggleSnack" */;
+			buildConfigurationList = D846DDCF2DACD53900B9E375 /* Build configuration list for PBXProject "WiggleSnake" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -116,9 +128,19 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D846DDD52DACD53900B9E375 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D87CF7052DAF5BB900271EF4 /* Products */;
+					ProjectRef = D87CF7042DAF5BB900271EF4 /* WiggleSnake.xcodeproj */;
+				},
+				{
+					ProductGroup = D87CF6AE2DAF5ACA00271EF4 /* Products */;
+					ProjectRef = D87CF6AD2DAF5ACA00271EF4 /* WiggleSnake.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
-				D846DDD32DACD53900B9E375 /* WiggleSnack */,
+				D846DDD32DACD53900B9E375 /* WiggleSnake */,
 			);
 		};
 /* End PBXProject section */
@@ -271,11 +293,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"WiggleSnack/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"WiggleSnake/Preview Content\"";
 				DEVELOPMENT_TEAM = W5Z68U98HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WiggleSnack/Info.plist;
+				INFOPLIST_FILE = WiggleSnake/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -287,7 +309,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = yanni13.WiggleSnack;
+				PRODUCT_BUNDLE_IDENTIFIER = yanni13.WiggleSnake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -302,11 +324,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"WiggleSnack/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"WiggleSnake/Preview Content\"";
 				DEVELOPMENT_TEAM = W5Z68U98HJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WiggleSnack/Info.plist;
+				INFOPLIST_FILE = WiggleSnake/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -318,7 +340,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = yanni13.WiggleSnack;
+				PRODUCT_BUNDLE_IDENTIFIER = yanni13.WiggleSnake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -329,7 +351,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D846DDCF2DACD53900B9E375 /* Build configuration list for PBXProject "WiggleSnack" */ = {
+		D846DDCF2DACD53900B9E375 /* Build configuration list for PBXProject "WiggleSnake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D846DDE52DACD53A00B9E375 /* Debug */,
@@ -338,7 +360,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D846DDE72DACD53A00B9E375 /* Build configuration list for PBXNativeTarget "WiggleSnack" */ = {
+		D846DDE72DACD53A00B9E375 /* Build configuration list for PBXNativeTarget "WiggleSnake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D846DDE82DACD53A00B9E375 /* Debug */,
