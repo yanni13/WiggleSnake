@@ -10,11 +10,8 @@ import SwiftUI
 struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var viewContext
-
     @State private var path = NavigationPath()
-    
-//    let navigationRoute: NavigationRoute = .addChallenge
-    
+        
     var body: some View {
         NavigationStack(path: $path) {
             VStack(alignment: .leading) {
