@@ -25,6 +25,7 @@ final class AddChallengeViewModel: ObservableObject {
         }
     }
     
+    /// 데이터 저장
     func saveChallenge(context: NSManagedObjectContext) {
         let newChallenge = Challenge(context: context)
         newChallenge.id = UUID()

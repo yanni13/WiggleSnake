@@ -11,9 +11,9 @@ struct ListComponent: View {
 //    @State private var isActiveBtn: Bool = false
     // 더미데이터
     @State private var items: [ListItemModel] = [
-            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false)
+//            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
+//            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
+//            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false)
         ]
     @Binding var item: ListItemModel
 
@@ -33,9 +33,9 @@ struct ListComponent: View {
                         .foregroundColor(.gray05)
                         .lineSpacing(1)
                     
-                    Text(item.dateRange)
-                        .font(.B1MediumFont())
-                        .foregroundColor(.gray05)
+//                    Text(item.dateRange)
+//                        .font(.B1MediumFont())
+//                        .foregroundColor(.gray05)
                 }
                 
                 Spacer()

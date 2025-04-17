@@ -13,6 +13,7 @@
 /* Begin PBXFileReference section */
 		D81714C72DAF2F1D007704BD /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D846DDD42DACD53900B9E375 /* WiggleSnake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiggleSnake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D85EAD5B2DB0DED700E12930 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D87CF6AD2DAF5ACA00271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D87CF7042DAF5BB900271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D87CF75D2DAF5D5B00271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
@@ -64,6 +65,11 @@
 			children = (
 				D846DDD42DACD53900B9E375 /* WiggleSnake.app */,
 			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D85EAD5C2DB0DED700E12930 /* Products */ = {
+			isa = PBXGroup;
 			name = Products;
 			sourceTree = "<group>";
 		};
@@ -135,6 +141,10 @@
 			productRefGroup = D846DDD52DACD53900B9E375 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = D85EAD5C2DB0DED700E12930 /* Products */;
+					ProjectRef = D85EAD5B2DB0DED700E12930 /* WiggleSnake.xcodeproj */;
+				},
 				{
 					ProductGroup = D87CF75E2DAF5D5B00271EF4 /* Products */;
 					ProjectRef = D87CF75D2DAF5D5B00271EF4 /* WiggleSnake.xcodeproj */;

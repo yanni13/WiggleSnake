@@ -8,30 +8,44 @@
 import SwiftUI
 
 struct ChallengeListView: View {
+    @Environment(\.managedObjectContext) private var context
+    
+    @ObservedObject var fetchViewModel: FetchChallengeViewModel
     @State private var selectedTab: String = "진행중"    // 더미데이터
     @State private var items: [ListItemModel] = [
-        ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-        ListItemModel(category: .자기계발, title: "공부하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-        ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false)
+//        ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
+//        ListItemModel(category: .자기계발, title: "공부하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
+//        ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false)
     ]
     let textLabel = ["진행중", "완료"]
     
+//    var groupedItems: [CategoryIcon: [ListItemModel]] {
+//        var result = [CategoryIcon: [ListItemModel]]()
+//        
+//        let filteredItems = selectedTab == "진행중"
+//        ? items.filter { !$0.isCompleted }
+//        : items.filter { $0.isCompleted }
+//        
+//        for item in filteredItems {
+//            if result[item.category] == nil {
+//                result[item.category] = [item]
+//            } else {
+//                result[item.category]?.append(item)
+//            }
+//        }
+//        
+//        return result
+//    }
+    
+    
+    private var filteredItems: [ListItemModel] {
+        selectedTab == "진행중"
+        ? fetchViewModel.items.filter { !$0.isCompleted }
+        : fetchViewModel.items.filter { $0.isCompleted }
+    }
+
     var groupedItems: [CategoryIcon: [ListItemModel]] {
-        var result = [CategoryIcon: [ListItemModel]]()
-        
-        let filteredItems = selectedTab == "진행중"
-        ? items.filter { !$0.isCompleted }
-        : items.filter { $0.isCompleted }
-        
-        for item in filteredItems {
-            if result[item.category] == nil {
-                result[item.category] = [item]
-            } else {
-                result[item.category]?.append(item)
-            }
-        }
-        
-        return result
+        Dictionary(grouping: filteredItems, by: { $0.category })
     }
     
     var body: some View {
@@ -115,9 +129,12 @@ struct ChallengeListView: View {
                 }.offset(x: -10)
             }
         }
+        .onAppear {
+             fetchViewModel.fetchAllChallenges(context: context)
+        }
     }
 }
 
 #Preview {
-    ChallengeListView()
+    ChallengeListView(fetchViewModel: FetchChallengeViewModel())
 }
