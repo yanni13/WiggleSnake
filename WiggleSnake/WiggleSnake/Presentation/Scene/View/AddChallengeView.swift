@@ -19,14 +19,7 @@ struct AddChallengeView: View {
     @State private var isActivePicker: Bool = false
     /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
     @State private var isPickerStartData = true
-    
-//    var selectedCategoryText: String {
-//        let categories = CategoryIcon.allCases
-//        guard viewModel.selectedCategory >= 0 && viewModel.selectedCategory < categories.count else {
-//            return "카테고리를 선택해주세요"
-//        }
-//        return categories[viewModel.selectedIndex].groupTitle
-//    }
+    /// 사용자가 선택했는지 여부를 추적하는 상태 변수
 
     
     var body: some View {
@@ -60,6 +53,12 @@ struct AddChallengeView: View {
                         } else {
                             viewModel.isValidForm = true
                             print("❌ [AddChallengeView] 도전일기 저장 실패")
+                            print("📝 제목: \(viewModel.title)")
+                            print("📄 메모: \(viewModel.memo)")
+                            print("📂 카테고리: \(viewModel.category)")
+                            print("📅 시작일: \(viewModel.startDate)")
+                            print("📅 종료일: \(viewModel.endDate)")
+                            
                         }
                         
                     }
@@ -90,7 +89,7 @@ struct AddChallengeView: View {
             .sheet(isPresented: $isActiveCategory) {
                 Spacer().frame(height: 56)
                 
-                CategoryListView(selectedIndex: $selectedCategory)
+                CategoryListView(viewModel: viewModel, selectedIndex: $selectedCategory)
                     .presentationDetents([.large, .large])
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(20)
@@ -188,8 +187,8 @@ struct AddChallengeView: View {
                 }, label: {
                     Text(DateFormatter.koreanShort.string(from: viewModel.startDate))
                         .font(.H5MediumFont())
-                        .foregroundColor(.gray03)
-                    
+                        .foregroundColor(Calendar.current.isDateInToday(viewModel.startDate) ? .gray03 : .gray05)
+
                     Image("icon_arrow_front_small")
                         .resizable()
                         .frame(width: 27, height: 27)
@@ -210,8 +209,8 @@ struct AddChallengeView: View {
                 }, label: {
                     Text(DateFormatter.koreanShort.string(from: viewModel.endDate))
                         .font(.H5MediumFont())
-                        .foregroundColor(.gray03)
-                    
+                        .foregroundColor(Calendar.current.isDateInToday(viewModel.endDate) ? .gray03 : .gray05)
+
                     Image("icon_arrow_front_small")
                         .resizable()
                         .frame(width: 27, height: 27)

@@ -18,7 +18,7 @@ final class AddChallengeViewModel: ObservableObject {
     
     /// 도전기록 추가하기 입력폼의 유효성을 검사하는 함수
     func formValid(completion: @escaping (Bool) -> Void) {
-        if !title.isEmpty && !memo.isEmpty && !category.isEmpty && startDate <= endDate {
+        if !title.isEmpty && !category.isEmpty && startDate <= endDate {
             completion(true)
         } else {
             completion(false)

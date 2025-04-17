@@ -12,6 +12,7 @@ extension DateFormatter {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR") // 한국어 설정
         formatter.dateFormat = "M월 d일" // 원하는 포맷
+        formatter.timeZone = .current
         return formatter
     }()
 }

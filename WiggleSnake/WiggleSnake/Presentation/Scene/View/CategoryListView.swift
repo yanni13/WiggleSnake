@@ -10,6 +10,7 @@ import SwiftUI
 struct CategoryListView: View {
     
     /// 카테고리의 상태를 담는 변수
+    @ObservedObject var viewModel: AddChallengeViewModel
     @Binding var selectedIndex: Int
     
     let columns = [GridItem(.flexible(), spacing: 30), GridItem(.flexible(), spacing: 30)]
@@ -45,6 +46,7 @@ struct CategoryListView: View {
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         selectedIndex = index
+                        viewModel.category = categories[index].groupTitle
                     }
                 }, label: {
                     ZStack(alignment: .topLeading) {
