@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddChallengeView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) private var presentationMode
     @StateObject private var viewModel = AddChallengeViewModel()
     @State private var selectedCategory: Int = 0
     @State private var date: Date = Date()
@@ -48,6 +49,7 @@ struct AddChallengeView: View {
                     viewModel.formValid { success in
                         if success {
                             viewModel.saveChallenge(context: viewContext)
+                            self.presentationMode.wrappedValue.dismiss()
                             print("✅ [AddChallengeView] 도전일기 저장완료")
                             
                         } else {
