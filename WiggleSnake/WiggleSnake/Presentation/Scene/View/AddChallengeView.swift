@@ -17,6 +17,8 @@ struct AddChallengeView: View {
     @State private var isActiveCategory: Bool = false
     /// datepicker을 보여주도록 하는 변수
     @State private var isActivePicker: Bool = false
+    /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
+    @State private var isPickerStartData = true
     
 //    var selectedCategoryText: String {
 //        let categories = CategoryIcon.allCases
@@ -93,7 +95,13 @@ struct AddChallengeView: View {
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(20)
             }
-            .sheet(isPresented: $isActivePicker) {
+            .sheet(isPresented: $isActivePicker, onDismiss: {
+                if isPickerStartData {
+                    viewModel.startDate = date
+                } else {
+                    viewModel.endDate = date
+                }
+            }) {
                 DatePicker("", selection: $date, displayedComponents: .date)
                     .presentationDetents([.medium, .medium])
                     .datePickerStyle(.graphical)
@@ -102,10 +110,10 @@ struct AddChallengeView: View {
                     .presentationCornerRadius(20)
                 
             }
-        }
-        
     }
     
+}
+
     @ViewBuilder
     private func titleComponent() -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -175,9 +183,10 @@ struct AddChallengeView: View {
                 
                 Button(action: {
                     isActivePicker = true
+                    isPickerStartData = true
+                    date = viewModel.startDate
                 }, label: {
-                    
-                    Text("")
+                    Text(DateFormatter.koreanShort.string(from: viewModel.startDate))
                         .font(.H5MediumFont())
                         .foregroundColor(.gray03)
                     
@@ -196,8 +205,10 @@ struct AddChallengeView: View {
                 
                 Button(action: {
                     isActivePicker = true
+                    isPickerStartData = false
+                    date = viewModel.endDate
                 }, label: {
-                    Text("")
+                    Text(DateFormatter.koreanShort.string(from: viewModel.endDate))
                         .font(.H5MediumFont())
                         .foregroundColor(.gray03)
                     
@@ -244,6 +255,7 @@ struct AddChallengeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 4))
         }
     }
+    
     
     
 }

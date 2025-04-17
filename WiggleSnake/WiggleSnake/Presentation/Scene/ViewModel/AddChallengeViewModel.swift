@@ -13,7 +13,7 @@ final class AddChallengeViewModel: ObservableObject {
     @Published var memo: String = ""
     @Published var category: String = ""
     @Published var startDate: Date = Date()
-    @Published var endDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+    @Published var endDate: Date = Date()
     @Published var isValidForm: Bool = false
     
     /// 도전기록 추가하기 입력폼의 유효성을 검사하는 함수
@@ -36,7 +36,7 @@ final class AddChallengeViewModel: ObservableObject {
         
         do {
             try context.save()
-            print("✅ 저장 성공")
+            print("✅[AddChallengeViewModel] 저장 성공")
             
             // 저장 후 바로 데이터 확인
             let fetchRequest: NSFetchRequest<Challenge> = Challenge.fetchRequest()
@@ -51,7 +51,7 @@ final class AddChallengeViewModel: ObservableObject {
             }
             
         } catch {
-            print("❌ 저장 실패: \(error)")
+            print("❌[AddChallengeViewModel] 저장 실패: \(error)")
         }
     }
     
