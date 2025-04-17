@@ -8,22 +8,25 @@
 import SwiftUI
 
 struct AddChallengeView: View {
-    @State private var title: String = ""
-    @State private var memo: String = ""
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.presentationMode) private var presentationMode
+    @StateObject private var viewModel = AddChallengeViewModel()
+    @State private var selectedCategory: Int = 0
     @State private var date: Date = Date()
-    @State private var startDate: Date = Date()
-    @State private var endDate: Date = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+    
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
     @State private var isActiveCategory: Bool = false
     /// datepicker을 보여주도록 하는 변수
     @State private var isActivePicker: Bool = false
-    
+    /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
+    @State private var isPickerStartData = true
+    /// 사용자가 선택했는지 여부를 추적하는 상태 변수
     
     
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {
-                Spacer().frame(height: 56)
+                Spacer().frame(height: 40)
                 titleComponent()
                 
                 Spacer().frame(height: 33)
@@ -40,14 +43,37 @@ struct AddChallengeView: View {
                 
                 Spacer()
                 
+                
                 CustomBottomBtn(action: {
+                    // 필수 입력값이 다 들어갔다면 -> 저장
+                    viewModel.formValid { success in
+                        if success {
+                            viewModel.saveChallenge(context: viewContext)
+                            self.presentationMode.wrappedValue.dismiss()
+                            print("✅ [AddChallengeView] 도전일기 저장완료")
+                            
+                        } else {
+                            viewModel.isValidForm = true
+                            print("❌ [AddChallengeView] 도전일기 저장 실패")
+                            print("📝 제목: \(viewModel.title)")
+                            print("📄 메모: \(viewModel.memo)")
+                            print("📂 카테고리: \(viewModel.category)")
+                            print("📅 시작일: \(viewModel.startDate)")
+                            print("📅 종료일: \(viewModel.endDate)")
+                            
+                        }
+                        
+                    }
                     
                 }, label: "확인")
                 .padding(.bottom, 34)
                 
-                
-                
+                //TODO: 폼이 유효하지 않을 때 alert 혹은 팝업
+                //                if viewModel.isValidForm {
+                //
+                //                }
             }
+            .frame(maxHeight: .infinity)
             .padding(.horizontal, 20)
             .navigationTitle("도전 일기 추가하기")
             .navigationBarTitleDisplayMode(.inline)
@@ -66,12 +92,18 @@ struct AddChallengeView: View {
             .sheet(isPresented: $isActiveCategory) {
                 Spacer().frame(height: 56)
                 
-                CategoryListView()
+                CategoryListView(viewModel: viewModel, selectedIndex: $selectedCategory)
                     .presentationDetents([.large, .large])
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(20)
             }
-            .sheet(isPresented: $isActivePicker) {
+            .sheet(isPresented: $isActivePicker, onDismiss: {
+                if isPickerStartData {
+                    viewModel.startDate = date
+                } else {
+                    viewModel.endDate = date
+                }
+            }) {
                 DatePicker("", selection: $date, displayedComponents: .date)
                     .presentationDetents([.medium, .medium])
                     .datePickerStyle(.graphical)
@@ -80,6 +112,7 @@ struct AddChallengeView: View {
                     .presentationCornerRadius(20)
                 
             }
+            
         }
         
     }
@@ -96,27 +129,22 @@ struct AddChallengeView: View {
                     .cornerRadius(4)
                 
                 
-                if title.isEmpty {
+                if viewModel.title.isEmpty {
                     Text("청소하기, 하루 5분 명상하기...")
                         .font(.H5MediumFont())
                         .foregroundColor(.gray02)
                         .padding(.leading, 17)
                 }
                 
-                TextField(text: $title, label: {
-                    
-                })
-                .offset(x: 17)
-                .onChange(of: title) { newValue in
-                    if newValue.count > 23 {
-                        title = String(newValue.prefix(23)) // 글자 수 제한
+                TextField("", text: $viewModel.title)
+                    .offset(x: 17)
+                    .onChange(of: viewModel.title) { newValue in
+                        if newValue.count > 23 {
+                            viewModel.title = String(newValue.prefix(23)) // 글자 수 제한
+                        }
                     }
-                }
-                .font(.H5MediumFont())
-                .foregroundColor(.gray05)
-                
-                
-                
+                    .font(.H5MediumFont())
+                    .foregroundColor(.gray05)
             }
             
         }
@@ -124,6 +152,7 @@ struct AddChallengeView: View {
     
     @ViewBuilder
     private func categoryComponent() -> some View {
+        let categoryValid = selectedCategory > 0 && selectedCategory < CategoryIcon.allCases.count
         HStack {
             InquiryText(title: "카테고리", isRequired: true)
             
@@ -132,9 +161,10 @@ struct AddChallengeView: View {
             Button(action: {
                 isActiveCategory = true
             }, label: {
-                Text("카테고리를 선택해주세요")
-                    .font(.H6MediumFont())
-                    .foregroundColor(.gray03)
+                Text(categoryValid ? CategoryIcon.allCases[selectedCategory].groupTitle : "카테고리를 선택해주세요")
+                
+                    .font(.H5MediumFont())
+                    .foregroundColor(categoryValid ? .gray05 : .gray03)
                 
                 
                 Image("icon_arrow_front_small")
@@ -156,11 +186,12 @@ struct AddChallengeView: View {
                 
                 Button(action: {
                     isActivePicker = true
+                    isPickerStartData = true
+                    date = viewModel.startDate
                 }, label: {
-                    
-                    Text("")
-                        .font(.H6MediumFont())
-                        .foregroundColor(.gray03)
+                    Text(DateFormatter.koreanShort.string(from: viewModel.startDate))
+                        .font(.H5MediumFont())
+                        .foregroundColor(Calendar.current.isDateInToday(viewModel.startDate) ? .gray03 : .gray05)
                     
                     Image("icon_arrow_front_small")
                         .resizable()
@@ -177,10 +208,12 @@ struct AddChallengeView: View {
                 
                 Button(action: {
                     isActivePicker = true
+                    isPickerStartData = false
+                    date = viewModel.endDate
                 }, label: {
-                    Text("")
-                        .font(.H6MediumFont())
-                        .foregroundColor(.gray03)
+                    Text(DateFormatter.koreanShort.string(from: viewModel.endDate))
+                        .font(.H5MediumFont())
+                        .foregroundColor(Calendar.current.isDateInToday(viewModel.endDate) ? .gray03 : .gray05)
                     
                     Image("icon_arrow_front_small")
                         .resizable()
@@ -203,17 +236,17 @@ struct AddChallengeView: View {
                     .foregroundColor(.gray01)
                     .frame(maxWidth: .infinity, maxHeight: 150)
                 
-                TextEditor(text: $memo)
-                    .font(.H5MediumFont())
+                TextEditor(text: $viewModel.memo)
+                    .font(.H4MediumFont())
                     .padding(.horizontal, 10)
                     .zIndex(0)
                     .colorMultiply(Color(.gray01))
                     .cornerRadius(6)
                 
                 
-                if memo.isEmpty {
+                if viewModel.memo.isEmpty {
                     Text("")
-                        .font(.B1MediumFont())
+                        .font(.H5MediumFont())
                         .padding(.leading, 14)
                         .padding(.top, 16)
                         .foregroundColor(.gray02)
@@ -225,6 +258,7 @@ struct AddChallengeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 4))
         }
     }
+    
     
     
 }

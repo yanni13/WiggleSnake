@@ -14,6 +14,7 @@ struct WiggleSnackApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

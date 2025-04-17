@@ -5,14 +5,14 @@
 //  Created by 아우신얀 on 4/14/25.
 //
 
+import CoreData
 import SwiftUI
 
 struct MainView: View {
     /// 도전기록 추가 뷰로 이동
+    @Environment(\.managedObjectContext) private var context
     @State private var path = NavigationPath()
-    
-//    let navigationRoute: NavigationRoute = .addChallenge
-    
+        
     var body: some View {
         NavigationStack(path: $path) {
             VStack(alignment: .leading) {
@@ -37,20 +37,21 @@ struct MainView: View {
                     })
                 }
                 
-                VStack(spacing: 0) {
+                VStack(alignment: .leading) {
                     Text("좋아요, \n오늘도 나만의 기록을 쌓아볼까요?")
                         .font(.H1BoldFont())
                         .foregroundColor(.gray05)
                         .lineSpacing(3)
                         .padding(.top, 34)
-                    
+                                            
                     Spacer().frame(height: 12)
                     
                     Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
-                        .font(.H5MediumFont())
+                        .font(.H4MediumFont())
                         .foregroundColor(.gray05)
                 }
                 .padding(.horizontal, 20)
+                
 
                 
                 // 지렁이 칸
@@ -79,12 +80,35 @@ struct MainView: View {
                 
                 
             }
+            .onAppear {
+                fetchAndPrintChallenges()
+            }
             
             
         }
-        
-        
     }
+    
+    private func fetchAndPrintChallenges() {
+        let fetchRequest: NSFetchRequest<Challenge> = Challenge.fetchRequest()
+        
+        do {
+            let challenges = try context.fetch(fetchRequest)
+            print("🔍 불러온 Challenge 수: \(challenges.count)")
+            
+            for (index, challenge) in challenges.enumerated() {
+                print("------ Challenge \(index + 1) ------")
+                print("📝 제목: \(challenge.title ?? "없음")")
+                print("📄 메모: \(challenge.memo ?? "없음")")
+                print("📂 카테고리: \(challenge.category ?? "없음")")
+                print("📅 시작일: \(challenge.startDate?.description ?? "없음")")
+                print("📅 종료일: \(challenge.endDate?.description ?? "없음")")
+            }
+            
+        } catch {
+            print("❌ Challenge 불러오기 실패: \(error)")
+        }
+    }
+    
 }
 
 #Preview {
