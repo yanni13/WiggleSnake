@@ -20,7 +20,6 @@ final class FetchChallengeViewModel: ObservableObject {
         do {
             let challenges = try context.fetch(request)
             
-
             print("🔍 불러온 Challenge 수: \(challenges.count)")
             
             for (index, challenge) in challenges.enumerated() {
