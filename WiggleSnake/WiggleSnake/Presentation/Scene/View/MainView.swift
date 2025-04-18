@@ -76,9 +76,10 @@ struct MainView: View {
                 case .addChallenge:
                     AddChallengeView()
                 case .challengeList:
-                    ChallengeListView(fetchViewModel: fetchViewModel)
+                    ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
+                case .challengeDetail(let item):
+                    ChallengeDetailView(item: item)
                 }
-                
                 
             }
             .onAppear {

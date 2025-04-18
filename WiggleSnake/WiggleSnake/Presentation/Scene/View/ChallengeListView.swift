@@ -12,11 +12,16 @@ struct ChallengeListView: View {
     @Environment(\.managedObjectContext) private var context
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
-    @State private var selectedTab: String = "진행중"    // 더미데이터
+    @State private var selectedTab: String = "진행중"
+    /// 저장된 데이터를 불러와서 items 배열에 저장하기 위한 변수
     @State private var items: [ListItemModel] = []
+    /// 도전기록 상세보기 뷰로 넘어가기 위한 상태변수
     @State private var isPresented: Bool = false
-    let textLabel = ["진행중", "완료"]
+    /// 선택된 리스트 아이템을 저장하는 변수
+    @State private var selectedItem: ListItemModel?
+    @Binding var path: NavigationPath
     
+    let textLabel = ["진행중", "완료"]
     
     private var filteredItems: [ListItemModel] {
         selectedTab == "진행중"
@@ -75,8 +80,7 @@ struct ChallengeListView: View {
                                         }
                                     }
                                 )
-                                
-                                ListComponent(item: itemBinding, isPresented: $isPresented, fetchViewModel: fetchViewModel)
+                                ListComponent(item: itemBinding, path: $path, fetchViewModel: fetchViewModel)
                                     .padding(.horizontal, 20)
                             }
                             
@@ -94,10 +98,10 @@ struct ChallengeListView: View {
                 Spacer()
             }
             
-            NavigationLink(destination: ChallengeDetailView(), isActive: $isPresented) {}
-                .hidden()
-                .buttonStyle(PlainButtonStyle())
-
+//            NavigationLink(destination: ChallengeDetailView(item: ), isActive: $isPresented) {}
+//                .hidden()
+//                .buttonStyle(PlainButtonStyle())
+            
         }
         .navigationTitle(Text("나의 도전 일지"))
         .navigationBarTitleDisplayMode(.inline)
@@ -119,6 +123,6 @@ struct ChallengeListView: View {
     }
 }
 
-#Preview {
-    ChallengeListView(fetchViewModel: FetchChallengeViewModel())
-}
+//#Preview {
+//    ChallengeListView(fetchViewModel: FetchChallengeViewModel())
+//}

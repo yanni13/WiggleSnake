@@ -10,9 +10,11 @@ import Combine
 
 struct ListComponent: View {
     @Binding var item: ListItemModel
-    @Binding var isPresented: Bool
-    
+//    @Binding var isPresented: Bool
+    @Binding var path: NavigationPath
+//    @Binding var selectedItem: ListItemModel
     @Environment(\.managedObjectContext) private var context
+
     
     var fetchViewModel: FetchChallengeViewModel
 
@@ -26,7 +28,9 @@ struct ListComponent: View {
                     .padding(.leading, 8)
                 
                 Button(action: {
-                    isPresented = true
+                    path.append(NavigationRoute.challengeDetail(item))
+//                    isPresented = true
+//                    path.append(NavigationRoute.challengeDetail(item))
                 }, label: {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(item.title)
@@ -45,6 +49,7 @@ struct ListComponent: View {
                 Button(action: {
                     item.isCompleted.toggle()
                     fetchViewModel.updateCompletion(for: item, context: context)
+                    
                 }, label: {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")
                         .frame(width: 44, height: 44)

@@ -10,11 +10,7 @@ import CoreData
 
 final class FetchChallengeViewModel: ObservableObject {
     @Published var items: [ListItemModel] = []
-//    private var context: NSManagedObjectContext
-//
-//    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
-//            self.context = context
-//        }
+
     
     /// 데이터 조회
     func fetchAllChallenges(context: NSManagedObjectContext) -> [ListItemModel] {

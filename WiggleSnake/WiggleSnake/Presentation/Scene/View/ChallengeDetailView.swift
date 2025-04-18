@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ChallengeDetailView: View {
+    var item: ListItemModel
+    
     var body: some View {
         VStack {
             
         }
-        .navigationTitle("나의 도전 일기")
+        .navigationTitle(item.title)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .edgesIgnoringSafeArea(.bottom)
@@ -59,8 +61,4 @@ struct ChallengeDetailView: View {
             .offset(x: 10)
         }
     }
-}
-
-#Preview {
-    ChallengeDetailView()
 }
