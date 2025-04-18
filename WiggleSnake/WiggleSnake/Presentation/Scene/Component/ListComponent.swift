@@ -8,13 +8,6 @@ import Foundation
 import SwiftUI
 
 struct ListComponent: View {
-//    @State private var isActiveBtn: Bool = false
-    // 더미데이터
-    @State private var items: [ListItemModel] = [
-//            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-//            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-//            ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false)
-        ]
     @Binding var item: ListItemModel
 
     let category: CategoryIcon = .운동
@@ -33,15 +26,15 @@ struct ListComponent: View {
                         .foregroundColor(.gray05)
                         .lineSpacing(1)
                     
-//                    Text(item.dateRange)
-//                        .font(.B1MediumFont())
-//                        .foregroundColor(.gray05)
+                    Text(item.dateRangeText)
+                        .font(.B1MediumFont())
+                        .foregroundColor(.gray05)
                 }
                 
                 Spacer()
                 
                 Button(action: {
-                    item.isCompleted.toggle()
+                    item.isCompleted = true
                 }, label: {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")
                         .frame(width: 44, height: 44)
@@ -60,9 +53,12 @@ struct ListComponent: View {
                 .foregroundColor(.gray01)
                 .cornerRadius(8)
             
-            Text(category.emoji)
-                .font(.system(size: 28))
-                .zIndex(1)
+                Text(category.emoji)
+                    .font(.system(size: 28))
+                    .zIndex(1)
+            
         }
     }
+
+
 }

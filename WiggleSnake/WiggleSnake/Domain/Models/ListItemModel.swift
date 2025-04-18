@@ -8,7 +8,6 @@
 import Foundation
 
 struct ListItemModel: Identifiable {
-//    let id = UUID()
     let id: UUID
     var category: CategoryIcon
     var title: String
