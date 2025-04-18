@@ -12,15 +12,14 @@ struct ChallengeListView: View {
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
     @State private var selectedTab: String = "진행중"    // 더미데이터
-    @State private var items: [ListItemModel] = [
-    ]
+    @State private var items: [ListItemModel] = []
     let textLabel = ["진행중", "완료"]
     
     
     private var filteredItems: [ListItemModel] {
         selectedTab == "진행중"
-        ? fetchViewModel.items.filter { !$0.isCompleted }
-        : fetchViewModel.items.filter { $0.isCompleted }
+        ? items.filter { !$0.isCompleted }
+        : items.filter { $0.isCompleted }
     }
     
     var groupedItems: [CategoryIcon: [ListItemModel]] {

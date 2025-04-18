@@ -34,7 +34,7 @@ struct ListComponent: View {
                 Spacer()
                 
                 Button(action: {
-                    item.isCompleted = true
+                    item.isCompleted.toggle()
                 }, label: {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")
                         .frame(width: 44, height: 44)
