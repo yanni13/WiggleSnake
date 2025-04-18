@@ -6,9 +6,15 @@
 //
 import Foundation
 import SwiftUI
+import Combine
 
 struct ListComponent: View {
     @Binding var item: ListItemModel
+    @Binding var isPresented: Bool
+    
+    @Environment(\.managedObjectContext) private var context
+    
+    var fetchViewModel: FetchChallengeViewModel
 
     let category: CategoryIcon = .운동
     
@@ -19,22 +25,26 @@ struct ListComponent: View {
                 IconImage(for: item.category)
                     .padding(.leading, 8)
                 
-                
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(item.title)
-                        .font(.B1SemiboldFont())
-                        .foregroundColor(.gray05)
-                        .lineSpacing(1)
-                    
-                    Text(item.dateRangeText)
-                        .font(.B1MediumFont())
-                        .foregroundColor(.gray05)
-                }
+                Button(action: {
+                    isPresented = true
+                }, label: {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(item.title)
+                            .font(.B1SemiboldFont())
+                            .foregroundColor(.gray05)
+                            .lineSpacing(1)
+                        
+                        Text(item.dateRangeText)
+                            .font(.B1MediumFont())
+                            .foregroundColor(.gray05)
+                    }
+                })
                 
                 Spacer()
                 
                 Button(action: {
                     item.isCompleted.toggle()
+                    fetchViewModel.updateCompletion(for: item, context: context)
                 }, label: {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")
                         .frame(width: 44, height: 44)
@@ -42,6 +52,7 @@ struct ListComponent: View {
                 
 
             }
+
         }
     }
     

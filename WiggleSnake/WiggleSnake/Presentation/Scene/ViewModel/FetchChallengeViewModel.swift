@@ -10,8 +10,12 @@ import CoreData
 
 final class FetchChallengeViewModel: ObservableObject {
     @Published var items: [ListItemModel] = []
-
-
+//    private var context: NSManagedObjectContext
+//
+//    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+//            self.context = context
+//        }
+    
     /// 데이터 조회
     func fetchAllChallenges(context: NSManagedObjectContext) -> [ListItemModel] {
 
@@ -39,5 +43,24 @@ final class FetchChallengeViewModel: ObservableObject {
             return []
         }
     }
+    
+    /// 데이터 수정 - 진행중인 데이터를 완료 데이터로 넘김
+    func updateCompletion(for item: ListItemModel, context: NSManagedObjectContext) {
+        let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
+
+        do {
+            let results = try context.fetch(request)
+            if let challenge = results.first {
+                challenge.isCompleted = item.isCompleted
+                try context.save()
+                print("✅ isCompleted 상태가 CoreData에 반영되었습니다.")
+            }
+        } catch {
+            print("❌ CoreData 업데이트 실패: \(error)")
+        }
+    }
+
+
 }
 

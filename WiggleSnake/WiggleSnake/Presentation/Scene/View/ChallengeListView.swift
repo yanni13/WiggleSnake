@@ -7,12 +7,14 @@
 
 import SwiftUI
 
+
 struct ChallengeListView: View {
     @Environment(\.managedObjectContext) private var context
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
     @State private var selectedTab: String = "진행중"    // 더미데이터
     @State private var items: [ListItemModel] = []
+    @State private var isPresented: Bool = false
     let textLabel = ["진행중", "완료"]
     
     
@@ -74,7 +76,7 @@ struct ChallengeListView: View {
                                     }
                                 )
                                 
-                                ListComponent(item: itemBinding)
+                                ListComponent(item: itemBinding, isPresented: $isPresented, fetchViewModel: fetchViewModel)
                                     .padding(.horizontal, 20)
                             }
                             
@@ -91,6 +93,11 @@ struct ChallengeListView: View {
                 
                 Spacer()
             }
+            
+            NavigationLink(destination: ChallengeDetailView(), isActive: $isPresented) {}
+                .hidden()
+                .buttonStyle(PlainButtonStyle())
+
         }
         .navigationTitle(Text("나의 도전 일지"))
         .navigationBarTitleDisplayMode(.inline)
