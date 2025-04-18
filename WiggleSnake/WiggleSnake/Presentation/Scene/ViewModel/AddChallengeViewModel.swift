@@ -25,6 +25,7 @@ final class AddChallengeViewModel: ObservableObject {
         }
     }
     
+    /// 데이터 저장
     func saveChallenge(context: NSManagedObjectContext) {
         let newChallenge = Challenge(context: context)
         newChallenge.id = UUID()
@@ -58,3 +59,11 @@ final class AddChallengeViewModel: ObservableObject {
     
 }
 
+// MARK: DataRange를 구하기 위한 extension
+extension ListItemModel {
+    var dateRangeText: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "M/d"
+        return "\(formatter.string(from: startDate))~\(formatter.string(from: endDate))"
+    }
+}

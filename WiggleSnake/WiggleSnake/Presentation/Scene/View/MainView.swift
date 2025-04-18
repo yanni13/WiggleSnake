@@ -12,6 +12,7 @@ struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var context
     @State private var path = NavigationPath()
+    @StateObject var fetchViewModel = FetchChallengeViewModel()
         
     var body: some View {
         NavigationStack(path: $path) {
@@ -75,7 +76,7 @@ struct MainView: View {
                 case .addChallenge:
                     AddChallengeView()
                 case .challengeList:
-                    ChallengeListView()
+                    ChallengeListView(fetchViewModel: fetchViewModel)
                 }
                 
                 

@@ -8,9 +8,12 @@
 import Foundation
 
 struct ListItemModel: Identifiable {
-    let id = UUID()
+    let id: UUID
     var category: CategoryIcon
-    let title: String
-    let dateRange: String
+    var title: String
+    var startDate: Date
+    var endDate: Date
+    var memo: String
     var isCompleted: Bool
+    var dataRange: String
 }

@@ -8,30 +8,22 @@
 import SwiftUI
 
 struct ChallengeListView: View {
+    @Environment(\.managedObjectContext) private var context
+    
+    @ObservedObject var fetchViewModel: FetchChallengeViewModel
     @State private var selectedTab: String = "진행중"    // 더미데이터
-    @State private var items: [ListItemModel] = [
-        ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-        ListItemModel(category: .자기계발, title: "공부하기", dateRange: "7/1 ~ 7/7", isCompleted: false),
-        ListItemModel(category: .운동, title: "운동하기", dateRange: "7/1 ~ 7/7", isCompleted: false)
-    ]
+    @State private var items: [ListItemModel] = []
     let textLabel = ["진행중", "완료"]
     
-    var groupedItems: [CategoryIcon: [ListItemModel]] {
-        var result = [CategoryIcon: [ListItemModel]]()
-        
-        let filteredItems = selectedTab == "진행중"
+    
+    private var filteredItems: [ListItemModel] {
+        selectedTab == "진행중"
         ? items.filter { !$0.isCompleted }
         : items.filter { $0.isCompleted }
-        
-        for item in filteredItems {
-            if result[item.category] == nil {
-                result[item.category] = [item]
-            } else {
-                result[item.category]?.append(item)
-            }
-        }
-        
-        return result
+    }
+    
+    var groupedItems: [CategoryIcon: [ListItemModel]] {
+        Dictionary(grouping: filteredItems, by: { $0.category })
     }
     
     var body: some View {
@@ -53,7 +45,7 @@ struct ChallengeListView: View {
                 
                 ForEach(Array(groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue })), id: \.self) { category in
                     let categoryItems = groupedItems[category] ?? []
-
+                    
                     VStack(alignment: .leading) {
                         Text(category.groupTitle)
                             .font(.H3SemiboldFont())
@@ -62,7 +54,7 @@ struct ChallengeListView: View {
                             .padding(.top, 20)
                         
                         
-                        Spacer().frame(height: 17)
+                        Spacer().frame(height: 25)
                         
                         VStack(spacing: 20) {
                             ForEach(categoryItems.indices, id: \.self) { index in
@@ -84,14 +76,13 @@ struct ChallengeListView: View {
                                 
                                 ListComponent(item: itemBinding)
                                     .padding(.horizontal, 20)
-                                                            }
-
+                            }
+                            
                             // 카테고리 항목이 2개이상이여야 표시됨
                             if category != groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue }).last {
                                 Rectangle()
                                     .frame(height: 8)
                                     .foregroundColor(.gray01)
-                                    .padding(.top, 10)
                             }
                         }
                     }
@@ -115,9 +106,12 @@ struct ChallengeListView: View {
                 }.offset(x: -10)
             }
         }
+        .onAppear {
+            items = fetchViewModel.fetchAllChallenges(context: context)
+        }
     }
 }
 
 #Preview {
-    ChallengeListView()
+    ChallengeListView(fetchViewModel: FetchChallengeViewModel())
 }

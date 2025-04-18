@@ -4,6 +4,7 @@
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="memo" optional="YES" attributeType="String"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>

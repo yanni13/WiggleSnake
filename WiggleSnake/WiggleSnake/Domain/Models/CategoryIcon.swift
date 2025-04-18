@@ -25,3 +25,20 @@ enum CategoryIcon: String, CaseIterable {
         return self.rawValue
     }
 }
+
+extension CategoryIcon {
+    init?(title: String) {
+        switch title {
+        case "운동": self = .운동
+        case "자기계발": self = .자기계발
+        case "마음챙김": self = .마음챙김
+        case "생활루틴": self = .생활루틴
+        case "소비습관": self = .소비습관
+        case "소통": self = .소통
+        case "디지털디톡스": self = .디지털디톡스
+        case "취미": self = .취미
+        default:
+            return nil
+        }
+    }
+}
