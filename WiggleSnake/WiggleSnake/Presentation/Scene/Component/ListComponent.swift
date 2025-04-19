@@ -14,7 +14,7 @@ struct ListComponent: View {
     @Environment(\.managedObjectContext) private var context
 
     
-    var fetchViewModel: FetchChallengeViewModel
+    @ObservedObject var fetchViewModel: FetchChallengeViewModel
 
     let category: CategoryIcon = .운동
     

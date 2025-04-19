@@ -25,8 +25,8 @@ struct ChallengeListView: View {
     
     private var filteredItems: [ListItemModel] {
         selectedTab == "진행중"
-        ? items.filter { !$0.isCompleted }
-        : items.filter { $0.isCompleted }
+        ? fetchViewModel.items.filter { !$0.isCompleted }
+        : fetchViewModel.items.filter { $0.isCompleted }
     }
     
     var groupedItems: [CategoryIcon: [ListItemModel]] {
@@ -65,21 +65,36 @@ struct ChallengeListView: View {
                         
                         VStack(spacing: 20) {
                             ForEach(categoryItems.indices, id: \.self) { index in
+                                //                                let itemBinding = Binding<ListItemModel>(
+                                //                                    get: {
+                                //                                        // 원본 items 배열에서 해당 항목 찾기
+                                //                                        if let originalIndex = items.firstIndex(where: { $0.id == categoryItems[index].id }) {
+                                //                                            return items[originalIndex]
+                                //                                        }
+                                //                                        return categoryItems[index]
+                                //                                    },
+                                //                                    set: { newValue in
+                                //                                        // 원본 items 배열에서 해당 항목 업데이트
+                                //                                        if let originalIndex = items.firstIndex(where: { $0.id == categoryItems[index].id }) {
+                                //                                            items[originalIndex] = newValue
+                                //                                        }
+                                //                                    }
+                                //                                )
+                                
+                                let item = categoryItems[index]
+                                
+                                // ✅ fetchViewModel.items 기반으로 Binding 생성
                                 let itemBinding = Binding<ListItemModel>(
                                     get: {
-                                        // 원본 items 배열에서 해당 항목 찾기
-                                        if let originalIndex = items.firstIndex(where: { $0.id == categoryItems[index].id }) {
-                                            return items[originalIndex]
-                                        }
-                                        return categoryItems[index]
+                                        fetchViewModel.items.first(where: { $0.id == item.id }) ?? item
                                     },
                                     set: { newValue in
-                                        // 원본 items 배열에서 해당 항목 업데이트
-                                        if let originalIndex = items.firstIndex(where: { $0.id == categoryItems[index].id }) {
-                                            items[originalIndex] = newValue
+                                        if let i = fetchViewModel.items.firstIndex(where: { $0.id == newValue.id }) {
+                                            fetchViewModel.items[i] = newValue
                                         }
                                     }
                                 )
+                                
                                 ListComponent(item: itemBinding, path: $path, fetchViewModel: fetchViewModel)
                                     .padding(.horizontal, 20)
                             }
@@ -98,10 +113,6 @@ struct ChallengeListView: View {
                 Spacer()
             }
             
-//            NavigationLink(destination: ChallengeDetailView(item: ), isActive: $isPresented) {}
-//                .hidden()
-//                .buttonStyle(PlainButtonStyle())
-            
         }
         .navigationTitle(Text("나의 도전 일지"))
         .navigationBarTitleDisplayMode(.inline)
@@ -117,12 +128,21 @@ struct ChallengeListView: View {
                 }.offset(x: -10)
             }
         }
+        .onChange(of: fetchViewModel.items) { newItems in
+            print("items 변경 감지됨")
+            for item in newItems {
+                print("id: \(item.id), isCompleted: \(item.isCompleted)")
+            }
+        }
+        
         .onAppear {
             items = fetchViewModel.fetchAllChallenges(context: context)
+            
+            print("onAppear에서 items 상태 확인:")
+            for item in items {
+                print("id: \(item.id), isCompleted: \(item.isCompleted)")
+            }
         }
+        
     }
 }
-
-//#Preview {
-//    ChallengeListView(fetchViewModel: FetchChallengeViewModel())
-//}

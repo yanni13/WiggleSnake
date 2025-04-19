@@ -55,6 +55,11 @@ final class FetchChallengeViewModel: ObservableObject {
             print("❌ CoreData 업데이트 실패: \(error)")
         }
     }
+    
+    func refreshItem(context: NSManagedObjectContext) {
+        self.items = fetchAllChallenges(context: context)
+        self.objectWillChange.send()
+    }
 
 
 }
