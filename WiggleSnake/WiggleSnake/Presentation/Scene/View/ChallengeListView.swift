@@ -29,6 +29,7 @@ struct ChallengeListView: View {
         selectedTab == "진행중"
         ? fetchViewModel.items.filter { !$0.isCompleted }
         : fetchViewModel.items.filter { $0.isCompleted }
+        
     }
     
     var groupedItems: [CategoryIcon: [ListItemModel]] {
