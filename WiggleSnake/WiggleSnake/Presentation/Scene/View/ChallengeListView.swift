@@ -86,9 +86,15 @@ struct ChallengeListView: View {
                                         item: itemBinding,
                                         path: $path,
                                         onCheck: {
-                                            showToast = true
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                                showToast = false
+                                            if selectedTab == "진행중" {
+                                                withAnimation(.easeInOut(duration: 0.3)) {
+                                                    showToast = true
+                                                }
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                                        showToast = false
+                                                    }
+                                                }
                                             }
                                         },
                                         fetchViewModel: fetchViewModel
@@ -118,8 +124,6 @@ struct ChallengeListView: View {
                     CustomToastComponent(text: "지렁이의 꼬리가 10cm 자랐어요!", icon: "🎉")
                         .padding(.bottom, 34)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
-                        .animation(.easeInOut(duration: 0.3), value: showToast)
-                        .border(.black)
                 }
             }
             

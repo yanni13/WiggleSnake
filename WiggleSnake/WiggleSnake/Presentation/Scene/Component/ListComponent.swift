@@ -13,11 +13,11 @@ struct ListComponent: View {
     @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var context
     var onCheck: (() -> Void)?
-
+    
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
-
-    let category: CategoryIcon = .운동
+    
+    //    let category: CategoryIcon = .운동
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -53,9 +53,9 @@ struct ListComponent: View {
                         .frame(width: 44, height: 44)
                 })
                 
-
+                
             }
-
+            
         }
     }
     
@@ -67,12 +67,12 @@ struct ListComponent: View {
                 .foregroundColor(.gray01)
                 .cornerRadius(8)
             
-                Text(category.emoji)
-                    .font(.system(size: 28))
-                    .zIndex(1)
+            Text(category.emoji)
+                .font(.system(size: 28))
+                .zIndex(1)
             
         }
     }
-
-
+    
+    
 }
