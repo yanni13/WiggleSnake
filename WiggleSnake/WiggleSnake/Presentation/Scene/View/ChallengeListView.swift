@@ -65,25 +65,9 @@ struct ChallengeListView: View {
                         
                         VStack(spacing: 20) {
                             ForEach(categoryItems.indices, id: \.self) { index in
-                                //                                let itemBinding = Binding<ListItemModel>(
-                                //                                    get: {
-                                //                                        // 원본 items 배열에서 해당 항목 찾기
-                                //                                        if let originalIndex = items.firstIndex(where: { $0.id == categoryItems[index].id }) {
-                                //                                            return items[originalIndex]
-                                //                                        }
-                                //                                        return categoryItems[index]
-                                //                                    },
-                                //                                    set: { newValue in
-                                //                                        // 원본 items 배열에서 해당 항목 업데이트
-                                //                                        if let originalIndex = items.firstIndex(where: { $0.id == categoryItems[index].id }) {
-                                //                                            items[originalIndex] = newValue
-                                //                                        }
-                                //                                    }
-                                //                                )
-                                
                                 let item = categoryItems[index]
                                 
-                                // ✅ fetchViewModel.items 기반으로 Binding 생성
+                                // fetchViewModel.items 기반으로 Binding 생성
                                 let itemBinding = Binding<ListItemModel>(
                                     get: {
                                         fetchViewModel.items.first(where: { $0.id == item.id }) ?? item
@@ -128,20 +112,8 @@ struct ChallengeListView: View {
                 }.offset(x: -10)
             }
         }
-        .onChange(of: fetchViewModel.items) { newItems in
-            print("items 변경 감지됨")
-            for item in newItems {
-                print("id: \(item.id), isCompleted: \(item.isCompleted)")
-            }
-        }
-        
         .onAppear {
             items = fetchViewModel.fetchAllChallenges(context: context)
-            
-            print("onAppear에서 items 상태 확인:")
-            for item in items {
-                print("id: \(item.id), isCompleted: \(item.isCompleted)")
-            }
         }
         
     }
