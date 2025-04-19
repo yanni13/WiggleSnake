@@ -12,6 +12,7 @@ struct ListComponent: View {
     @Binding var item: ListItemModel
     @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var context
+    var onCheck: (() -> Void)?
 
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
@@ -45,6 +46,7 @@ struct ListComponent: View {
                 Button(action: {
                     item.isCompleted.toggle()
                     fetchViewModel.updateCompletion(for: item, context: context)
+                    onCheck?()
                     
                 }, label: {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")

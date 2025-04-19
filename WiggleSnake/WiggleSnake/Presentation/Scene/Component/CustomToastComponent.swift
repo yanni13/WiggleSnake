@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CustomToastComponent: View {
-    let text: String = ""
-    let icon: String = ""
+    let text: String
+    let icon: String
 
     var body: some View {
         ZStack(alignment: .leading) {
@@ -31,9 +31,7 @@ struct CustomToastComponent: View {
             }
         }
         .padding(.horizontal, 20)
+        .edgesIgnoringSafeArea(.bottom)
     }
 }
 
-#Preview {
-    CustomToastComponent()
-}
