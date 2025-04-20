@@ -13,6 +13,7 @@ struct MainView: View {
     @Environment(\.managedObjectContext) private var context
     @State private var path = NavigationPath()
     @StateObject var fetchViewModel = FetchChallengeViewModel()
+    @StateObject var deleteViewModel = DeleteChallengeViewModel()
         
     var body: some View {
         NavigationStack(path: $path) {
@@ -78,7 +79,7 @@ struct MainView: View {
                 case .challengeList:
                     ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
                 case .challengeDetail(let item):
-                    ChallengeDetailView(item: item)
+                    ChallengeDetailView(deleteViewModel: deleteViewModel, item: item)
                 }
                 
             }

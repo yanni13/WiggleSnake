@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct ChallengeDetailView: View {
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.presentationMode) private var presentationMode
+    
+    @ObservedObject var deleteViewModel: DeleteChallengeViewModel
     var item: ListItemModel
     
     var body: some View {
@@ -44,7 +48,15 @@ struct ChallengeDetailView: View {
             })
             
             Button(action: {
-                
+                deleteViewModel.deleteChallenge(for: item, context: context) { success in
+                    if success {
+                        self.presentationMode.wrappedValue.dismiss()
+                        
+                    } else {
+                        print("[ChallengeDetailView]: 삭제 실패")
+                    }
+                    
+                }
             }, label: {
                 Text("삭제")
             })
