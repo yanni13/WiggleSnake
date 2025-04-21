@@ -7,10 +7,15 @@
 
 import SwiftUI
 
+enum ChallengeEditorMode {
+    case add
+    case edit
+}
+
 struct AddChallengeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
-    @StateObject private var viewModel = AddChallengeViewModel()
+    @ObservedObject var viewModel: AddChallengeViewModel
     @State private var selectedCategory: Int = -1
     @State private var date: Date = Date()
     
@@ -22,8 +27,11 @@ struct AddChallengeView: View {
     @State private var isPickerStartData = true
     /// 사용자가 선택했는지 여부를 추적하는 상태 변수
     
-    
+
+    let mode: ChallengeEditorMode
+
     var body: some View {
+        let navigationTitle = mode == .add ? "도전 일기 추가하기" : "도전 일기 수정하기"
         ZStack {
             VStack(alignment: .leading) {
                 Spacer().frame(height: 40)
@@ -72,7 +80,7 @@ struct AddChallengeView: View {
             }
             .frame(maxHeight: .infinity)
             .padding(.horizontal, 20)
-            .navigationTitle("도전 일기 추가하기")
+            .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .edgesIgnoringSafeArea(.bottom)
@@ -265,7 +273,7 @@ struct AddChallengeView: View {
     
     
 }
-
-#Preview {
-    AddChallengeView()
-}
+//
+//#Preview {
+//    AddChallengeView()
+//}

@@ -16,6 +16,25 @@ final class AddChallengeViewModel: ObservableObject {
     @Published var endDate: Date = Date()
     @Published var isValidForm: Bool = false
     
+    private var existingChallenge: Challenge?
+    
+    init(mode: ChallengeEditorMode) {
+        switch mode {
+        case .add:
+            break //기본값
+        case .edit:
+            guard let challenge = existingChallenge else { return }
+
+            self.title = challenge.title ?? ""
+            self.memo = challenge.memo ?? ""
+            self.category = challenge.category ?? ""
+            self.startDate = challenge.startDate ?? Date()
+            self.endDate = challenge.endDate ?? Date()
+            self.existingChallenge = challenge
+        }
+    }
+    
+    
     /// 도전기록 추가하기 입력폼의 유효성을 검사하는 함수
     func formValid(completion: @escaping (Bool) -> Void) {
         if !title.isEmpty && !category.isEmpty && startDate <= endDate {
@@ -27,13 +46,25 @@ final class AddChallengeViewModel: ObservableObject {
     
     /// 데이터 저장
     func saveChallenge(context: NSManagedObjectContext) {
-        let newChallenge = Challenge(context: context)
-        newChallenge.id = UUID()
-        newChallenge.title = title
-        newChallenge.memo = memo
-        newChallenge.category = category
-        newChallenge.startDate = startDate
-        newChallenge.endDate = endDate
+        if let existingChallenge {
+            // 수정 모드
+            existingChallenge.title = title
+            existingChallenge.memo = memo
+            existingChallenge.category = category
+            existingChallenge.startDate = startDate
+            existingChallenge.endDate = endDate
+            return
+        } else {
+            // 추가 모드
+            let newChallenge = Challenge(context: context)
+            newChallenge.id = UUID()
+            newChallenge.title = title
+            newChallenge.memo = memo
+            newChallenge.category = category
+            newChallenge.startDate = startDate
+            newChallenge.endDate = endDate
+        }
+        
         
         do {
             try context.save()

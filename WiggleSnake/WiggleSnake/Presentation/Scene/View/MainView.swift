@@ -14,6 +14,7 @@ struct MainView: View {
     @State private var path = NavigationPath()
     @StateObject var fetchViewModel = FetchChallengeViewModel()
     @StateObject var deleteViewModel = DeleteChallengeViewModel()
+    @StateObject var addViewModel = AddChallengeViewModel(mode: .add)
         
     var body: some View {
         NavigationStack(path: $path) {
@@ -75,7 +76,7 @@ struct MainView: View {
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                 case .addChallenge:
-                    AddChallengeView()
+                    AddChallengeView(viewModel: addViewModel, mode: .add)
                 case .challengeList:
                     ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
                 case .challengeDetail(let item):
