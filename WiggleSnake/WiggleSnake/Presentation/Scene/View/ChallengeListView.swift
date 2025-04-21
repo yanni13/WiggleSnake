@@ -121,8 +121,6 @@ struct ChallengeListView: View {
                             }
                         }
                     }
-                    
-                    
                     Spacer()
                 }
                 
@@ -132,7 +130,7 @@ struct ChallengeListView: View {
                 Color.clear
                     .edgesIgnoringSafeArea(.all)
                     .confettiCannon(trigger: $triggerConfetti, num: 100, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 300), radius: 400, repetitions: 1)
-
+                
                 Spacer()
             }
             .allowsHitTesting(false)
@@ -140,16 +138,12 @@ struct ChallengeListView: View {
             if showToast {
                 VStack {
                     Spacer()
-                    CustomToastComponent(text: "지렁이의 꼬리가 10cm 자랐어요!", icon: "🎉")
+                    CustomToastComponent(text: "지렁이의 꼬리가 10cm 자랐어요!", icon: "🎉", color: .pink02, textColor: .white)
                         .padding(.bottom, 34)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                     
                 }
-                
-                
             }
-            
-            
         }
         .navigationTitle(Text("나의 도전 일지"))
         .navigationBarTitleDisplayMode(.inline)

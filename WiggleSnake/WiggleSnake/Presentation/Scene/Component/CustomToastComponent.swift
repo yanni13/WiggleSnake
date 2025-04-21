@@ -10,12 +10,14 @@ import SwiftUI
 struct CustomToastComponent: View {
     let text: String
     let icon: String
+    let color: Color
+    let textColor: Color
 
     var body: some View {
         ZStack(alignment: .leading) {
             Rectangle()
               .frame(maxWidth: .infinity, maxHeight: 50)
-              .foregroundColor(.pink01)
+              .foregroundColor(color)
               .cornerRadius(6)
             
             HStack(spacing: 10) {
@@ -27,7 +29,7 @@ struct CustomToastComponent: View {
                 
                 Text(text)
                     .font(.B1SemiboldFont())
-                    .foregroundColor(.white)
+                    .foregroundColor(textColor)
             }
         }
         .padding(.horizontal, 20)

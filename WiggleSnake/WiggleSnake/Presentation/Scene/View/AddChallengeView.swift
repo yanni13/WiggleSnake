@@ -68,10 +68,7 @@ struct AddChallengeView: View {
                 }, label: "확인")
                 .padding(.bottom, 34)
                 
-                //TODO: 폼이 유효하지 않을 때 alert 혹은 팝업
-                //                if viewModel.isValidForm {
-                //
-                //                }
+
             }
             .frame(maxHeight: .infinity)
             .padding(.horizontal, 20)
@@ -255,6 +252,13 @@ struct AddChallengeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .frame(maxWidth: .infinity, maxHeight: 150)
             .clipShape(RoundedRectangle(cornerRadius: 4))
+            
+            if viewModel.isValidForm {
+                Text("필수 입력 사항을 모두 채워 주세요.")
+                    .font(.H6MediumFont())
+                    .foregroundStyle(.red)
+                    
+            }
         }
     }
     
