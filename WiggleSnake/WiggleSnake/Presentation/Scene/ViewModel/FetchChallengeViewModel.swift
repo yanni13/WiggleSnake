@@ -11,7 +11,7 @@ import CoreData
 final class FetchChallengeViewModel: ObservableObject {
     @Published var items: [ListItemModel] = []
 
-
+    
     /// 데이터 조회
     func fetchAllChallenges(context: NSManagedObjectContext) -> [ListItemModel] {
 
@@ -20,7 +20,6 @@ final class FetchChallengeViewModel: ObservableObject {
         do {
             let challenges = try context.fetch(request)
             
-
             print("🔍 불러온 Challenge 수: \(challenges.count)")
             
             for (index, challenge) in challenges.enumerated() {
@@ -39,5 +38,29 @@ final class FetchChallengeViewModel: ObservableObject {
             return []
         }
     }
+    
+    /// 데이터 수정 - 진행중인 데이터를 완료 데이터로 넘김
+    func updateCompletion(for item: ListItemModel, context: NSManagedObjectContext) {
+        let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
+
+        do {
+            let results = try context.fetch(request)
+            if let challenge = results.first {
+                challenge.isCompleted = item.isCompleted
+                try context.save()
+                print("✅ isCompleted 상태가 CoreData에 반영되었습니다.")
+            }
+        } catch {
+            print("❌ CoreData 업데이트 실패: \(error)")
+        }
+    }
+    
+    func refreshItem(context: NSManagedObjectContext) {
+        self.items = fetchAllChallenges(context: context)
+        self.objectWillChange.send()
+    }
+
+
 }
 

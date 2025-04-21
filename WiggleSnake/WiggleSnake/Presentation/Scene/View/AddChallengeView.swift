@@ -95,7 +95,7 @@ struct AddChallengeView: View {
                 CategoryListView(viewModel: viewModel, selectedIndex: $selectedCategory)
                     .presentationDetents([.large, .large])
                     .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(20)
+ 
             }
             .sheet(isPresented: $isActivePicker, onDismiss: {
                 if isPickerStartData {
@@ -109,7 +109,6 @@ struct AddChallengeView: View {
                     .datePickerStyle(.graphical)
                     .edgesIgnoringSafeArea(.bottom)
                     .padding(.horizontal, 20)
-                    .presentationCornerRadius(20)
                 
             }
             
