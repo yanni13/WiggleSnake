@@ -10,7 +10,7 @@ import SwiftUI
 struct CalendarComponent: View {
     @State var month: Date
     @State var offset: CGSize = CGSize()
-    @State var clickedDates: Set<Date> = []
+    @Binding var completedDates: Set<Date>
     var item: ListItemModel
     
     private var dateRange: [Date] {
@@ -101,6 +101,7 @@ struct CalendarComponent: View {
     private var calendarGridView: some View {
         let daysInMonth: Int = numberOfDays(in: month)
         let firstWeekday: Int = firstWeekdayOfMonth(in: month) - 1
+
         
         return VStack {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 7), spacing: 0) {
@@ -116,16 +117,17 @@ struct CalendarComponent: View {
                         let isLastDay = date.startOfDay() == item.endDate.startOfDay()
                         let isPreviousDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date)
                         let isNextDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date)
-                        
+                        let isCompleted = completedDates.contains(date.startOfDay())  // 완료 여부 확인
+
                         CellView(day: day,
                                  isInRange: isInDateRange,
                                  isFirstDay: isFirstDay,
                                  isLastDay: isLastDay,
                                  isPreviousDayInRange: isPreviousDayInRange && !isFirstDay,
-                                 isNextDayInRange: isNextDayInRange && !isLastDay
+                                 isNextDayInRange: isNextDayInRange && !isLastDay,
+                                 isCompleted: isCompleted
                         )
                         .frame(height: 60)
-//                        .border(.black)
                         
                     }
                 }
@@ -134,6 +136,7 @@ struct CalendarComponent: View {
             .padding(.horizontal, 20)
         }
     }
+    
     // 주어진 날짜가 범위 내에 있는지 확인
     private func isDateInRange(_ date: Date) -> Bool {
         let startDate = item.startDate.startOfDay()
@@ -152,14 +155,25 @@ private struct CellView: View {
     var isLastDay: Bool = false
     var isPreviousDayInRange: Bool = false
     var isNextDayInRange: Bool = false
+    var isCompleted: Bool = false
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5)
                 .opacity(0)
                 .overlay(Text(String(day)))
+                .zIndex(1)
                 .foregroundColor(.gray05)
                 .padding(.bottom, 30)
+            
+            if isCompleted {
+                Circle()
+                    .foregroundStyle(.pink01)
+                    .padding(.bottom, 30)
+                    .frame(maxWidth: .infinity)
+
+                
+            }
             
             // 이전 날짜와 연결(왼쪽)
             if isInRange && isPreviousDayInRange {

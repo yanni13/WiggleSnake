@@ -13,7 +13,8 @@ struct ListComponent: View {
     @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var context
     var onCheck: (() -> Void)?
-    
+    let today = Date().startOfDay()
+
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
     
@@ -44,8 +45,12 @@ struct ListComponent: View {
                 Spacer()
                 
                 Button(action: {
+                    
                     item.isCompleted.toggle()
                     item.completedDate = item.isCompleted ? nil : Date()
+                    //  CoreData에 ChallengeRecord 저장
+                    fetchViewModel.markChallengeCompleted(for: item, on: today, context: context)
+
                     fetchViewModel.updateCompletion(for: item, context: context)
                     onCheck?()
                     

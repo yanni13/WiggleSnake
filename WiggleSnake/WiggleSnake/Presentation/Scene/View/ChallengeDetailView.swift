@@ -12,7 +12,8 @@ struct ChallengeDetailView: View {
     @Environment(\.presentationMode) private var presentationMode
     
     @ObservedObject var deleteViewModel: DeleteChallengeViewModel
-
+    @ObservedObject var fetchViewModel: FetchChallengeViewModel
+    
     var item: ListItemModel
     
     var body: some View {
@@ -20,7 +21,7 @@ struct ChallengeDetailView: View {
             VStack(alignment: .leading) {
                 Spacer().frame(height: 35)
                 
-                CalendarComponent(month: Date(), item: item)
+                CalendarComponent(month: Date(), completedDates: $fetchViewModel.completedDates, item: item)
                 
                 Spacer().frame(height: 30)
                 
@@ -67,7 +68,6 @@ struct ChallengeDetailView: View {
                 }
             }
         }
-
     }
     
     @ViewBuilder

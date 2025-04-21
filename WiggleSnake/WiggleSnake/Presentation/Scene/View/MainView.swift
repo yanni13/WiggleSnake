@@ -79,7 +79,7 @@ struct MainView: View {
                 case .challengeList:
                     ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
                 case .challengeDetail(let item):
-                    ChallengeDetailView(deleteViewModel: deleteViewModel, item: item)
+                    ChallengeDetailView(deleteViewModel: deleteViewModel, fetchViewModel: fetchViewModel, item: item)
                 }
                 
             }
