@@ -11,7 +11,7 @@ struct AddChallengeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
     @StateObject private var viewModel = AddChallengeViewModel()
-    @State private var selectedCategory: Int = 0
+    @State private var selectedCategory: Int = -1
     @State private var date: Date = Date()
     
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
