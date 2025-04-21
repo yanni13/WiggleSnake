@@ -17,7 +17,7 @@ struct ListComponent: View {
     
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
     
-    //    let category: CategoryIcon = .운동
+        let category: CategoryIcon = .운동
     
     var body: some View {
         VStack(alignment: .leading) {
