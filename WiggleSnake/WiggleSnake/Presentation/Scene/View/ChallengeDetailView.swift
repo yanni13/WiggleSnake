@@ -12,9 +12,9 @@ struct ChallengeDetailView: View {
 
     @Environment(\.managedObjectContext) private var context
     @Environment(\.presentationMode) private var presentationMode
-    
-    @ObservedObject var deleteViewModel = DeleteChallengeViewModel()
-    @ObservedObject var fetchViewModel: FetchChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
+//    @ObservedObject var deleteViewModel = DeleteChallengeViewModel()
+//    @ObservedObject var fetchViewModel: FetchChallengeViewModel
     
     var item: ListItemModel
     
@@ -23,7 +23,7 @@ struct ChallengeDetailView: View {
             VStack(alignment: .leading) {
                 Spacer().frame(height: 35)
                 
-                CalendarComponent(month: Date(), completedDates: $fetchViewModel.completedDates, item: item)
+                CalendarComponent(month: Date(), completedDates: $viewModel.completedDates, item: item)
                 
                 Spacer().frame(height: 30)
                 
@@ -82,7 +82,7 @@ struct ChallengeDetailView: View {
             })
             
             Button(action: {
-                deleteViewModel.deleteChallenge(for: item, context: context) { success in
+                viewModel.deleteChallenge(for: item, context: context) { success in
                     if success {
                         self.presentationMode.wrappedValue.dismiss()
                         

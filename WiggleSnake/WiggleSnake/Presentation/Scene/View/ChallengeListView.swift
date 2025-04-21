@@ -11,7 +11,7 @@ import ConfettiSwiftUI
 struct ChallengeListView: View {
     @Environment(\.managedObjectContext) private var context
     
-    @ObservedObject var fetchViewModel: FetchChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
     @State private var selectedTab: String = "진행중"
     /// 저장된 데이터를 불러와서 items 배열에 저장하기 위한 변수
     @State private var items: [ListItemModel] = []
@@ -29,7 +29,7 @@ struct ChallengeListView: View {
     private var filteredItems: [ListItemModel] {
         let today = Date()
         
-        let activeItems = fetchViewModel.items.filter { item in
+        let activeItems = viewModel.items.filter { item in
             today >= item.startDate && today <= item.endDate
         }
         
@@ -81,11 +81,11 @@ struct ChallengeListView: View {
                                     // fetchViewModel.items 기반으로 Binding 생성
                                     let itemBinding = Binding<ListItemModel>(
                                         get: {
-                                            fetchViewModel.items.first(where: { $0.id == item.id }) ?? item
+                                            viewModel.items.first(where: { $0.id == item.id }) ?? item
                                         },
                                         set: { newValue in
-                                            if let i = fetchViewModel.items.firstIndex(where: { $0.id == newValue.id }) {
-                                                fetchViewModel.items[i] = newValue
+                                            if let i = viewModel.items.firstIndex(where: { $0.id == newValue.id }) {
+                                                viewModel.items[i] = newValue
                                             }
                                         }
                                     )
@@ -107,7 +107,7 @@ struct ChallengeListView: View {
                                                 }
                                             }
                                         },
-                                        fetchViewModel: fetchViewModel
+                                        viewModel: viewModel
                                     )
                                     .padding(.horizontal, 20)
                                 }
@@ -160,7 +160,7 @@ struct ChallengeListView: View {
             }
         }
         .onAppear {
-            items = fetchViewModel.fetchAllChallenges(context: context)
+            items = viewModel.fetchAllChallenges(context: context)
         }
         
     }

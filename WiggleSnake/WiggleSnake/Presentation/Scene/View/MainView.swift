@@ -12,9 +12,7 @@ struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var context
     @State private var path = NavigationPath()
-    @StateObject var fetchViewModel = FetchChallengeViewModel()
-    @StateObject var deleteViewModel = DeleteChallengeViewModel()
-    @StateObject var addViewModel = AddChallengeViewModel()
+    @StateObject var viewModel = ChallengeViewModel()
 
         
     var body: some View {
@@ -77,13 +75,13 @@ struct MainView: View {
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                 case .addChallenge:
-                    AddChallengeView(viewModel: addViewModel, mode: .add)
+                    AddChallengeView(viewModel: viewModel, mode: .add)
                 case .editChallenge:
-                    AddChallengeView(viewModel: addViewModel, mode: .edit)
+                    AddChallengeView(viewModel: viewModel, mode: .edit)
                 case .challengeList:
-                    ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
+                    ChallengeListView(viewModel: viewModel, path: $path)
                 case .challengeDetail(let item):
-                    ChallengeDetailView(path: $path, fetchViewModel: fetchViewModel, item: item)
+                    ChallengeDetailView(path: $path, viewModel: viewModel, item: item)
                 }
                 
             }

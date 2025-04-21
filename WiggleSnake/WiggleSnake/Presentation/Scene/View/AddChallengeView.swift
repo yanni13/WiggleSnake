@@ -15,7 +15,7 @@ enum ChallengeEditorMode {
 struct AddChallengeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject var viewModel: AddChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
     @State private var selectedCategory: Int = -1
     @State private var date: Date = Date()
     

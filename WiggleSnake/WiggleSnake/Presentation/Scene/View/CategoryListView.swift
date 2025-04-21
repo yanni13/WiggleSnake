@@ -10,7 +10,7 @@ import SwiftUI
 struct CategoryListView: View {
     
     /// 카테고리의 상태를 담는 변수
-    @ObservedObject var viewModel: AddChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
     @Binding var selectedIndex: Int
     
     let columns = [GridItem(.flexible(), spacing: 30), GridItem(.flexible(), spacing: 30)]

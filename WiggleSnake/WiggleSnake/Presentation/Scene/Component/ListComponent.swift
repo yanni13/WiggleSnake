@@ -16,7 +16,7 @@ struct ListComponent: View {
     let today = Date().startOfDay()
 
     
-    @ObservedObject var fetchViewModel: FetchChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
     
         let category: CategoryIcon = .운동
     
@@ -49,9 +49,9 @@ struct ListComponent: View {
                     item.isCompleted.toggle()
                     item.completedDate = item.isCompleted ? nil : Date()
                     //  CoreData에 ChallengeRecord 저장
-                    fetchViewModel.markChallengeCompleted(for: item, on: today, context: context)
+                    viewModel.markChallengeCompleted(for: item, on: today, context: context)
 
-                    fetchViewModel.updateCompletion(for: item, context: context)
+                    viewModel.updateCompletion(for: item, context: context)
                     onCheck?()
                     
                 }, label: {
