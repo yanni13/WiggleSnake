@@ -29,9 +29,11 @@ struct AddChallengeView: View {
     @State private var items: [ListItemModel] = []
     let mode: ChallengeEditorMode
     let editingItem: ListItemModel?
+    
 
     var body: some View {
         let navigationTitle = mode == .add ? "도전 일기 추가하기" : "도전 일기 수정하기"
+
         ZStack {
             VStack(alignment: .leading) {
                 Spacer().frame(height: 40)
@@ -126,7 +128,7 @@ struct AddChallengeView: View {
                     viewModel.memo = item.memo
                     viewModel.startDate = item.startDate
                     viewModel.endDate = item.endDate
-//                    viewModel.category = item.category
+                    viewModel.category = item.category
                 }
 
         }
@@ -168,7 +170,8 @@ struct AddChallengeView: View {
     
     @ViewBuilder
     private func categoryComponent() -> some View {
-        let categoryValid = selectedCategory > 0 && selectedCategory < CategoryIcon.allCases.count
+        let categoryValid = viewModel.category != nil
+        
         HStack {
             InquiryText(title: "카테고리", isRequired: true)
             
@@ -177,8 +180,8 @@ struct AddChallengeView: View {
             Button(action: {
                 isActiveCategory = true
             }, label: {
-                Text(categoryValid ? CategoryIcon.allCases[selectedCategory].groupTitle : "카테고리를 선택해주세요")
-                
+                Text(categoryValid ? viewModel.category?.groupTitle ?? "" : "카테고리를 선택해주세요")
+
                     .font(.H5MediumFont())
                     .foregroundColor(categoryValid ? .gray05 : .gray03)
                 

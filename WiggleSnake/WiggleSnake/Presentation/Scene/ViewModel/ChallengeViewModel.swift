@@ -11,7 +11,9 @@ import CoreData
 final class ChallengeViewModel: ObservableObject {
     @Published var title: String = ""
     @Published var memo: String = ""
-    @Published var category: String = ""
+    @Published var category: CategoryIcon? = nil
+
+//    @Published var category: String = ""
     @Published var startDate: Date = Date()
     @Published var endDate: Date = Date()
     @Published var isValidForm: Bool = false
@@ -23,7 +25,7 @@ final class ChallengeViewModel: ObservableObject {
     
     /// 도전기록 추가하기 입력폼의 유효성을 검사하는 함수
     func formValid(completion: @escaping (Bool) -> Void) {
-        if !title.isEmpty && !category.isEmpty && startDate <= endDate {
+        if let category = category, !title.isEmpty && !category.rawValue.isEmpty && startDate <= endDate {
             completion(true)
         } else {
             completion(false)
@@ -36,7 +38,7 @@ final class ChallengeViewModel: ObservableObject {
             // 수정 모드
             existingChallenge.title = title
             existingChallenge.memo = memo
-            existingChallenge.category = category
+            existingChallenge.category = category?.rawValue ?? ""
             existingChallenge.startDate = startDate
             existingChallenge.endDate = endDate
             return
@@ -46,7 +48,7 @@ final class ChallengeViewModel: ObservableObject {
             newChallenge.id = UUID()
             newChallenge.title = title
             newChallenge.memo = memo
-            newChallenge.category = category
+            newChallenge.category = category?.rawValue ?? ""
             newChallenge.startDate = startDate
             newChallenge.endDate = endDate
         }
