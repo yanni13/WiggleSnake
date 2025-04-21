@@ -8,6 +8,7 @@ import Combine
 
 enum NavigationRoute: Hashable {
     case addChallenge
+     case editChallenge(ListItemModel)
     case challengeList
     case challengeDetail(ListItemModel)
 }

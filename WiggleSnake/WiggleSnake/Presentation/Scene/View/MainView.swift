@@ -14,7 +14,8 @@ struct MainView: View {
     @State private var path = NavigationPath()
     @StateObject var fetchViewModel = FetchChallengeViewModel()
     @StateObject var deleteViewModel = DeleteChallengeViewModel()
-    @StateObject var addViewModel = AddChallengeViewModel(mode: .add)
+    @StateObject var addViewModel = AddChallengeViewModel()
+
         
     var body: some View {
         NavigationStack(path: $path) {
@@ -77,10 +78,12 @@ struct MainView: View {
                 switch route {
                 case .addChallenge:
                     AddChallengeView(viewModel: addViewModel, mode: .add)
+                case .editChallenge:
+                    AddChallengeView(viewModel: addViewModel, mode: .edit)
                 case .challengeList:
                     ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
                 case .challengeDetail(let item):
-                    ChallengeDetailView(deleteViewModel: deleteViewModel, fetchViewModel: fetchViewModel, item: item)
+                    ChallengeDetailView(path: $path, fetchViewModel: fetchViewModel, item: item)
                 }
                 
             }
@@ -92,6 +95,7 @@ struct MainView: View {
         }
     }
     
+    // MARK: 데이터 잘 불러오고 있는지 로그찍는 함수
     private func fetchAndPrintChallenges() {
         let fetchRequest: NSFetchRequest<Challenge> = Challenge.fetchRequest()
         

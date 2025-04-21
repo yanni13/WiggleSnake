@@ -17,23 +17,20 @@ final class AddChallengeViewModel: ObservableObject {
     @Published var isValidForm: Bool = false
     
     private var existingChallenge: Challenge?
-    
-    init(mode: ChallengeEditorMode) {
-        switch mode {
-        case .add:
-            break //기본값
-        case .edit:
-            guard let challenge = existingChallenge else { return }
 
-            self.title = challenge.title ?? ""
-            self.memo = challenge.memo ?? ""
-            self.category = challenge.category ?? ""
-            self.startDate = challenge.startDate ?? Date()
-            self.endDate = challenge.endDate ?? Date()
-            self.existingChallenge = challenge
-        }
-    }
-    
+//    init(mode: ChallengeEditorMode, challenge: ListItemModel) {
+//
+//        switch mode {
+//        case .add:
+//            break
+//        case .edit:
+//            self.title = challenge.title
+//            self.memo = challenge.memo
+//            self.startDate = challenge.startDate
+//            self.endDate = challenge.endDate
+//            if let category = CategoryIcon(rawValue: categoryString)
+//        }
+//    }
     
     /// 도전기록 추가하기 입력폼의 유효성을 검사하는 함수
     func formValid(completion: @escaping (Bool) -> Void) {

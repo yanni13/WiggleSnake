@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ChallengeDetailView: View {
+    @Binding var path: NavigationPath
+
     @Environment(\.managedObjectContext) private var context
     @Environment(\.presentationMode) private var presentationMode
     
-    @ObservedObject var deleteViewModel: DeleteChallengeViewModel
+    @ObservedObject var deleteViewModel = DeleteChallengeViewModel()
     @ObservedObject var fetchViewModel: FetchChallengeViewModel
     
     var item: ListItemModel
@@ -74,7 +76,7 @@ struct ChallengeDetailView: View {
     private func menuComponent() -> some View {
         Menu {
             Button(action: {
-                
+                path.append(NavigationRoute.editChallenge(item))
             }, label: {
                 Text("수정")
             })
