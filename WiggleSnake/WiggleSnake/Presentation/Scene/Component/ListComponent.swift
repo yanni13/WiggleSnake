@@ -45,6 +45,7 @@ struct ListComponent: View {
                 
                 Button(action: {
                     item.isCompleted.toggle()
+                    item.completedDate = item.isCompleted ? nil : Date()
                     fetchViewModel.updateCompletion(for: item, context: context)
                     onCheck?()
                     
@@ -52,8 +53,6 @@ struct ListComponent: View {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")
                         .frame(width: 44, height: 44)
                 })
-                
-                
             }
             
         }
@@ -73,8 +72,6 @@ struct ListComponent: View {
             
         }
     }
-    
-    
 }
 
 

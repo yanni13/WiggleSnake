@@ -27,15 +27,16 @@ struct ChallengeListView: View {
     
     private var filteredItems: [ListItemModel] {
         let today = Date()
-
+        
         let activeItems = fetchViewModel.items.filter { item in
-                return today >= item.startDate && today <= item.endDate
-            }
-            
-            return selectedTab == "진행중"
-                ? activeItems.filter { !$0.isCompleted }
-                : fetchViewModel.items.filter { $0.isCompleted } 
+            today >= item.startDate && today <= item.endDate
+        }
+        
+        return selectedTab == "진행중"
+        ? activeItems.filter { !$0.isCompleted }
+        : activeItems.filter { $0.isCompleted }
     }
+
     
     var groupedItems: [CategoryIcon: [ListItemModel]] {
         Dictionary(grouping: filteredItems, by: { $0.category })
