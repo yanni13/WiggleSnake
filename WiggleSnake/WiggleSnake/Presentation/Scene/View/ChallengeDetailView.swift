@@ -19,7 +19,7 @@ struct ChallengeDetailView: View {
         VStack(alignment: .leading) {
             Spacer().frame(height: 35)
 
-            CalendarComponent(month: Date())
+            CalendarComponent(month: Date(), item: item)
             
             Spacer().frame(height: 60)
 

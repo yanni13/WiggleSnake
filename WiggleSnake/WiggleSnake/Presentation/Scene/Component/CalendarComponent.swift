@@ -11,6 +11,24 @@ struct CalendarComponent: View {
     @State var month: Date
     @State var offset: CGSize = CGSize()
     @State var clickedDates: Set<Date> = []
+    var item: ListItemModel
+    
+    private var dateRange: [Date] {
+        let calendar = Calendar.current
+        var dates: [Date] = []
+        var currentDate = item.startDate.startOfDay()
+        let endDate = item.endDate.startOfDay()
+        
+        while currentDate <= endDate {
+            dates.append(currentDate)
+            if let nextDate = calendar.date(byAdding: .day, value: 1, to: currentDate) {
+                currentDate = nextDate
+            } else {
+                break
+            }
+        }
+        return dates
+    }
     
     var body: some View {
         VStack {
@@ -46,7 +64,7 @@ struct CalendarComponent: View {
                 Spacer()
                 
                 Button(action: {
-                    
+                    changeMonth(by: -1)
                 }, label: {
                     Image("icon_arrow_back_small")
                         .resizable()
@@ -54,7 +72,7 @@ struct CalendarComponent: View {
                 })
                 
                 Button(action: {
-                    
+                    changeMonth(by: 1)
                 }, label: {
                     Image("icon_arrow_front_small")
                         .resizable()
@@ -85,7 +103,7 @@ struct CalendarComponent: View {
         let firstWeekday: Int = firstWeekdayOfMonth(in: month) - 1
         
         return VStack {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 7), spacing: 40) {
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
                 ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
                     if index < firstWeekday {
                         RoundedRectangle(cornerRadius: 5)
@@ -93,43 +111,111 @@ struct CalendarComponent: View {
                     } else {
                         let date = getDate(for: index - firstWeekday)
                         let day = index - firstWeekday + 1
-                        let clicked = clickedDates.contains(date)
+                        let isInDateRange = isDateInRange(date)
+                        let isFirstDay = date.startOfDay() == item.startDate.startOfDay()
+                        let isLastDay = date.startOfDay() == item.endDate.startOfDay()
+                        let isPreviousDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date)
+                        let isNextDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date)
                         
-                        CellView(day: day, clicked: clicked)
-                            .onTapGesture {
-                                if clicked {
-                                    clickedDates.remove(date)
-                                } else {
-                                    clickedDates.insert(date)
-                                }
-                            }
+                        CellView(day: day,
+                                 isInRange: isInDateRange,
+                                 isFirstDay: isFirstDay,
+                                 isLastDay: isLastDay,
+                                 isPreviousDayInRange: isPreviousDayInRange && !isFirstDay,
+                                 isNextDayInRange: isNextDayInRange && !isLastDay
+                        )
+                        .frame(height: 40)
+                        
                     }
                 }
             }
+            
             .padding(.horizontal, 20)
         }
+    }
+    // 주어진 날짜가 범위 내에 있는지 확인
+    private func isDateInRange(_ date: Date) -> Bool {
+        let startDate = item.startDate.startOfDay()
+        let endDate = item.endDate.startOfDay()
+        let targetDate = date.startOfDay()
+        
+        return targetDate >= startDate && targetDate <= endDate
     }
 }
 
 // MARK: - 일자 셀 뷰
 private struct CellView: View {
     var day: Int
-    var clicked: Bool = false
-    
-    init(day: Int, clicked: Bool) {
-        self.day = day
-        self.clicked = clicked
-    }
+    var isInRange: Bool = false
+    var isFirstDay: Bool = false
+    var isLastDay: Bool = false
+    var isPreviousDayInRange: Bool = false
+    var isNextDayInRange: Bool = false
     
     var body: some View {
-        VStack {
+        ZStack {
             RoundedRectangle(cornerRadius: 5)
                 .opacity(0)
                 .overlay(Text(String(day)))
                 .foregroundColor(.gray05)
+            
+            // 이전 날짜와 연결(왼쪽)
+            if isInRange && isPreviousDayInRange {
+                HStack {
+                    Rectangle()
+                        .foregroundColor(.pink02)
+                        .frame(height: 6)
+                    Spacer()
+                }
+                .padding(.leading, -5)
+                .padding(.top, 30)
+            }
+            
+            // 다음 날짜와 연결(오른쪽)
+            if isInRange && isNextDayInRange {
+                HStack {
+                    Spacer()
+                    Rectangle()
+                        .foregroundColor(.pink02)
+                        .frame(height: 6)
+                }
+                .padding(.trailing, -5)
+                .padding(.top, 30)
+                
+            }
+            
+            
+            // 특별한 날짜 표시기
+            if isInRange {
+                if isFirstDay {
+                    // 첫 번째 날짜
+                    HStack {
+                        Rectangle()
+                          .foregroundColor(.pink02)
+                          .frame(height: 6)
+                          .cornerRadius(10)
+                            
+                        Spacer()
+                    }
+                    .padding(.top, 30)
+                    
+                } else if isLastDay {
+                    // 마지막 날짜
+                    HStack {
+                        Rectangle()
+                            .foregroundColor(.pink02)
+                            .frame(height: 6)
+                            .cornerRadius(10)
+                        
+                    }
+                    .padding(.top, 30)
+                }
+            }
         }
     }
 }
+
+
 
 // MARK: - 내부 메서드
 private extension CalendarComponent {
@@ -164,19 +250,29 @@ private extension CalendarComponent {
             self.month = newMonth
         }
     }
+    
+    /// 해당 날짜가 챌린지 기간에 포함되는지 여부
+    func isInChallengeRange(_ date: Date) -> Bool {
+        return date >= item.startDate.startOfDay() && date <= item.endDate.startOfDay()
+    }
+    
 }
 
-// MARK: - Static 프로퍼티
-extension CalendarComponent {
+// MARK: - CalendarView Static 프로퍼티
+private extension CalendarComponent {
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "M월"
+        formatter.dateFormat = "YYYY년 M월"
         return formatter
     }()
     
     static let weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
 }
 
-#Preview {
-    CalendarComponent(month: Date())
+
+// MARK: - Date Extension
+extension Date {
+    func startOfDay() -> Date {
+        Calendar.current.startOfDay(for: self)
+    }
 }
