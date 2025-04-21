@@ -103,7 +103,7 @@ struct CalendarComponent: View {
         let firstWeekday: Int = firstWeekdayOfMonth(in: month) - 1
         
         return VStack {
-            LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
+            LazyVGrid(columns: Array(repeating: GridItem(), count: 7), spacing: 0) {
                 ForEach(0 ..< daysInMonth + firstWeekday, id: \.self) { index in
                     if index < firstWeekday {
                         RoundedRectangle(cornerRadius: 5)
@@ -124,7 +124,8 @@ struct CalendarComponent: View {
                                  isPreviousDayInRange: isPreviousDayInRange && !isFirstDay,
                                  isNextDayInRange: isNextDayInRange && !isLastDay
                         )
-                        .frame(height: 40)
+                        .frame(height: 60)
+//                        .border(.black)
                         
                     }
                 }
@@ -158,6 +159,7 @@ private struct CellView: View {
                 .opacity(0)
                 .overlay(Text(String(day)))
                 .foregroundColor(.gray05)
+                .padding(.bottom, 30)
             
             // 이전 날짜와 연결(왼쪽)
             if isInRange && isPreviousDayInRange {
@@ -181,7 +183,7 @@ private struct CellView: View {
                 }
                 .padding(.trailing, -5)
                 .padding(.top, 30)
-                
+
             }
             
             
@@ -198,7 +200,7 @@ private struct CellView: View {
                         Spacer()
                     }
                     .padding(.top, 30)
-                    
+
                 } else if isLastDay {
                     // 마지막 날짜
                     HStack {

@@ -16,54 +16,58 @@ struct ChallengeDetailView: View {
     var item: ListItemModel
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Spacer().frame(height: 35)
-
-            CalendarComponent(month: Date(), item: item)
-            
-            Spacer().frame(height: 60)
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text("다짐 및 도전 목표")
-                    .foregroundColor(.gray05)
-                    .font(.H4MediumFont())
+        ScrollView {
+            VStack(alignment: .leading) {
+                Spacer().frame(height: 35)
                 
+                CalendarComponent(month: Date(), item: item)
                 
-                ZStack(alignment: .topLeading) {
-                    Rectangle()
-                        .frame(maxWidth: .infinity, maxHeight: 150)
-                      .foregroundColor(.gray01)
-                      .cornerRadius(4)
-                    Text(item.memo)
+                Spacer().frame(height: 30)
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("다짐 및 도전 목표")
                         .foregroundColor(.gray05)
-                        .padding(13)
-                        .font(.H5MediumFont())
-    
-    
+                        .font(.H4MediumFont())
+                    
+                    
+                    ZStack(alignment: .topLeading) {
+                        Rectangle()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 150)
+                            .foregroundColor(.gray01)
+                            .cornerRadius(4)
+                        Text(item.memo)
+                            .foregroundColor(.gray05)
+                            .padding(13)
+                            .font(.H5MediumFont())
+                        
+                        
+                    }
+                }
+                .padding(.horizontal, 20)
+                
+                Spacer()
+            }
+            .navigationTitle(item.title)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .edgesIgnoringSafeArea(.bottom)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        NavigationBackBtn()
+                            .padding(.leading, 5)
+                            .contentShape(Rectangle())
+                    }
+                    .offset(x: -10)
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    menuComponent()
                 }
             }
-            .padding(.horizontal, 20)
-            
-            Spacer()
         }
-        .navigationTitle(item.title)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .edgesIgnoringSafeArea(.bottom)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    NavigationBackBtn()
-                        .padding(.leading, 5)
-                        .contentShape(Rectangle())
-                }
-                .offset(x: -10)
-            }
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                menuComponent()
-            }
-        }
+
     }
     
     @ViewBuilder
