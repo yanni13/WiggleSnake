@@ -12,11 +12,39 @@ struct ChallengeDetailView: View {
     @Environment(\.presentationMode) private var presentationMode
     
     @ObservedObject var deleteViewModel: DeleteChallengeViewModel
+
     var item: ListItemModel
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
+            Spacer().frame(height: 35)
+
+            CalendarComponent(month: Date())
             
+            Spacer().frame(height: 60)
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("다짐 및 도전 목표")
+                    .foregroundColor(.gray05)
+                    .font(.H4MediumFont())
+                
+                
+                ZStack(alignment: .topLeading) {
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: 150)
+                      .foregroundColor(.gray01)
+                      .cornerRadius(4)
+                    Text(item.memo)
+                        .foregroundColor(.gray05)
+                        .padding(13)
+                        .font(.H5MediumFont())
+    
+    
+                }
+            }
+            .padding(.horizontal, 20)
+            
+            Spacer()
         }
         .navigationTitle(item.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -74,3 +102,4 @@ struct ChallengeDetailView: View {
         }
     }
 }
+
