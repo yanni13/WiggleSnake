@@ -75,9 +75,9 @@ struct MainView: View {
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                 case .addChallenge:
-                    AddChallengeView(viewModel: viewModel, mode: .add)
-                case .editChallenge:
-                    AddChallengeView(viewModel: viewModel, mode: .edit)
+                    AddChallengeView(viewModel: viewModel, mode: .add, editingItem: nil)
+                case .editChallenge(let item):
+                    AddChallengeView(viewModel: viewModel, mode: .edit, editingItem: item)
                 case .challengeList:
                     ChallengeListView(viewModel: viewModel, path: $path)
                 case .challengeDetail(let item):
@@ -88,8 +88,6 @@ struct MainView: View {
             .onAppear {
                 fetchAndPrintChallenges()
             }
-            
-            
         }
     }
     

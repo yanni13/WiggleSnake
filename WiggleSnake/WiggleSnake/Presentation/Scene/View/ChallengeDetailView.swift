@@ -13,8 +13,6 @@ struct ChallengeDetailView: View {
     @Environment(\.managedObjectContext) private var context
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: ChallengeViewModel
-//    @ObservedObject var deleteViewModel = DeleteChallengeViewModel()
-//    @ObservedObject var fetchViewModel: FetchChallengeViewModel
     
     var item: ListItemModel
     

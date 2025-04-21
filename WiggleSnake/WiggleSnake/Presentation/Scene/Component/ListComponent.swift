@@ -45,7 +45,6 @@ struct ListComponent: View {
                 Spacer()
                 
                 Button(action: {
-                    
                     item.isCompleted.toggle()
                     item.completedDate = item.isCompleted ? nil : Date()
                     //  CoreData에 ChallengeRecord 저장

@@ -25,10 +25,10 @@ struct AddChallengeView: View {
     @State private var isActivePicker: Bool = false
     /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
     @State private var isPickerStartData = true
-    /// 사용자가 선택했는지 여부를 추적하는 상태 변수
-    
-
+    /// 사용자가 데이터를 받아와서 저장할 배열
+    @State private var items: [ListItemModel] = []
     let mode: ChallengeEditorMode
+    let editingItem: ListItemModel?
 
     var body: some View {
         let navigationTitle = mode == .add ? "도전 일기 추가하기" : "도전 일기 수정하기"
@@ -117,6 +117,18 @@ struct AddChallengeView: View {
                 
             }
             
+        }
+        .onAppear {
+            items = viewModel.fetchAllChallenges(context: viewContext)
+            
+            if mode == .edit, let item = editingItem {
+                    viewModel.title = item.title
+                    viewModel.memo = item.memo
+                    viewModel.startDate = item.startDate
+                    viewModel.endDate = item.endDate
+//                    viewModel.category = item.category
+                }
+
         }
         
     }
