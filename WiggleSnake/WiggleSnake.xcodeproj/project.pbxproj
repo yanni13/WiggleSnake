@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D81714C82DAF2F1D007704BD /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D81714C72DAF2F1D007704BD /* .gitignore */; };
+		D8FA6CE62DB633280004A9CF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FA6CE62DB633280004A9CF /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +134,7 @@
 			);
 			name = WiggleSnake;
 			packageProductDependencies = (
+				D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */,
 			);
 			productName = WiggleSnack;
 			productReference = D846DDD42DACD53900B9E375 /* WiggleSnake.app */;
@@ -161,6 +164,9 @@
 			);
 			mainGroup = D846DDCB2DACD53900B9E375;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D8FA6CE42DB633280004A9CF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D846DDD52DACD53900B9E375 /* Products */;
 			projectDirPath = "";
@@ -432,6 +438,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D8FA6CE42DB633280004A9CF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8FA6CE42DB633280004A9CF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D846DDCC2DACD53900B9E375 /* Project object */;
 }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import ConfettiSwiftUI
 
 struct ChallengeListView: View {
     @Environment(\.managedObjectContext) private var context
@@ -20,6 +20,7 @@ struct ChallengeListView: View {
     /// 선택된 리스트 아이템을 저장하는 변수
     @State private var selectedItem: ListItemModel?
     @State private var showToast: Bool = false
+    @State private var triggerConfetti: Bool = false
     
     @Binding var path: NavigationPath
     
@@ -36,7 +37,7 @@ struct ChallengeListView: View {
         ? activeItems.filter { !$0.isCompleted }
         : activeItems.filter { $0.isCompleted }
     }
-
+    
     
     var groupedItems: [CategoryIcon: [ListItemModel]] {
         Dictionary(grouping: filteredItems, by: { $0.category })
@@ -96,10 +97,12 @@ struct ChallengeListView: View {
                                             if selectedTab == "진행중" {
                                                 withAnimation(.easeInOut(duration: 0.3)) {
                                                     showToast = true
+                                                    triggerConfetti = true
                                                 }
                                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                                     withAnimation(.easeInOut(duration: 0.3)) {
                                                         showToast = false
+                                                        triggerConfetti = false
                                                     }
                                                 }
                                             }
@@ -125,13 +128,25 @@ struct ChallengeListView: View {
                 
             }
             
+            VStack {
+                Color.clear
+                    .edgesIgnoringSafeArea(.all)
+                    .confettiCannon(trigger: $triggerConfetti, num: 100, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 300), radius: 400, repetitions: 1)
+
+                Spacer()
+            }
+            .allowsHitTesting(false)
+            
             if showToast {
                 VStack {
                     Spacer()
                     CustomToastComponent(text: "지렁이의 꼬리가 10cm 자랐어요!", icon: "🎉")
                         .padding(.bottom, 34)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
+                    
                 }
+                
+                
             }
             
             

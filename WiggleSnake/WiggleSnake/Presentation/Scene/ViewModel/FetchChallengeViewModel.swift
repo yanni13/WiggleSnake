@@ -26,7 +26,6 @@ final class FetchChallengeViewModel: ObservableObject {
         self.items = challenges.compactMap { $0.toListItemModel() }
         
         self.completedDates = Set(challenges.flatMap { challenge in
-            print("🌟 challenge: \(challenge.title ?? "No Title")")
             return challenge.toChallengeRecordModels().compactMap { record in
                 print("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
                 // 각 ChallengeRecord에서 isCompleted가 true인 날짜만 추출
@@ -48,47 +47,6 @@ final class FetchChallengeViewModel: ObservableObject {
     }
         
 }
-//    func fetchAllChallenges(context: NSManagedObjectContext) -> [ListItemModel] {
-//        
-//        let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
-//        
-//        // ChallengeRecord와의 관계를 포함시키기 위해
-//        request.relationshipKeyPathsForPrefetching = ["challengeRecords"]
-//        
-//        do {
-//            let challenges = try context.fetch(request)
-//            
-//            print("🔍 불러온 Challenge 수: \(challenges.count)")
-//            
-//            for (index, challenge) in challenges.enumerated() {
-//                print("------ Challenge \(index + 1) ------")
-//                print("📝 제목: \(challenge.title ?? "없음")")
-//                print("📄 메모: \(challenge.memo ?? "없음")")
-//                print("📂 카테고리: \(challenge.category ?? "없음")")
-//                print("📅 시작일: \(challenge.startDate?.description ?? "없음")")
-//                print("📅 종료일: \(challenge.endDate?.description ?? "없음")")
-//            }
-//            items = challenges.compactMap { $0.toListItemModel()} // fetch
-//            
-//            // 완료된 날짜 목록을 ChallengeRecord에서 가져오기
-//            self.completedDates = Set(challenges.flatMap { challenge in
-//                // ChallengeRecord에서 완료된 날짜들만 필터링
-//                return challenge.records?.compactMap { record in
-//                    // isCompleted가 true일 때만 date를 반환
-//                    if record.isCompleted {
-//                        return record.date
-//                    } else {
-//                        return nil
-//                    }
-//                } ?? []
-//            })
-//            
-//            return challenges.compactMap { $0.toListItemModel()}
-//        } catch {
-//            print("CoreData fetch error: \(error)")
-//            return []
-//        }
-//    }
     
     /// 데이터 수정 - 진행중인 데이터를 완료 데이터로 넘김
     func updateCompletion(for item: ListItemModel, context: NSManagedObjectContext) {
