@@ -13,6 +13,8 @@ struct MainView: View {
     @Environment(\.managedObjectContext) private var context
     @State private var path = NavigationPath()
     @StateObject var viewModel = ChallengeViewModel()
+    @State private var item: ListItemModel?
+
 
         
     var body: some View {

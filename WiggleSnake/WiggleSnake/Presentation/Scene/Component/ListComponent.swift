@@ -14,11 +14,10 @@ struct ListComponent: View {
     @Environment(\.managedObjectContext) private var context
     var onCheck: (() -> Void)?
     let today = Date().startOfDay()
-
     
     @ObservedObject var viewModel: ChallengeViewModel
     
-        let category: CategoryIcon = .운동
+    let category: CategoryIcon = .운동
     
     var body: some View {
         VStack(alignment: .leading) {

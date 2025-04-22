@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ChallengeDetailView: View {
+    @State private var challenges: [ListItemModel] = []
     @Binding var path: NavigationPath
 
     @Environment(\.managedObjectContext) private var context
@@ -15,6 +16,7 @@ struct ChallengeDetailView: View {
     @ObservedObject var viewModel: ChallengeViewModel
     
     var item: ListItemModel
+    
     
     var body: some View {
         ScrollView {
@@ -67,6 +69,13 @@ struct ChallengeDetailView: View {
                     menuComponent()
                 }
             }
+        }
+        .onChange(of: viewModel.updateTrigger) { newValue in
+            viewModel.fetchAllChallenges(context: context)
+            challenges = viewModel.items
+            
+            viewModel.updateTrigger = false
+            print("[ChallengeDetailView]: \(challenges)")
         }
     }
     

@@ -18,6 +18,7 @@ final class ChallengeViewModel: ObservableObject {
     @Published var items: [ListItemModel] = []
     @Published var completedDates: Set<Date> = [] // 완료된 날짜를 저장할 변수 추가
     @Published var editingItem: ListItemModel?
+    @Published var updateTrigger: Bool = false
     private var existingChallenge: Challenge?
     
     
@@ -27,6 +28,13 @@ final class ChallengeViewModel: ObservableObject {
             completion(true)
         } else {
             completion(false)
+        }
+    }
+    
+    // 특정 항목만 갱신하는 메서드
+    func updateChallenge(_ updatedItem: ListItemModel, context: NSManagedObjectContext) {
+        if let index = items.firstIndex(where: { $0.id == updatedItem.id }) {
+            items[index] = updatedItem
         }
     }
     
@@ -41,23 +49,21 @@ final class ChallengeViewModel: ObservableObject {
             newChallenge.startDate = self.startDate
             newChallenge.endDate = self.endDate
             newChallenge.category = self.category?.rawValue ?? ""
-            // 기타 초기화 로직
             
         case .edit:
             guard let existingChallenge = self.existingChallenge else {
                 print("❌ existingChallenge가 nil입니다.")
                 return
             }
-            
             existingChallenge.title = self.title
             existingChallenge.memo = self.memo
             existingChallenge.startDate = self.startDate
             existingChallenge.endDate = self.endDate
             existingChallenge.category = self.category?.rawValue ?? ""
             
+            updateTrigger = true
             
         }
-        
         
         do {
             try context.save()
@@ -117,10 +123,10 @@ final class ChallengeViewModel: ObservableObject {
             self.completedDates = Set(challenges.flatMap { challenge in
                 return challenge.toChallengeRecordModels().compactMap { record in
                     print("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
-                    // 각 ChallengeRecord에서 isCompleted가 true인 날짜만 추출
+
                     if record.isCompleted {
                         print("✅ Adding completed date: \(record.date.startOfDay())")
-                        return record.date.startOfDay() // 날짜의 시간부분을 제거하여 비교하도록 변경
+                        return record.date.startOfDay()
                     } else {
                         return nil
                     }
@@ -142,14 +148,13 @@ final class ChallengeViewModel: ObservableObject {
         // 특정 ID를 가진 Challenge 엔티티 가져오기
         let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
-        request.relationshipKeyPathsForPrefetching = ["records"] // 관련 record도 함께 가져오기
+        request.relationshipKeyPathsForPrefetching = ["records"] 
         
         do {
             if let challenge = try context.fetch(request).first {
                 // existingChallenge 속성 설정
                 self.existingChallenge = challenge
                 
-                // 뷰 모델 속성을 Challenge 데이터로 업데이트
                 self.title = challenge.title ?? ""
                 self.memo = challenge.memo ?? ""
                 if let categoryString = challenge.category, !categoryString.isEmpty {
@@ -158,10 +163,8 @@ final class ChallengeViewModel: ObservableObject {
                 self.startDate = challenge.startDate ?? Date()
                 self.endDate = challenge.endDate ?? Date()
                 
-                // 참조용 editingItem 설정
                 self.editingItem = item
                 
-                // completedDates 업데이트 - 필요한 경우
                 let records = challenge.toChallengeRecordModels()
                 let completedDates = Set(records.compactMap { record in
                     return record.isCompleted ? record.date.startOfDay() : nil
