@@ -15,7 +15,14 @@ struct ListItemModel: Identifiable, Equatable, Hashable {
     var endDate: Date
     var memo: String
     var isCompleted: Bool
+    var completedDate: Date?
     var dataRange: String
+    
+    // 오늘 완료한 도전인지 확인
+    var isCompletedToday: Bool {
+            guard let completedDate else { return false }
+            return Calendar.current.isDateInToday(completedDate)
+        }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D81714C82DAF2F1D007704BD /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = D81714C72DAF2F1D007704BD /* .gitignore */; };
+		D8FA6CE62DB633280004A9CF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		D87CF7042DAF5BB900271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D87CF75D2DAF5D5B00271EF4 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D8B99B9A2DB4EFE80091EEF9 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
+		D8FA6CAC2DB5C69F0004A9CF /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -48,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FA6CE62DB633280004A9CF /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +109,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D8FA6CAD2DB5C69F0004A9CF /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -126,6 +134,7 @@
 			);
 			name = WiggleSnake;
 			packageProductDependencies = (
+				D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */,
 			);
 			productName = WiggleSnack;
 			productReference = D846DDD42DACD53900B9E375 /* WiggleSnake.app */;
@@ -155,6 +164,9 @@
 			);
 			mainGroup = D846DDCB2DACD53900B9E375;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D8FA6CE42DB633280004A9CF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D846DDD52DACD53900B9E375 /* Products */;
 			projectDirPath = "";
@@ -162,6 +174,10 @@
 				{
 					ProductGroup = D8B99B9B2DB4EFE80091EEF9 /* Products */;
 					ProjectRef = D8B99B9A2DB4EFE80091EEF9 /* WiggleSnake.xcodeproj */;
+				},
+				{
+					ProductGroup = D8FA6CAD2DB5C69F0004A9CF /* Products */;
+					ProjectRef = D8FA6CAC2DB5C69F0004A9CF /* WiggleSnake.xcodeproj */;
 				},
 				{
 					ProductGroup = D85EAD5C2DB0DED700E12930 /* Products */;
@@ -422,6 +438,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D8FA6CE42DB633280004A9CF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8FA6CE42DB633280004A9CF /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D846DDCC2DACD53900B9E375 /* Project object */;
 }

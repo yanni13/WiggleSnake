@@ -13,11 +13,11 @@ struct ListComponent: View {
     @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var context
     var onCheck: (() -> Void)?
+    let today = Date().startOfDay()
     
+    @ObservedObject var viewModel: ChallengeViewModel
     
-    @ObservedObject var fetchViewModel: FetchChallengeViewModel
-    
-    //    let category: CategoryIcon = .운동
+    let category: CategoryIcon = .운동
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -45,15 +45,17 @@ struct ListComponent: View {
                 
                 Button(action: {
                     item.isCompleted.toggle()
-                    fetchViewModel.updateCompletion(for: item, context: context)
+                    item.completedDate = item.isCompleted ? nil : Date()
+                    //  CoreData에 ChallengeRecord 저장
+                    viewModel.markChallengeCompleted(for: item, on: today, context: context)
+
+                    viewModel.updateCompletion(for: item, context: context)
                     onCheck?()
                     
                 }, label: {
                     Image(item.isCompleted ? "icon_check_pink" : "icon_check")
                         .frame(width: 44, height: 44)
                 })
-                
-                
             }
             
         }
@@ -73,8 +75,6 @@ struct ListComponent: View {
             
         }
     }
-    
-    
 }
 
 

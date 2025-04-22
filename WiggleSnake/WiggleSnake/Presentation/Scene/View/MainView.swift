@@ -12,8 +12,9 @@ struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var context
     @State private var path = NavigationPath()
-    @StateObject var fetchViewModel = FetchChallengeViewModel()
-    @StateObject var deleteViewModel = DeleteChallengeViewModel()
+    @StateObject var viewModel = ChallengeViewModel()
+    @State private var item: ListItemModel?
+
         
     var body: some View {
         NavigationStack(path: $path) {
@@ -75,22 +76,23 @@ struct MainView: View {
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                 case .addChallenge:
-                    AddChallengeView()
+                    AddChallengeView(path: $path, viewModel: viewModel, mode: .add, editingItem: nil)
+                case .editChallenge(let item):
+                    AddChallengeView(path: $path, viewModel: viewModel, mode: .edit, editingItem: item)
                 case .challengeList:
-                    ChallengeListView(fetchViewModel: fetchViewModel, path: $path)
+                    ChallengeListView(viewModel: viewModel, path: $path)
                 case .challengeDetail(let item):
-                    ChallengeDetailView(deleteViewModel: deleteViewModel, item: item)
+                    ChallengeDetailView(path: $path, item: item, viewModel: viewModel)
                 }
                 
             }
             .onAppear {
                 fetchAndPrintChallenges()
             }
-            
-            
         }
     }
     
+    // MARK: 데이터 잘 불러오고 있는지 로그찍는 함수
     private func fetchAndPrintChallenges() {
         let fetchRequest: NSFetchRequest<Challenge> = Challenge.fetchRequest()
         

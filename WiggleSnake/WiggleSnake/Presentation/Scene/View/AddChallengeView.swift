@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+enum ChallengeEditorMode {
+    case add
+    case edit
+}
+
 struct AddChallengeView: View {
+    @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
-    @StateObject private var viewModel = AddChallengeViewModel()
-    @State private var selectedCategory: Int = 0
+    @ObservedObject var viewModel: ChallengeViewModel
+    @State private var selectedCategory: Int = -1
     @State private var date: Date = Date()
     
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
@@ -20,10 +26,15 @@ struct AddChallengeView: View {
     @State private var isActivePicker: Bool = false
     /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
     @State private var isPickerStartData = true
-    /// 사용자가 선택했는지 여부를 추적하는 상태 변수
+    /// 사용자가 데이터를 받아와서 저장할 배열
+//    @State private var items: [ListItemModel] = []
+    let mode: ChallengeEditorMode
+    let editingItem: ListItemModel?
     
-    
+
     var body: some View {
+        let navigationTitle = mode == .add ? "도전 일기 추가하기" : "도전 일기 수정하기"
+
         ZStack {
             VStack(alignment: .leading) {
                 Spacer().frame(height: 40)
@@ -48,8 +59,19 @@ struct AddChallengeView: View {
                     // 필수 입력값이 다 들어갔다면 -> 저장
                     viewModel.formValid { success in
                         if success {
-                            viewModel.saveChallenge(context: viewContext)
-                            self.presentationMode.wrappedValue.dismiss()
+                            viewModel.saveChallenge(context: viewContext, mode: mode)
+
+                            switch mode {
+                            case .add:
+                                self.presentationMode.wrappedValue.dismiss()
+                            case .edit:
+                                if let editingItem = editingItem {
+                                    self.path = NavigationPath()
+                                    self.path.append(NavigationRoute.challengeList)
+
+                                }
+
+                            }
                             print("✅ [AddChallengeView] 도전일기 저장완료")
                             
                         } else {
@@ -68,14 +90,11 @@ struct AddChallengeView: View {
                 }, label: "확인")
                 .padding(.bottom, 34)
                 
-                //TODO: 폼이 유효하지 않을 때 alert 혹은 팝업
-                //                if viewModel.isValidForm {
-                //
-                //                }
+
             }
             .frame(maxHeight: .infinity)
             .padding(.horizontal, 20)
-            .navigationTitle("도전 일기 추가하기")
+            .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .edgesIgnoringSafeArea(.bottom)
@@ -112,6 +131,19 @@ struct AddChallengeView: View {
                 
             }
             
+        }
+        .onAppear {
+//            items = viewModel.fetchAllChallenges(context: viewContext)
+            
+            if mode == .edit, let item = editingItem {
+                viewModel.loadChallenge(from: item, context: viewContext)
+//                    viewModel.title = item.title
+//                    viewModel.memo = item.memo
+//                    viewModel.startDate = item.startDate
+//                    viewModel.endDate = item.endDate
+//                    viewModel.category = item.category
+                }
+
         }
         
     }
@@ -151,7 +183,8 @@ struct AddChallengeView: View {
     
     @ViewBuilder
     private func categoryComponent() -> some View {
-        let categoryValid = selectedCategory > 0 && selectedCategory < CategoryIcon.allCases.count
+        let categoryValid = viewModel.category != nil
+        
         HStack {
             InquiryText(title: "카테고리", isRequired: true)
             
@@ -160,8 +193,8 @@ struct AddChallengeView: View {
             Button(action: {
                 isActiveCategory = true
             }, label: {
-                Text(categoryValid ? CategoryIcon.allCases[selectedCategory].groupTitle : "카테고리를 선택해주세요")
-                
+                Text(categoryValid ? viewModel.category?.groupTitle ?? "" : "카테고리를 선택해주세요")
+
                     .font(.H5MediumFont())
                     .foregroundColor(categoryValid ? .gray05 : .gray03)
                 
@@ -255,13 +288,20 @@ struct AddChallengeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .frame(maxWidth: .infinity, maxHeight: 150)
             .clipShape(RoundedRectangle(cornerRadius: 4))
+            
+            if viewModel.isValidForm {
+                Text("필수 입력 사항을 모두 채워 주세요.")
+                    .font(.H6MediumFont())
+                    .foregroundStyle(.red)
+                    
+            }
         }
     }
     
     
     
 }
-
-#Preview {
-    AddChallengeView()
-}
+//
+//#Preview {
+//    AddChallengeView()
+//}

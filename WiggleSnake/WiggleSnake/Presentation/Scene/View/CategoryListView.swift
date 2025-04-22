@@ -10,12 +10,12 @@ import SwiftUI
 struct CategoryListView: View {
     
     /// 카테고리의 상태를 담는 변수
-    @ObservedObject var viewModel: AddChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
     @Binding var selectedIndex: Int
     
     let columns = [GridItem(.flexible(), spacing: 30), GridItem(.flexible(), spacing: 30)]
     let categories = CategoryIcon.allCases
-
+    
     var body: some View {
         ScrollView {
             
@@ -46,7 +46,9 @@ struct CategoryListView: View {
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         selectedIndex = index
-                        viewModel.category = categories[index].groupTitle
+                        viewModel.category = categories[index]
+                        
+                                
                     }
                 }, label: {
                     ZStack(alignment: .topLeading) {
@@ -55,13 +57,13 @@ struct CategoryListView: View {
                             .frame(width: 152, height: 160)
                             .cornerRadius(8)
                         
-                        Text(category.groupTitle)
+                        Text(CategoryIcon.allCases[index].groupTitle)
                             .font(.H3MediumFont())
                             .foregroundColor(selectedIndex == index ? .white : .gray05)
                             .padding(.leading, 16)
                             .padding(.top, 23)
                         
-                        Text(category.emoji)
+                        Text(CategoryIcon.allCases[index].emoji)
                             .font(.system(size: 80))
                             .position(x: 100, y: 110)
                     }

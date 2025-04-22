@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-
+import ConfettiSwiftUI
 
 struct ChallengeListView: View {
     @Environment(\.managedObjectContext) private var context
     
-    @ObservedObject var fetchViewModel: FetchChallengeViewModel
+    @ObservedObject var viewModel: ChallengeViewModel
     @State private var selectedTab: String = "진행중"
     /// 저장된 데이터를 불러와서 items 배열에 저장하기 위한 변수
     @State private var items: [ListItemModel] = []
@@ -20,17 +20,24 @@ struct ChallengeListView: View {
     /// 선택된 리스트 아이템을 저장하는 변수
     @State private var selectedItem: ListItemModel?
     @State private var showToast: Bool = false
+    @State private var triggerConfetti: Bool = false
     
     @Binding var path: NavigationPath
     
     let textLabel = ["진행중", "완료"]
     
     private var filteredItems: [ListItemModel] {
-        selectedTab == "진행중"
-        ? fetchViewModel.items.filter { !$0.isCompleted }
-        : fetchViewModel.items.filter { $0.isCompleted }
+        let today = Date()
         
+        let activeItems = viewModel.items.filter { item in
+            today >= item.startDate && today <= item.endDate
+        }
+        
+        return selectedTab == "진행중"
+        ? activeItems.filter { !$0.isCompleted }
+        : activeItems.filter { $0.isCompleted }
     }
+    
     
     var groupedItems: [CategoryIcon: [ListItemModel]] {
         Dictionary(grouping: filteredItems, by: { $0.category })
@@ -74,11 +81,11 @@ struct ChallengeListView: View {
                                     // fetchViewModel.items 기반으로 Binding 생성
                                     let itemBinding = Binding<ListItemModel>(
                                         get: {
-                                            fetchViewModel.items.first(where: { $0.id == item.id }) ?? item
+                                            viewModel.items.first(where: { $0.id == item.id }) ?? item
                                         },
                                         set: { newValue in
-                                            if let i = fetchViewModel.items.firstIndex(where: { $0.id == newValue.id }) {
-                                                fetchViewModel.items[i] = newValue
+                                            if let i = viewModel.items.firstIndex(where: { $0.id == newValue.id }) {
+                                                viewModel.items[i] = newValue
                                             }
                                         }
                                     )
@@ -90,15 +97,17 @@ struct ChallengeListView: View {
                                             if selectedTab == "진행중" {
                                                 withAnimation(.easeInOut(duration: 0.3)) {
                                                     showToast = true
+                                                    triggerConfetti = true
                                                 }
                                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                                     withAnimation(.easeInOut(duration: 0.3)) {
                                                         showToast = false
+                                                        triggerConfetti = false
                                                     }
                                                 }
                                             }
                                         },
-                                        fetchViewModel: fetchViewModel
+                                        viewModel: viewModel
                                     )
                                     .padding(.horizontal, 20)
                                 }
@@ -112,23 +121,29 @@ struct ChallengeListView: View {
                             }
                         }
                     }
-                    
-                    
                     Spacer()
                 }
                 
             }
             
+            VStack {
+                Color.clear
+                    .edgesIgnoringSafeArea(.all)
+                    .confettiCannon(trigger: $triggerConfetti, num: 100, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 300), radius: 400, repetitions: 1)
+                
+                Spacer()
+            }
+            .allowsHitTesting(false)
+            
             if showToast {
                 VStack {
                     Spacer()
-                    CustomToastComponent(text: "지렁이의 꼬리가 10cm 자랐어요!", icon: "🎉")
+                    CustomToastComponent(text: "지렁이의 꼬리가 10cm 자랐어요!", icon: "🎉", color: .pink02, textColor: .white)
                         .padding(.bottom, 34)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
+                    
                 }
             }
-            
-            
         }
         .navigationTitle(Text("나의 도전 일지"))
         .navigationBarTitleDisplayMode(.inline)
@@ -145,7 +160,7 @@ struct ChallengeListView: View {
             }
         }
         .onAppear {
-            items = fetchViewModel.fetchAllChallenges(context: context)
+            items = viewModel.fetchAllChallenges(context: context)
         }
         
     }
