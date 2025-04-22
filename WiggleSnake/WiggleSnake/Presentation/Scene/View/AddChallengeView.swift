@@ -13,6 +13,7 @@ enum ChallengeEditorMode {
 }
 
 struct AddChallengeView: View {
+    @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: ChallengeViewModel
@@ -26,7 +27,7 @@ struct AddChallengeView: View {
     /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
     @State private var isPickerStartData = true
     /// 사용자가 데이터를 받아와서 저장할 배열
-    @State private var items: [ListItemModel] = []
+//    @State private var items: [ListItemModel] = []
     let mode: ChallengeEditorMode
     let editingItem: ListItemModel?
     
@@ -59,7 +60,18 @@ struct AddChallengeView: View {
                     viewModel.formValid { success in
                         if success {
                             viewModel.saveChallenge(context: viewContext, mode: mode)
-                            self.presentationMode.wrappedValue.dismiss()
+
+                            switch mode {
+                            case .add:
+                                self.presentationMode.wrappedValue.dismiss()
+                            case .edit:
+                                if let editingItem = editingItem {
+                                    self.path = NavigationPath()
+                                    self.path.append(NavigationRoute.challengeList)
+
+                                }
+
+                            }
                             print("✅ [AddChallengeView] 도전일기 저장완료")
                             
                         } else {

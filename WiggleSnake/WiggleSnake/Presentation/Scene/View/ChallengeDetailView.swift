@@ -10,13 +10,11 @@ import SwiftUI
 struct ChallengeDetailView: View {
     @State private var challenges: [ListItemModel] = []
     @Binding var path: NavigationPath
+    var item: ListItemModel
 
     @Environment(\.managedObjectContext) private var context
     @Environment(\.presentationMode) private var presentationMode
     @ObservedObject var viewModel: ChallengeViewModel
-    
-    var item: ListItemModel
-    
     
     var body: some View {
         ScrollView {

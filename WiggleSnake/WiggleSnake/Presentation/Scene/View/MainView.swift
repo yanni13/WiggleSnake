@@ -15,7 +15,6 @@ struct MainView: View {
     @StateObject var viewModel = ChallengeViewModel()
     @State private var item: ListItemModel?
 
-
         
     var body: some View {
         NavigationStack(path: $path) {
@@ -77,13 +76,13 @@ struct MainView: View {
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
                 case .addChallenge:
-                    AddChallengeView(viewModel: viewModel, mode: .add, editingItem: nil)
+                    AddChallengeView(path: $path, viewModel: viewModel, mode: .add, editingItem: nil)
                 case .editChallenge(let item):
-                    AddChallengeView(viewModel: viewModel, mode: .edit, editingItem: item)
+                    AddChallengeView(path: $path, viewModel: viewModel, mode: .edit, editingItem: item)
                 case .challengeList:
                     ChallengeListView(viewModel: viewModel, path: $path)
                 case .challengeDetail(let item):
-                    ChallengeDetailView(path: $path, viewModel: viewModel, item: item)
+                    ChallengeDetailView(path: $path, item: item, viewModel: viewModel)
                 }
                 
             }
