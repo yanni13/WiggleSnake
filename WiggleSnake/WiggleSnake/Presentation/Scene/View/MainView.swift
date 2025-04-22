@@ -15,8 +15,9 @@ struct MainView: View {
     @StateObject var viewModel = ChallengeViewModel()
     @State private var item: ListItemModel?
 
-        
+    
     var body: some View {
+    
         NavigationStack(path: $path) {
             VStack(alignment: .leading) {
                 
@@ -88,6 +89,8 @@ struct MainView: View {
             }
             .onAppear {
                 fetchAndPrintChallenges()
+
+                item = nil
             }
         }
     }

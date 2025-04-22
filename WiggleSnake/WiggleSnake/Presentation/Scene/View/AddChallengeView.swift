@@ -56,7 +56,6 @@ struct AddChallengeView: View {
                 
                 
                 CustomBottomBtn(action: {
-                    // 필수 입력값이 다 들어갔다면 -> 저장
                     viewModel.formValid { success in
                         if success {
                             viewModel.saveChallenge(context: viewContext, mode: mode)
@@ -84,7 +83,6 @@ struct AddChallengeView: View {
                             print("📅 종료일: \(viewModel.endDate)")
                             
                         }
-                        
                     }
                     
                 }, label: "확인")
@@ -133,15 +131,15 @@ struct AddChallengeView: View {
             
         }
         .onAppear {
-//            items = viewModel.fetchAllChallenges(context: viewContext)
-            
+            if mode == .add {
+                viewModel.title = ""
+                viewModel.memo = ""
+                viewModel.startDate = Date()
+                viewModel.endDate = Date()
+                viewModel.category = nil
+            }
             if mode == .edit, let item = editingItem {
                 viewModel.loadChallenge(from: item, context: viewContext)
-//                    viewModel.title = item.title
-//                    viewModel.memo = item.memo
-//                    viewModel.startDate = item.startDate
-//                    viewModel.endDate = item.endDate
-//                    viewModel.category = item.category
                 }
 
         }

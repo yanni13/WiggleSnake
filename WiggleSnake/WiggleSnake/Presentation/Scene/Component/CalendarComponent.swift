@@ -38,20 +38,20 @@ struct CalendarComponent: View {
             
             calendarGridView
         }
-        .gesture(
-            DragGesture()
-                .onChanged { gesture in
-                    self.offset = gesture.translation
-                }
-                .onEnded { gesture in
-                    if gesture.translation.width < -100 {
-                        changeMonth(by: 1)
-                    } else if gesture.translation.width > 100 {
-                        changeMonth(by: -1)
-                    }
-                    self.offset = CGSize()
-                }
-        )
+//        .gesture(
+//            DragGesture()
+//                .onChanged { gesture in
+//                    self.offset = gesture.translation
+//                }
+//                .onEnded { gesture in
+//                    if gesture.translation.width < -100 {
+//                        changeMonth(by: 1)
+//                    } else if gesture.translation.width > 100 {
+//                        changeMonth(by: -1)
+//                    }
+//                    self.offset = CGSize()
+//                }
+//        )
     }
     
     // MARK: - 헤더 뷰
@@ -132,7 +132,6 @@ struct CalendarComponent: View {
                     }
                 }
             }
-            
             .padding(.horizontal, 20)
         }
     }
@@ -171,6 +170,7 @@ private struct CellView: View {
                     .foregroundStyle(.pink01)
                     .padding(.bottom, 30)
                     .frame(maxWidth: .infinity)
+                    .zIndex(0)
 
                 
             }
