@@ -13,8 +13,12 @@ struct ListComponent: View {
     @Binding var path: NavigationPath
     @Environment(\.managedObjectContext) private var context
     var onCheck: (() -> Void)?
-    let today = Date().startOfDay()
-    
+    let today: Date = {
+        let now = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: now)
+        return calendar.date(from: components) ?? now
+    }()
     @ObservedObject var viewModel: ChallengeViewModel
     
     let category: CategoryIcon = .운동
@@ -35,20 +39,24 @@ struct ListComponent: View {
                             .foregroundColor(.gray05)
                             .lineSpacing(1)
                         
+                        
                         Text(item.dateRangeText)
                             .font(.B1MediumFont())
                             .foregroundColor(.gray05)
+                        
                     }
+                    
                 })
+                
                 
                 Spacer()
                 
                 Button(action: {
                     item.isCompleted.toggle()
-                    item.completedDate = item.isCompleted ? nil : Date()
+                    item.completedDate = item.isCompleted ? Date() : nil
                     //  CoreData에 ChallengeRecord 저장
                     viewModel.markChallengeCompleted(for: item, on: today, context: context)
-
+                    
                     viewModel.updateCompletion(for: item, context: context)
                     onCheck?()
                     

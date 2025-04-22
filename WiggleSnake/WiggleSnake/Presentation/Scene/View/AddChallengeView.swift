@@ -27,7 +27,6 @@ struct AddChallengeView: View {
     /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
     @State private var isPickerStartData = true
     /// 사용자가 데이터를 받아와서 저장할 배열
-//    @State private var items: [ListItemModel] = []
     let mode: ChallengeEditorMode
     let editingItem: ListItemModel?
     

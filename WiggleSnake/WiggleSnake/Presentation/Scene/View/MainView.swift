@@ -89,7 +89,6 @@ struct MainView: View {
             }
             .onAppear {
                 fetchAndPrintChallenges()
-
                 item = nil
             }
         }

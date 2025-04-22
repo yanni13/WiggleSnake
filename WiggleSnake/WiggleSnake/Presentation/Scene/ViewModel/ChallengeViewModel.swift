@@ -123,7 +123,7 @@ final class ChallengeViewModel: ObservableObject {
             self.completedDates = Set(challenges.flatMap { challenge in
                 return challenge.toChallengeRecordModels().compactMap { record in
                     print("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
-
+                    
                     if record.isCompleted {
                         print("✅ Adding completed date: \(record.date.startOfDay())")
                         return record.date.startOfDay()
@@ -148,7 +148,7 @@ final class ChallengeViewModel: ObservableObject {
         // 특정 ID를 가진 Challenge 엔티티 가져오기
         let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
-        request.relationshipKeyPathsForPrefetching = ["records"] 
+        request.relationshipKeyPathsForPrefetching = ["records"]
         
         do {
             if let challenge = try context.fetch(request).first {
@@ -169,6 +169,8 @@ final class ChallengeViewModel: ObservableObject {
                 let completedDates = Set(records.compactMap { record in
                     return record.isCompleted ? record.date.startOfDay() : nil
                 })
+                
+                
                 self.completedDates = completedDates
                 
                 print("✅ Challenge 로딩 성공: \(challenge.title ?? "")")
@@ -199,6 +201,10 @@ final class ChallengeViewModel: ObservableObject {
     
     /// 실제 도전을 수행한 기간이 얼만지 파악하기 위한 배열 추가 로직
     func markChallengeCompleted(for item: ListItemModel, on date: Date, context: NSManagedObjectContext) {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        let normalizedDate = calendar.date(from: components)!
+        
         // Challenge fetch
         let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
@@ -207,12 +213,12 @@ final class ChallengeViewModel: ObservableObject {
             if let challenge = try context.fetch(request).first {
                 let record = ChallengeRecord(context: context)
                 record.id = UUID()
-                record.date = date
+                record.date = normalizedDate
                 record.isCompleted = true
                 record.challenge = challenge
                 
                 try context.save()
-                print("✅ 저장된 기록: \(date)")
+                print("✅ 저장된 기록: \(normalizedDate)")
                 
                 // completedDates 갱신
                 fetchCompletedDates(context: context)
@@ -225,6 +231,7 @@ final class ChallengeViewModel: ObservableObject {
     private func fetchCompletedDates(context: NSManagedObjectContext) {
         let request: NSFetchRequest<ChallengeRecord> = ChallengeRecord.fetchRequest()
         request.predicate = NSPredicate(format: "isCompleted == %@", NSNumber(value: true))
+
         
         do {
             let records = try context.fetch(request)
@@ -234,5 +241,6 @@ final class ChallengeViewModel: ObservableObject {
         } catch {
             print("❌ ChallengeRecord fetch 실패: \(error)")
         }
+
     }
 }

@@ -13,6 +13,10 @@ struct CalendarComponent: View {
     @Binding var completedDates: Set<Date>
     var item: ListItemModel
     
+    private var normalizedCompletedDates: Set<Date> {
+        Set(completedDates.map { $0.startOfDay() })
+    }
+    
     private var dateRange: [Date] {
         let calendar = Calendar.current
         var dates: [Date] = []
@@ -37,21 +41,8 @@ struct CalendarComponent: View {
             Spacer().frame(height: 25)
             
             calendarGridView
+            
         }
-//        .gesture(
-//            DragGesture()
-//                .onChanged { gesture in
-//                    self.offset = gesture.translation
-//                }
-//                .onEnded { gesture in
-//                    if gesture.translation.width < -100 {
-//                        changeMonth(by: 1)
-//                    } else if gesture.translation.width > 100 {
-//                        changeMonth(by: -1)
-//                    }
-//                    self.offset = CGSize()
-//                }
-//        )
     }
     
     // MARK: - 헤더 뷰
@@ -98,10 +89,10 @@ struct CalendarComponent: View {
     }
     
     // MARK: - 날짜 그리드 뷰
+    // CalendarComponent 내부에서 calendarGridView 수정
     private var calendarGridView: some View {
         let daysInMonth: Int = numberOfDays(in: month)
         let firstWeekday: Int = firstWeekdayOfMonth(in: month) - 1
-
         
         return VStack {
             LazyVGrid(columns: Array(repeating: GridItem(), count: 7), spacing: 0) {
@@ -111,31 +102,44 @@ struct CalendarComponent: View {
                             .foregroundColor(Color.clear)
                     } else {
                         let date = getDate(for: index - firstWeekday)
+                        let normalizedDate = date.startOfDay()
                         let day = index - firstWeekday + 1
                         let isInDateRange = isDateInRange(date)
-                        let isFirstDay = date.startOfDay() == item.startDate.startOfDay()
-                        let isLastDay = date.startOfDay() == item.endDate.startOfDay()
-                        let isPreviousDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date)
+                        let isFirstDay = normalizedDate == item.startDate.startOfDay()
+                        let isLastDay = normalizedDate == item.endDate.startOfDay()
+                        let isPreviousDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: -1 , to: date) ?? date)
                         let isNextDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date)
-                        let isCompleted = completedDates.contains(date.startOfDay())  // 완료 여부 확인
-
-                        CellView(day: day,
-                                 isInRange: isInDateRange,
-                                 isFirstDay: isFirstDay,
-                                 isLastDay: isLastDay,
-                                 isPreviousDayInRange: isPreviousDayInRange && !isFirstDay,
-                                 isNextDayInRange: isNextDayInRange && !isLastDay,
-                                 isCompleted: isCompleted
-                        )
-                        .frame(height: 60)
                         
+                        let isCompleted = normalizedCompletedDates.contains { $0.isSameDay(as: Date()) }
+                        
+                        VStack {
+                            CellView(day: day,
+                                     isInRange: isInDateRange,
+                                     isFirstDay: isFirstDay,
+                                     isLastDay: isLastDay,
+                                     isPreviousDayInRange: isPreviousDayInRange && !isFirstDay,
+                                     isNextDayInRange: isNextDayInRange && !isLastDay,
+                                     isCompleted: isCompleted
+                            )
+                            .frame(height: 60)
+                            .onAppear {
+                                if isInDateRange {
+                                    print("📅 Date: \(Self.debugDateFormatter.string(from: normalizedDate)), isCompleted: \(isCompleted)")
+                                }
+                                for index in 0..<daysInMonth {
+                                    let date = getDate(for: index)
+                                    let normalizedDate = date.startOfDay(in: .current)
+                                    let isCompleted = normalizedCompletedDates.contains(normalizedDate)
+                                    print("📅 Date: \(normalizedDate), isCompleted: \(isCompleted)")
+                                }
+                            }
+                        }
                     }
                 }
             }
             .padding(.horizontal, 20)
         }
     }
-    
     // 주어진 날짜가 범위 내에 있는지 확인
     private func isDateInRange(_ date: Date) -> Bool {
         let startDate = item.startDate.startOfDay()
@@ -144,6 +148,15 @@ struct CalendarComponent: View {
         
         return targetDate >= startDate && targetDate <= endDate
     }
+    
+    // 디버깅용 날짜 포맷터
+    private static let debugDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        formatter.locale = Locale.current
+        formatter.timeZone = TimeZone.current
+        return formatter
+    }()
 }
 
 // MARK: - 일자 셀 뷰
@@ -171,7 +184,7 @@ private struct CellView: View {
                     .padding(.bottom, 30)
                     .frame(maxWidth: .infinity)
                     .zIndex(0)
-
+                
                 
             }
             
@@ -197,9 +210,8 @@ private struct CellView: View {
                 }
                 .padding(.trailing, -5)
                 .padding(.top, 30)
-
+                
             }
-            
             
             // 특별한 날짜 표시기
             if isInRange {
@@ -207,14 +219,14 @@ private struct CellView: View {
                     // 첫 번째 날짜
                     HStack {
                         Rectangle()
-                          .foregroundColor(.pink02)
-                          .frame(height: 6)
-                          .cornerRadius(10)
-                            
+                            .foregroundColor(.pink02)
+                            .frame(height: 6)
+                            .cornerRadius(10)
+                        
                         Spacer()
                     }
                     .padding(.top, 30)
-
+                    
                 } else if isLastDay {
                     // 마지막 날짜
                     HStack {
@@ -237,7 +249,9 @@ private struct CellView: View {
 private extension CalendarComponent {
     /// 특정 해당 날짜
     private func getDate(for day: Int) -> Date {
-        return Calendar.current.date(byAdding: .day, value: day, to: startOfMonth())!
+        let calendar = Calendar.current
+        let startOfMonth = self.startOfMonth()
+        return calendar.date(byAdding: .day, value: day, to: startOfMonth) ?? Date()
     }
     
     /// 해당 월의 시작 날짜
@@ -287,8 +301,25 @@ private extension CalendarComponent {
 
 
 // MARK: - Date Extension
+// Date 확장을 개선
 extension Date {
-    func startOfDay() -> Date {
-        Calendar.current.startOfDay(for: self)
+    func startOfDay(in timeZone: TimeZone = TimeZone.current) -> Date {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day], from: self)
+        components.hour = 0
+        components.minute = 0
+        components.second = 0
+        components.nanosecond = 0
+        
+        var calendarWithTimeZone = calendar
+        calendarWithTimeZone.timeZone = timeZone
+        
+        return calendarWithTimeZone.date(from: components) ?? self
+    }
+    
+    // 날짜만 비교하는 메서드 추가
+    func isSameDay(as date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self.startOfDay(), inSameDayAs: date.startOfDay())
     }
 }
