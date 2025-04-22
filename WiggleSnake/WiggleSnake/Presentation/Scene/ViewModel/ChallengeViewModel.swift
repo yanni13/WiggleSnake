@@ -12,14 +12,12 @@ final class ChallengeViewModel: ObservableObject {
     @Published var title: String = ""
     @Published var memo: String = ""
     @Published var category: CategoryIcon? = nil
-
-//    @Published var category: String = ""
     @Published var startDate: Date = Date()
     @Published var endDate: Date = Date()
     @Published var isValidForm: Bool = false
     @Published var items: [ListItemModel] = []
     @Published var completedDates: Set<Date> = [] // 완료된 날짜를 저장할 변수 추가
-    
+    @Published var editingItem: ListItemModel?
     private var existingChallenge: Challenge?
     
     
@@ -33,24 +31,31 @@ final class ChallengeViewModel: ObservableObject {
     }
     
     /// 데이터 저장
-    func saveChallenge(context: NSManagedObjectContext) {
-        if let existingChallenge {
-            // 수정 모드
-            existingChallenge.title = title
-            existingChallenge.memo = memo
-            existingChallenge.category = category?.rawValue ?? ""
-            existingChallenge.startDate = startDate
-            existingChallenge.endDate = endDate
-            return
-        } else {
-            // 추가 모드
+    func saveChallenge(context: NSManagedObjectContext, mode: ChallengeEditorMode) {
+        switch mode {
+        case .add:
             let newChallenge = Challenge(context: context)
             newChallenge.id = UUID()
-            newChallenge.title = title
-            newChallenge.memo = memo
-            newChallenge.category = category?.rawValue ?? ""
-            newChallenge.startDate = startDate
-            newChallenge.endDate = endDate
+            newChallenge.title = self.title
+            newChallenge.memo = self.memo
+            newChallenge.startDate = self.startDate
+            newChallenge.endDate = self.endDate
+            newChallenge.category = self.category?.rawValue ?? ""
+            // 기타 초기화 로직
+            
+        case .edit:
+            guard let existingChallenge = self.existingChallenge else {
+                print("❌ existingChallenge가 nil입니다.")
+                return
+            }
+            
+            existingChallenge.title = self.title
+            existingChallenge.memo = self.memo
+            existingChallenge.startDate = self.startDate
+            existingChallenge.endDate = self.endDate
+            existingChallenge.category = self.category?.rawValue ?? ""
+            
+            
         }
         
         
@@ -130,6 +135,46 @@ final class ChallengeViewModel: ObservableObject {
             return []
         }
         
+    }
+    
+    /// 도전일지 수정하기에 사용하기 위해 데이터를 로드하고 편집하는 메서드
+    func loadChallenge(from item: ListItemModel, context: NSManagedObjectContext) {
+        // 특정 ID를 가진 Challenge 엔티티 가져오기
+        let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
+        request.relationshipKeyPathsForPrefetching = ["records"] // 관련 record도 함께 가져오기
+        
+        do {
+            if let challenge = try context.fetch(request).first {
+                // existingChallenge 속성 설정
+                self.existingChallenge = challenge
+                
+                // 뷰 모델 속성을 Challenge 데이터로 업데이트
+                self.title = challenge.title ?? ""
+                self.memo = challenge.memo ?? ""
+                if let categoryString = challenge.category, !categoryString.isEmpty {
+                    self.category = CategoryIcon(rawValue: categoryString)
+                }
+                self.startDate = challenge.startDate ?? Date()
+                self.endDate = challenge.endDate ?? Date()
+                
+                // 참조용 editingItem 설정
+                self.editingItem = item
+                
+                // completedDates 업데이트 - 필요한 경우
+                let records = challenge.toChallengeRecordModels()
+                let completedDates = Set(records.compactMap { record in
+                    return record.isCompleted ? record.date.startOfDay() : nil
+                })
+                self.completedDates = completedDates
+                
+                print("✅ Challenge 로딩 성공: \(challenge.title ?? "")")
+            } else {
+                print("⚠️ 해당 ID에 해당하는 Challenge를 찾을 수 없습니다.")
+            }
+        } catch {
+            print("❌ Challenge 불러오기 실패: \(error)")
+        }
     }
     
     /// 데이터 수정 - 진행중인 데이터를 완료 데이터로 넘김

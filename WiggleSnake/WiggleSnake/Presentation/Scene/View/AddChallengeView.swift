@@ -58,7 +58,7 @@ struct AddChallengeView: View {
                     // 필수 입력값이 다 들어갔다면 -> 저장
                     viewModel.formValid { success in
                         if success {
-                            viewModel.saveChallenge(context: viewContext)
+                            viewModel.saveChallenge(context: viewContext, mode: mode)
                             self.presentationMode.wrappedValue.dismiss()
                             print("✅ [AddChallengeView] 도전일기 저장완료")
                             
@@ -121,14 +121,15 @@ struct AddChallengeView: View {
             
         }
         .onAppear {
-            items = viewModel.fetchAllChallenges(context: viewContext)
+//            items = viewModel.fetchAllChallenges(context: viewContext)
             
             if mode == .edit, let item = editingItem {
-                    viewModel.title = item.title
-                    viewModel.memo = item.memo
-                    viewModel.startDate = item.startDate
-                    viewModel.endDate = item.endDate
-                    viewModel.category = item.category
+                viewModel.loadChallenge(from: item, context: viewContext)
+//                    viewModel.title = item.title
+//                    viewModel.memo = item.memo
+//                    viewModel.startDate = item.startDate
+//                    viewModel.endDate = item.endDate
+//                    viewModel.category = item.category
                 }
 
         }
