@@ -23,7 +23,6 @@ struct AddChallengeView: View {
     @State private var didSelectStartDate: Bool = false
     @State private var didSelectEndDate: Bool = false
 
-    
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
     @State private var isActiveCategory: Bool = false
     /// datepicker을 보여주도록 하는 변수

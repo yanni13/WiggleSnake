@@ -28,18 +28,13 @@ struct ChallengeListView: View {
         let now = Date()
         let koreanTimeZone = TimeZone(identifier: "Asia/Seoul")!
         let koreanNow = now.addingTimeInterval(TimeInterval(koreanTimeZone.secondsFromGMT(for: now)))
-        
-        print("🕓 한국 기준 현재 시간: \(koreanNow)")
-        print("🟦 현재 탭: \(selectedTab)")
-        
-        for item in viewModel.items {
-            print("🔹 \(item.title): \(item.startDate) ~ \(item.endDate), isCompleted: \(item.isCompleted)")
-            print("   ▶︎ 포함됨? \(koreanNow >= item.startDate && koreanNow <= item.endDate)")
-        }
-        
+
+        let calendar = Calendar(identifier: .gregorian)
         let activeItems = viewModel.items.filter { item in
-            koreanNow >= item.startDate && koreanNow <= item.endDate
+            let endDateInclusive = calendar.date(byAdding: .day, value: 1, to: item.endDate)!
+            return koreanNow >= item.startDate && koreanNow < endDateInclusive
         }
+
         return selectedTab == "진행중"
         ? activeItems.filter { !$0.isCompleted }
         : activeItems.filter { $0.isCompleted }

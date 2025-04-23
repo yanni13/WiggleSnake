@@ -14,14 +14,14 @@ struct CalendarComponent: View {
     var item: ListItemModel
     
     private var normalizedCompletedDates: Set<Date> {
-        Set(completedDates.map { $0.startOfDay() })
+        Set(completedDates.map { $0.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)})
     }
     
     private var dateRange: [Date] {
         let calendar = Calendar.current
         var dates: [Date] = []
-        var currentDate = item.startDate.startOfDay()
-        let endDate = item.endDate.startOfDay()
+        var currentDate = item.startDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
+        let endDate = item.endDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
         
         while currentDate <= endDate {
             dates.append(currentDate)
@@ -102,14 +102,14 @@ struct CalendarComponent: View {
                             .foregroundColor(Color.clear)
                     } else {
                         let date = getDate(for: index - firstWeekday)
-                        let normalizedDate = date.startOfDay()
+                        let normalizedDate = date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
                         let day = index - firstWeekday + 1
                         let isInDateRange = isDateInRange(date)
-                        let isFirstDay = normalizedDate == item.startDate.startOfDay()
-                        let isLastDay = normalizedDate == item.endDate.startOfDay()
+                        let isFirstDay = normalizedDate == item.startDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
+                        let isLastDay = normalizedDate == item.endDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
                         let isPreviousDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: -1 , to: date) ?? date)
                         let isNextDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date)
-                        let isCompleted = normalizedCompletedDates.contains { $0.isSameDay(as: Date()) }
+                        let isCompleted = normalizedCompletedDates.contains { $0.isSameDay(as: normalizedDate) }
                         let isToday = today == normalizedDate
                         
                         VStack {
@@ -124,11 +124,12 @@ struct CalendarComponent: View {
                             .frame(height: 60)
                             .onAppear {
                                 if isInDateRange {
-                                    print("📅 Date: \(Self.debugDateFormatter.string(from: normalizedDate)), isCompleted: \(isCompleted)")
-                                }
+                                        print("📅 Checking \(Self.debugDateFormatter.string(from: normalizedDate))")
+                                        print("   ↳ isCompleted: \(isCompleted)")
+                                    }
                                 for index in 0..<daysInMonth {
                                     let date = getDate(for: index)
-                                    let normalizedDate = date.startOfDay(in: .current)
+                                    let normalizedDate = date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
                                     let isCompleted = normalizedCompletedDates.contains(normalizedDate)
                                     print("📅 Date: \(normalizedDate), isCompleted: \(isCompleted)")
                                 }
@@ -142,9 +143,9 @@ struct CalendarComponent: View {
     }
     // 주어진 날짜가 범위 내에 있는지 확인
     private func isDateInRange(_ date: Date) -> Bool {
-        let startDate = item.startDate.startOfDay()
-        let endDate = item.endDate.startOfDay()
-        let targetDate = date.startOfDay()
+        let startDate = item.startDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
+        let endDate = item.endDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
+        let targetDate = date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
         
         return targetDate >= startDate && targetDate <= endDate
     }
@@ -291,7 +292,7 @@ private extension CalendarComponent {
     
     /// 해당 날짜가 챌린지 기간에 포함되는지 여부
     func isInChallengeRange(_ date: Date) -> Bool {
-        return date >= item.startDate.startOfDay() && date <= item.endDate.startOfDay()
+        return date >= item.startDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!) && date <= item.endDate.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
     }
     
 }

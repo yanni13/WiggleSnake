@@ -125,7 +125,8 @@ final class ChallengeViewModel: ObservableObject {
                     print("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
                     
                     if record.isCompleted {
-                        return record.date.startOfDay(in: TimeZone.current)
+                        return record.date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
+//                        return record.date.startOfDay(in: TimeZone.current)
                     } else {
                         return nil
                     }
