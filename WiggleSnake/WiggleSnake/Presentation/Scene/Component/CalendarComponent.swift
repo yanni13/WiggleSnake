@@ -109,8 +109,8 @@ struct CalendarComponent: View {
                         let isLastDay = normalizedDate == item.endDate.startOfDay()
                         let isPreviousDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: -1 , to: date) ?? date)
                         let isNextDayInRange = isDateInRange(Calendar.current.date(byAdding: .day, value: 1, to: date) ?? date)
-                        
                         let isCompleted = normalizedCompletedDates.contains { $0.isSameDay(as: Date()) }
+                        let isToday = today == normalizedDate
                         
                         VStack {
                             CellView(day: day,
@@ -119,7 +119,7 @@ struct CalendarComponent: View {
                                      isLastDay: isLastDay,
                                      isPreviousDayInRange: isPreviousDayInRange && !isFirstDay,
                                      isNextDayInRange: isNextDayInRange && !isLastDay,
-                                     isCompleted: isCompleted
+                                     isCompleted: isToday
                             )
                             .frame(height: 60)
                             .onAppear {
@@ -247,6 +247,14 @@ private struct CellView: View {
 
 // MARK: - 내부 메서드
 private extension CalendarComponent {
+    
+    
+    var today: Date {
+            let now = Date()
+            let components = Calendar.current.dateComponents([.year, .month, .day], from: now)
+            return Calendar.current.date(from: components)!
+        }
+
     /// 특정 해당 날짜
     private func getDate(for day: Int) -> Date {
         let calendar = Calendar.current
