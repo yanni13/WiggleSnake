@@ -28,14 +28,10 @@ struct ChallengeListView: View {
     
     private var filteredItems: [ListItemModel] {
         let today = Date()
-        
-        let activeItems = viewModel.items.filter { item in
-            today >= item.startDate && today <= item.endDate
-        }
-        
+
         return selectedTab == "진행중"
-        ? activeItems.filter { !$0.isCompleted }
-        : activeItems.filter { $0.isCompleted }
+        ? viewModel.items.filter { !$0.isCompleted }
+        : viewModel.items.filter { $0.isCompleted }
     }
     
     
@@ -60,71 +56,81 @@ struct ChallengeListView: View {
                     
                     Spacer().frame(height: 18)
                     
-                    
-                    ForEach(Array(groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue })), id: \.self) { category in
-                        let categoryItems = groupedItems[category] ?? []
-                        
-                        VStack(alignment: .leading) {
-                            Text(category.groupTitle)
-                                .font(.H3SemiboldFont())
-                                .foregroundColor(.gray05)
-                                .padding(.leading, 29)
-                                .padding(.top, 20)
+                    if items.isEmpty {
+                        Text("지렁이의 하루는 당신의 도전으로 시작돼요 ☀️")
+                            .font(.H5MediumFont())
+                            .foregroundColor(.gray05)
+                            .border(.black)
+                            .padding(.horizontal, 19)
+                    } else {
+                        ForEach(Array(groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue })), id: \.self) { category in
+                            let categoryItems = groupedItems[category] ?? []
                             
-                            
-                            Spacer().frame(height: 25)
-                            
-                            VStack(spacing: 20) {
-                                ForEach(categoryItems.indices, id: \.self) { index in
-                                    let item = categoryItems[index]
-                                    
-                                    // fetchViewModel.items 기반으로 Binding 생성
-                                    let itemBinding = Binding<ListItemModel>(
-                                        get: {
-                                            viewModel.items.first(where: { $0.id == item.id }) ?? item
-                                        },
-                                        set: { newValue in
-                                            if let i = viewModel.items.firstIndex(where: { $0.id == newValue.id }) {
-                                                viewModel.items[i] = newValue
-                                            }
-                                        }
-                                    )
-                                    
-                                    ListComponent(
-                                        item: itemBinding,
-                                        path: $path,
-                                        onCheck: {
-                                            if selectedTab == "진행중" {
-                                                withAnimation(.easeInOut(duration: 0.3)) {
-                                                    showToast = true
-                                                    triggerConfetti = true
+                            VStack(alignment: .leading) {
+                                Text(category.groupTitle)
+                                    .font(.H3SemiboldFont())
+                                    .foregroundColor(.gray05)
+                                    .padding(.leading, 29)
+                                    .padding(.top, 20)
+                                
+                                
+                                Spacer().frame(height: 25)
+                                
+                                VStack(spacing: 20) {
+                                    ForEach(categoryItems.indices, id: \.self) { index in
+                                        let item = categoryItems[index]
+                                        
+                                        // fetchViewModel.items 기반으로 Binding 생성
+                                        let itemBinding = Binding<ListItemModel>(
+                                            get: {
+                                                viewModel.items.first(where: { $0.id == item.id }) ?? item
+                                            },
+                                            set: { newValue in
+                                                if let i = viewModel.items.firstIndex(where: { $0.id == newValue.id }) {
+                                                    viewModel.items[i] = newValue
                                                 }
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                            }
+                                        )
+                                        
+                                        ListComponent(
+                                            item: itemBinding,
+                                            path: $path,
+                                            onCheck: {
+                                                if selectedTab == "진행중" {
                                                     withAnimation(.easeInOut(duration: 0.3)) {
-                                                        showToast = false
-                                                        triggerConfetti = false
+                                                        showToast = true
+                                                        triggerConfetti = true
+                                                    }
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                                            showToast = false
+                                                            triggerConfetti = false
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        },
-                                        viewModel: viewModel
-                                    )
-                                    .padding(.horizontal, 20)
+                                            },
+                                            viewModel: viewModel
+                                        )
+                                        .padding(.horizontal, 20)
+                                    }
+                                    
+                                    // 카테고리 항목이 2개이상이여야 표시됨
+                                    if category != groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue }).last {
+                                        Rectangle()
+                                            .frame(height: 8)
+                                            .foregroundColor(.gray01)
+                                    }
                                 }
                                 
-                                // 카테고리 항목이 2개이상이여야 표시됨
-                                if category != groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue }).last {
-                                    Rectangle()
-                                        .frame(height: 8)
-                                        .foregroundColor(.gray01)
-                                }
                             }
                         }
                     }
                     Spacer()
                 }
-                
+                Spacer()
             }
+            .padding(.bottom, 40)
+
             
             VStack {
                 Color.clear
