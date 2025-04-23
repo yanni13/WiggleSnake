@@ -16,9 +16,9 @@ struct ChallengeListView: View {
     /// 저장된 데이터를 불러와서 items 배열에 저장하기 위한 변수
     @State private var items: [ListItemModel] = []
     /// 도전기록 상세보기 뷰로 넘어가기 위한 상태변수
-    @State private var isPresented: Bool = false
+//    @State private var isPresented: Bool = false
     /// 선택된 리스트 아이템을 저장하는 변수
-    @State private var selectedItem: ListItemModel?
+//    @State private var selectedItem: ListItemModel?
     @State private var showToast: Bool = false
     @State private var triggerConfetti: Bool = false
     
@@ -27,7 +27,6 @@ struct ChallengeListView: View {
     let textLabel = ["진행중", "완료"]
     
     private var filteredItems: [ListItemModel] {
-        let today = Date()
 
         return selectedTab == "진행중"
         ? viewModel.items.filter { !$0.isCompleted }
@@ -57,11 +56,18 @@ struct ChallengeListView: View {
                     Spacer().frame(height: 18)
                     
                     if items.isEmpty {
-                        Text("지렁이의 하루는 당신의 도전으로 시작돼요 ☀️")
-                            .font(.H5MediumFont())
-                            .foregroundColor(.gray05)
-                            .border(.black)
-                            .padding(.horizontal, 19)
+                        VStack {
+                            Spacer().frame(height: 250)
+                            
+                            Text("지렁이의 하루는 당신의 도전으로 시작돼요 ☀️")
+                                .font(.H4MediumFont())
+                                .foregroundColor(.gray04)
+                                .padding(.horizontal, 20)
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+
                     } else {
                         ForEach(Array(groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue })), id: \.self) { category in
                             let categoryItems = groupedItems[category] ?? []
