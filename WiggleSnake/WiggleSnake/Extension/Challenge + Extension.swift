@@ -13,7 +13,7 @@ extension Challenge {
             print("🚨 Challenge.records가 비어있거나 형변환 실패")
             return []
         }
-
+        
         return recordSet.map { record in
             ChallengeRecordModel(
                 id: record.id ?? UUID(),
@@ -30,26 +30,28 @@ extension Challenge {
               let title = title,
               let startDate = startDate,
               let endDate = endDate,
-              let memo = memo,
               let categoryRaw = category,
               let category = CategoryIcon(rawValue: categoryRaw) else {
+            print("⚠️ toListItemModel 변환 실패 - 필수 항목 누락")
             return nil
         }
-                
+        
+        let memo = self.memo ?? ""
+        
         let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "M/d"
-                let range = "\(dateFormatter.string(from: startDate)) ~ \(dateFormatter.string(from: endDate))"
-                
-                return ListItemModel(
-                    id: id,
-                    category: category,
-                    title: title,
-                    startDate: startDate,
-                    endDate: endDate,
-                    memo: memo,
-                    isCompleted: isCompleted,
-                    dataRange: range
-                )
+        dateFormatter.dateFormat = "M/d"
+        let range = "\(dateFormatter.string(from: startDate)) ~ \(dateFormatter.string(from: endDate))"
+        
+        return ListItemModel(
+            id: id,
+            category: category,
+            title: title,
+            startDate: startDate,
+            endDate: endDate,
+            memo: memo,
+            isCompleted: isCompleted,
+            dataRange: range
+        )
     }
     
 }

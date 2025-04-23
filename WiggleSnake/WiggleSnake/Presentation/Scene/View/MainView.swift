@@ -60,6 +60,7 @@ struct MainView: View {
                 
                 // 지렁이 칸
                 WormView()
+                    
                 
 
                 CustomBottomBtn(action: {
@@ -88,7 +89,9 @@ struct MainView: View {
                 
             }
             .onAppear {
-                fetchAndPrintChallenges()
+                viewModel.deleteExpiredChallenges(context: context) { success in
+                    fetchAndPrintChallenges()
+                }
                 item = nil
             }
         }

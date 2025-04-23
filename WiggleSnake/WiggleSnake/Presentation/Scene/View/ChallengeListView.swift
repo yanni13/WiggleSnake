@@ -10,16 +10,14 @@ import ConfettiSwiftUI
 
 struct ChallengeListView: View {
     @Environment(\.managedObjectContext) private var context
-    
     @ObservedObject var viewModel: ChallengeViewModel
+    
     @State private var selectedTab: String = "진행중"
     /// 저장된 데이터를 불러와서 items 배열에 저장하기 위한 변수
     @State private var items: [ListItemModel] = []
-    /// 도전기록 상세보기 뷰로 넘어가기 위한 상태변수
-//    @State private var isPresented: Bool = false
-    /// 선택된 리스트 아이템을 저장하는 변수
-//    @State private var selectedItem: ListItemModel?
+    /// 토스트바 표시하기 위한 변수
     @State private var showToast: Bool = false
+    /// 컨페티 표시하기 위한 변수
     @State private var triggerConfetti: Bool = false
     
     @Binding var path: NavigationPath
@@ -27,10 +25,24 @@ struct ChallengeListView: View {
     let textLabel = ["진행중", "완료"]
     
     private var filteredItems: [ListItemModel] {
-
+        let now = Date()
+        let koreanTimeZone = TimeZone(identifier: "Asia/Seoul")!
+        let koreanNow = now.addingTimeInterval(TimeInterval(koreanTimeZone.secondsFromGMT(for: now)))
+        
+        print("🕓 한국 기준 현재 시간: \(koreanNow)")
+        print("🟦 현재 탭: \(selectedTab)")
+        
+        for item in viewModel.items {
+            print("🔹 \(item.title): \(item.startDate) ~ \(item.endDate), isCompleted: \(item.isCompleted)")
+            print("   ▶︎ 포함됨? \(koreanNow >= item.startDate && koreanNow <= item.endDate)")
+        }
+        
+        let activeItems = viewModel.items.filter { item in
+            koreanNow >= item.startDate && koreanNow <= item.endDate
+        }
         return selectedTab == "진행중"
-        ? viewModel.items.filter { !$0.isCompleted }
-        : viewModel.items.filter { $0.isCompleted }
+        ? activeItems.filter { !$0.isCompleted }
+        : activeItems.filter { $0.isCompleted }
     }
     
     
@@ -67,7 +79,7 @@ struct ChallengeListView: View {
                             Spacer()
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+                        
                     } else {
                         ForEach(Array(groupedItems.keys.sorted(by: { $0.rawValue < $1.rawValue })), id: \.self) { category in
                             let categoryItems = groupedItems[category] ?? []
@@ -136,7 +148,7 @@ struct ChallengeListView: View {
                 Spacer()
             }
             .padding(.bottom, 40)
-
+            
             
             VStack {
                 Color.clear
@@ -173,6 +185,18 @@ struct ChallengeListView: View {
         }
         .onAppear {
             items = viewModel.fetchAllChallenges(context: context)
+            
+            //            viewModel.deleteExpiredChallenges(context: context) { success in
+            //                if success {
+            //                    items = viewModel.fetchAllChallenges(context: context)
+            //                }
+            //            }
+            print("🧾 viewModel.items: \(viewModel.items.count)")
+            for item in viewModel.items {
+                print("👉 \(item.title), 시작: \(item.startDate), 종료: \(item.endDate), 완료 여부: \(item.isCompleted)")
+            }
+            print("📋 화면에 보일 filteredItems: \(filteredItems.count)")
+            
         }
         
     }

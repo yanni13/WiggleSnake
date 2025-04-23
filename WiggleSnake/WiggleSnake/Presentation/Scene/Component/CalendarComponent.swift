@@ -309,25 +309,19 @@ private extension CalendarComponent {
 
 
 // MARK: - Date Extension
-// Date 확장을 개선
 extension Date {
-    func startOfDay(in timeZone: TimeZone = TimeZone.current) -> Date {
-        let calendar = Calendar.current
-        var components = calendar.dateComponents([.year, .month, .day], from: self)
-        components.hour = 0
-        components.minute = 0
-        components.second = 0
-        components.nanosecond = 0
-        
-        var calendarWithTimeZone = calendar
-        calendarWithTimeZone.timeZone = timeZone
-        
-        return calendarWithTimeZone.date(from: components) ?? self
+    func startOfDay(in timeZone: TimeZone = TimeZone(identifier: "Asia/Seoul")!) -> Date {
+        var calendar = Calendar.current
+        calendar.timeZone = timeZone
+
+        let components = calendar.dateComponents([.year, .month, .day], from: self)
+        return calendar.date(from: components) ?? self
     }
-    
-    // 날짜만 비교하는 메서드 추가
-    func isSameDay(as date: Date) -> Bool {
-        let calendar = Calendar.current
-        return calendar.isDate(self.startOfDay(), inSameDayAs: date.startOfDay())
+
+    func isSameDay(as date: Date, in timeZone: TimeZone = TimeZone(identifier: "Asia/Seoul")!) -> Bool {
+        var calendar = Calendar.current
+        calendar.timeZone = timeZone
+        return calendar.isDate(self, inSameDayAs: date)
     }
 }
+

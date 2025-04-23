@@ -11,6 +11,16 @@
 		D8FA6CE62DB633280004A9CF /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = D8FA6CE52DB633280004A9CF /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D8FA6E692DB8914A0004A9CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D846DDCC2DACD53900B9E375 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D846DDD32DACD53900B9E375;
+			remoteInfo = WiggleSnake;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		D81714C72DAF2F1D007704BD /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D846DDD42DACD53900B9E375 /* WiggleSnake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WiggleSnake.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -23,6 +33,8 @@
 		D8B99B9A2DB4EFE80091EEF9 /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D8FA6CAC2DB5C69F0004A9CF /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D8FA6E262DB746D60004A9CF /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
+		D8FA6E652DB8914A0004A9CF /* WiggleSnakeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WiggleSnakeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8FA6E762DB896F30004A9CF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -55,6 +67,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D8FA6E622DB8914A0004A9CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -63,6 +82,7 @@
 			children = (
 				D81714C72DAF2F1D007704BD /* .gitignore */,
 				D846DDD62DACD53900B9E375 /* WiggleSnake */,
+				D8FA6E752DB896F20004A9CF /* Frameworks */,
 				D846DDD52DACD53900B9E375 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				D846DDD42DACD53900B9E375 /* WiggleSnake.app */,
+				D8FA6E652DB8914A0004A9CF /* WiggleSnakeUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,6 +141,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D8FA6E752DB896F20004A9CF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8FA6E762DB896F30004A9CF /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -146,6 +175,26 @@
 			productReference = D846DDD42DACD53900B9E375 /* WiggleSnake.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D8FA6E642DB8914A0004A9CF /* WiggleSnakeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8FA6E6B2DB8914A0004A9CF /* Build configuration list for PBXNativeTarget "WiggleSnakeUITests" */;
+			buildPhases = (
+				D8FA6E612DB8914A0004A9CF /* Sources */,
+				D8FA6E622DB8914A0004A9CF /* Frameworks */,
+				D8FA6E632DB8914A0004A9CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D8FA6E6A2DB8914A0004A9CF /* PBXTargetDependency */,
+			);
+			name = WiggleSnakeUITests;
+			packageProductDependencies = (
+			);
+			productName = WiggleSnakeUITests;
+			productReference = D8FA6E652DB8914A0004A9CF /* WiggleSnakeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -158,6 +207,10 @@
 				TargetAttributes = {
 					D846DDD32DACD53900B9E375 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					D8FA6E642DB8914A0004A9CF = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = D846DDD32DACD53900B9E375;
 					};
 				};
 			};
@@ -217,6 +270,7 @@
 			projectRoot = "";
 			targets = (
 				D846DDD32DACD53900B9E375 /* WiggleSnake */,
+				D8FA6E642DB8914A0004A9CF /* WiggleSnakeUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -230,6 +284,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D8FA6E632DB8914A0004A9CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -240,7 +301,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D8FA6E612DB8914A0004A9CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D8FA6E6A2DB8914A0004A9CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D846DDD32DACD53900B9E375 /* WiggleSnake */;
+			targetProxy = D8FA6E692DB8914A0004A9CF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D846DDE52DACD53A00B9E375 /* Debug */ = {
@@ -278,6 +354,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -341,6 +418,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -426,6 +504,42 @@
 			};
 			name = Release;
 		};
+		D8FA6E6C2DB8914A0004A9CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W5Z68U98HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = yanni13.WiggleSnakeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WiggleSnake.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WiggleSnake";
+			};
+			name = Debug;
+		};
+		D8FA6E6D2DB8914A0004A9CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W5Z68U98HJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = yanni13.WiggleSnakeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WiggleSnake.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WiggleSnake";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -443,6 +557,15 @@
 			buildConfigurations = (
 				D846DDE82DACD53A00B9E375 /* Debug */,
 				D846DDE92DACD53A00B9E375 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8FA6E6B2DB8914A0004A9CF /* Build configuration list for PBXNativeTarget "WiggleSnakeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8FA6E6C2DB8914A0004A9CF /* Debug */,
+				D8FA6E6D2DB8914A0004A9CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

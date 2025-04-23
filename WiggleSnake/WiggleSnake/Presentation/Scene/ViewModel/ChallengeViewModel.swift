@@ -125,8 +125,7 @@ final class ChallengeViewModel: ObservableObject {
                     print("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
                     
                     if record.isCompleted {
-                        print("✅ Adding completed date: \(record.date.startOfDay())")
-                        return record.date.startOfDay()
+                        return record.date.startOfDay(in: TimeZone.current)
                     } else {
                         return nil
                     }
@@ -167,7 +166,7 @@ final class ChallengeViewModel: ObservableObject {
                 
                 let records = challenge.toChallengeRecordModels()
                 let completedDates = Set(records.compactMap { record in
-                    return record.isCompleted ? record.date.startOfDay() : nil
+                    return record.isCompleted ? record.date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!) : nil
                 })
                 
                 
@@ -201,9 +200,15 @@ final class ChallengeViewModel: ObservableObject {
     
     /// 실제 도전을 수행한 기간이 얼만지 파악하기 위한 배열 추가 로직
     func markChallengeCompleted(for item: ListItemModel, on date: Date, context: NSManagedObjectContext) {
-        let calendar = Calendar.current
+        let seoulTimeZone = TimeZone(identifier: "Asia/Seoul")!
+        var calendar = Calendar.current
+        calendar.timeZone = seoulTimeZone
+        
         let components = calendar.dateComponents([.year, .month, .day], from: date)
-        let normalizedDate = calendar.date(from: components)!
+        guard let normalizedDate = calendar.date(from: components) else {
+            print("❌ 날짜 정규화 실패")
+            return
+        }
         
         // Challenge fetch
         let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
@@ -218,7 +223,11 @@ final class ChallengeViewModel: ObservableObject {
                 record.challenge = challenge
                 
                 try context.save()
-                print("✅ 저장된 기록: \(normalizedDate)")
+                // 확인용 KST 출력
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZ"
+                formatter.timeZone = seoulTimeZone
+                print("✅ 저장된 기록 (KST): \(formatter.string(from: normalizedDate))")
                 
                 // completedDates 갱신
                 fetchCompletedDates(context: context)
@@ -231,16 +240,45 @@ final class ChallengeViewModel: ObservableObject {
     private func fetchCompletedDates(context: NSManagedObjectContext) {
         let request: NSFetchRequest<ChallengeRecord> = ChallengeRecord.fetchRequest()
         request.predicate = NSPredicate(format: "isCompleted == %@", NSNumber(value: true))
-
+        
         
         do {
             let records = try context.fetch(request)
-            let completed = Set(records.map { $0.date!.startOfDay() })
+            let completed = Set(records.map { $0.date!.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!) })
             self.completedDates = completed
             print("🎯 완료된 날짜들: \(completed)")
         } catch {
             print("❌ ChallengeRecord fetch 실패: \(error)")
         }
-
+        
     }
+    
+    //만료된 리스트에 한해서는 삭제되도록
+    func deleteExpiredChallenges(context: NSManagedObjectContext, completion: @escaping (Bool) -> Void) {
+        let seoulTimeZone = TimeZone(identifier: "Asia/Seoul")!
+        var calendar = Calendar.current
+        calendar.timeZone = seoulTimeZone
+        let today = calendar.startOfDay(for: Date())
+
+        let expiredItems = items.filter { $0.endDate < today }
+
+        for item in expiredItems {
+            let request: NSFetchRequest<Challenge> = Challenge.fetchRequest()
+            request.predicate = NSPredicate(format: "id == %@", item.id as CVarArg)
+
+            do {
+                if let challenge = try context.fetch(request).first {
+                    context.delete(challenge)
+                    try context.save()
+                    print("🗑️ 삭제된 챌린지: \(item.title)")
+                }
+            } catch {
+                print("❌ 삭제 실패: \(error.localizedDescription)")
+            }
+        }
+
+        // ViewModel에서도 제거
+        items.removeAll { $0.endDate < today }
+    }
+
 }
