@@ -185,10 +185,7 @@ private struct CellView: View {
                     .padding(.bottom, 30)
                     .frame(maxWidth: .infinity)
                     .zIndex(0)
-                
-                
             }
-
             
             // 이전 날짜와 연결(왼쪽)
             if isInRange && isPreviousDayInRange {
@@ -223,7 +220,7 @@ private struct CellView: View {
                             .foregroundColor(.pink02)
                             .frame(height: 6)
                             .cornerRadius(10)
-                            .frame(width: 50) 
+                            .frame(width: 50)
                     }
                     .padding(.top, 30)
                 }

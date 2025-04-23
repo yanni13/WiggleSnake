@@ -16,12 +16,13 @@ final class WormViewModel: ObservableObject {
     private var movementTimer: AnyCancellable?
     private var direction: CGFloat = 0 // 각도로 방향 표현 (라디안)
     private var velocity: CGFloat = 3.0 // 속도
-    private var bounds: CGRect = CGRect(x: 0, y: 0, width: 300, height: 400)
+    private var bounds: CGRect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+
     private var targetDirection: CGFloat = 0
     private var turnSpeed: CGFloat = 0.1
     
     // 경계에서 유지할 안전 거리
-    private let safetyMargin: CGFloat = 40
+    private let safetyMargin: CGFloat = 10.0
     
     // 지렁이 세그먼트 사이 거리
     private let segmentDistance: CGFloat = 10.0
@@ -32,53 +33,44 @@ final class WormViewModel: ObservableObject {
     private let baseLength: Int = 5
     // 최대 길이 (화면 크기에 따라 조정됨)
     private var maxLength: Int = 400
-    
-    init() {
-        resetWorm()
-        startMoving()
-    }
-    
+
     func addListItem(_ item: ListItemModel) {
         listItems.append(item)
-        resetWorm() // 길이 업데이트를 위해 지렁이 재설정
+        resetWorm()
     }
     
     func updateListItem(_ item: ListItemModel) {
         if let index = listItems.firstIndex(where: { $0.id == item.id }) {
             listItems[index] = item
-            resetWorm() // 완료 상태가 변경되었을 수 있으므로 지렁이 재설정
+            resetWorm()
         }
     }
     
     func removeListItem(_ item: ListItemModel) {
         listItems.removeAll(where: { $0.id == item.id })
-        resetWorm() // 길이 업데이트를 위해 지렁이 재설정
+        resetWorm()
     }
     
     // 완료된 도전 수 계산
     private var completedChallengesCount: Int {
         return listItems.filter { $0.isCompleted }.count
     }
-    
+
     func resetWorm() {
-        // 초기 지렁이 생성 - 화면 중앙에 위치
         let centerX = bounds.width / 2
         let centerY = bounds.height / 2
         
-        // 초기 방향 (오른쪽)
         direction = 0
-        
-        // 초기 세그먼트 생성
         wormSegments = []
-        
-        // 도전 항목 수에 따라 길이 설정
-        let initialLength = calculateWormLength()
-        
-        for i in 0..<initialLength {
+
+        let segmentCount = max(1, completedChallengesCount)
+
+        for i in 0..<segmentCount {
             let x = centerX - CGFloat(i) * segmentDistance
             wormSegments.append(CGPoint(x: x, y: centerY))
         }
     }
+
     
     // 지렁이 길이 계산 (기본 길이 + 완료된 도전당 추가 길이)
     private func calculateWormLength() -> Int {
@@ -88,6 +80,9 @@ final class WormViewModel: ObservableObject {
     
     func startMoving() {
         movementTimer?.cancel()
+        
+        updateWormPosition()
+        
         movementTimer = Timer.publish(every: 0.03, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
@@ -210,6 +205,5 @@ final class WormViewModel: ObservableObject {
         let maxViewDimension = max(newBounds.width, newBounds.height)
         maxLength = Int(maxViewDimension / segmentDistance) * 2 // 화면을 두 번 돌 수 있는 정도의 길이
         
-        resetWorm()
     }
 }

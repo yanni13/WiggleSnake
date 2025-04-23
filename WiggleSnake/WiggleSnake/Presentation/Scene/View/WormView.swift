@@ -3,7 +3,7 @@ import Combine
 
 struct WormView: View {
     @StateObject private var viewModel = WormViewModel()
-//    @Binding var listItems: [ListItemModel]
+    let listItems: [ListItemModel]
     
     var body: some View {
         GeometryReader { geometry in
@@ -11,38 +11,41 @@ struct WormView: View {
                 Color.clear
                 
                 ImprovedWormCanvas(segments: viewModel.wormSegments)
-                    .border(.black)
             }
             .onAppear {
                 // 지렁이 크기와 영역 설정
                 viewModel.setBounds(CGRect(x: 0, y: 0, width: geometry.size.width, height: geometry.size.height))
-//                // 기존 리스트 아이템 설정
-//                for item in listItems {
-//                    viewModel.addListItem(item)
-//                }
-                viewModel.resetWorm()
+                
+                for item in listItems {
+                    viewModel.addListItem(item)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    viewModel.resetWorm()
+                    viewModel.startMoving()
+                }
             }
-//            .onChange(of: listItems) { newItems in
-//                            // 기존 항목을 모두 지우고 새 항목으로 업데이트
-//                            let oldItems = viewModel.listItems
-//                            
-//                            // 제거된 항목 처리
-//                            for oldItem in oldItems {
-//                                if !newItems.contains(where: { $0.id == oldItem.id }) {
-//                                    viewModel.removeListItem(oldItem)
-//                                }
-//                            }
-//                            
-//                            // 추가된 항목 처리
-//                            for newItem in newItems {
-//                                if !oldItems.contains(where: { $0.id == newItem.id }) {
-//                                    viewModel.addListItem(newItem)
-//                                } else if let oldItem = oldItems.first(where: { $0.id == newItem.id }), oldItem != newItem {
-//                                    // 변경된 항목 업데이트
-//                                    viewModel.updateListItem(newItem)
-//                                }
-//                            }
-//                        }
+            .onChange(of: listItems) { newItems in
+                // 기존 항목을 모두 지우고 새 항목으로 업데이트
+                let oldItems = viewModel.listItems
+                
+                // 제거된 항목 처리
+                for oldItem in oldItems {
+                    if !newItems.contains(where: { $0.id == oldItem.id }) {
+                        viewModel.removeListItem(oldItem)
+                    }
+                }
+                
+                // 추가된 항목 처리
+                for newItem in newItems {
+                    if !oldItems.contains(where: { $0.id == newItem.id }) {
+                        viewModel.addListItem(newItem)
+                    } else if let oldItem = oldItems.first(where: { $0.id == newItem.id }), oldItem != newItem {
+                        // 변경된 항목 업데이트
+                        viewModel.updateListItem(newItem)
+                    }
+                }
+            }
         }
         .clipped() // 화면 밖으로 나가는 부분 클리핑
     }
@@ -51,6 +54,7 @@ struct WormView: View {
 
 struct ImprovedWormCanvas: View {
     let segments: [CGPoint]
+    
     
     var body: some View {
         Canvas { context, size in
@@ -92,8 +96,7 @@ struct ImprovedWormCanvas: View {
                 let startPoint = segments[i]
                 let endPoint = segments[i+1]
                 
-                // 세그먼트마다 두께 계산 (머리에서 꼬리로 갈수록 얇아짐)
-                let thickness = 18.0 * (1.0 - Double(i) / Double(segments.count) * 0.3)
+                let thickness = 18.0
                 
                 var segmentPath = Path()
                 segmentPath.move(to: startPoint)

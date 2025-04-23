@@ -35,6 +35,7 @@
 		D8FA6E262DB746D60004A9CF /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 		D8FA6E652DB8914A0004A9CF /* WiggleSnakeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WiggleSnakeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8FA6E762DB896F30004A9CF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		D8FA6EC72DB8B3A00004A9CF /* WiggleSnake.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WiggleSnake.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -149,6 +150,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D8FA6EC82DB8B3A00004A9CF /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -253,6 +259,10 @@
 				{
 					ProductGroup = D85EAD5C2DB0DED700E12930 /* Products */;
 					ProjectRef = D85EAD5B2DB0DED700E12930 /* WiggleSnake.xcodeproj */;
+				},
+				{
+					ProductGroup = D8FA6EC82DB8B3A00004A9CF /* Products */;
+					ProjectRef = D8FA6EC72DB8B3A00004A9CF /* WiggleSnake.xcodeproj */;
 				},
 				{
 					ProductGroup = D87CF7052DAF5BB900271EF4 /* Products */;

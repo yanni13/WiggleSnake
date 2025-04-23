@@ -126,15 +126,11 @@ final class ChallengeViewModel: ObservableObject {
                     
                     if record.isCompleted {
                         return record.date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
-//                        return record.date.startOfDay(in: TimeZone.current)
                     } else {
                         return nil
                     }
                 }
-            })
-            
-            
-            
+            })            
             return items
         } catch {
             print("CoreData fetch error: \(error)")

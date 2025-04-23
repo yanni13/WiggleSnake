@@ -11,89 +11,78 @@ import SwiftUI
 struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var context
-    @State private var path = NavigationPath()
-    @StateObject var viewModel = ChallengeViewModel()
+    @Binding var path: NavigationPath
+    //    @State private var path = NavigationPath()
+    //    @StateObject var viewModel = ChallengeViewModel()
+    @ObservedObject var viewModel: ChallengeViewModel
     @State private var item: ListItemModel?
-
+    //    @State private var wormItems: [ListItemModel] = []
+    
     
     var body: some View {
-    
-        NavigationStack(path: $path) {
+        VStack(alignment: .leading) {
+            
+            // 상단 버튼
+            HStack(spacing: 0) {
+                Spacer()
+                
+                NavigationLink(value: NavigationRoute.addChallenge) {
+                    Image("icon_plus")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                }
+                
+                
+                Button(action: {
+                    
+                }, label: {
+                    Image("icon_share")
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                })
+            }
+            
             VStack(alignment: .leading) {
+                Text("좋아요, \n오늘도 나만의 기록을 쌓아볼까요?")
+                    .font(.H1BoldFont())
+                    .foregroundColor(.gray05)
+                    .lineSpacing(3)
+                    .padding(.top, 34)
                 
-                // 상단 버튼
-                HStack(spacing: 0) {
-                    Spacer()
-                    
-                    NavigationLink(value: NavigationRoute.addChallenge) {
-                        Image("icon_plus")
-                            .resizable()
-                            .frame(width: 44, height: 44)
-                    }
-                    
-                    
-                    Button(action: {
-                        
-                    }, label: {
-                        Image("icon_share")
-                            .resizable()
-                            .frame(width: 44, height: 44)
-                    })
-                }
+                Spacer().frame(height: 12)
                 
-                VStack(alignment: .leading) {
-                    Text("좋아요, \n오늘도 나만의 기록을 쌓아볼까요?")
-                        .font(.H1BoldFont())
-                        .foregroundColor(.gray05)
-                        .lineSpacing(3)
-                        .padding(.top, 34)
-                                            
-                    Spacer().frame(height: 12)
-                    
-                    Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
-                        .font(.H4MediumFont())
-                        .foregroundColor(.gray05)
-                }
-                .padding(.horizontal, 20)
+                Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
+                    .font(.H4MediumFont())
+                    .foregroundColor(.gray05)
+            }
+            .padding(.horizontal, 20)
+            
+            
+            
+            // 지렁이 칸
+            WormView(listItems: viewModel.items)
+            
+            
+            
+            CustomBottomBtn(action: {
+                path.append(NavigationRoute.challengeList)
                 
-
-                
-                // 지렁이 칸
-                WormView()
-                    
-                
-
-                CustomBottomBtn(action: {
-                    path.append(NavigationRoute.challengeList)
-
-                }, label: "챌린지 리스트")
-                .buttonStyle(.plain)
-                .padding(.bottom, 34)
-                .padding(.horizontal, 20)
-
+            }, label: "챌린지 리스트")
+            .buttonStyle(.plain)
+            .padding(.bottom, 34)
+            .padding(.horizontal, 20)
+            
+            
+        }
+        .edgesIgnoringSafeArea(.bottom)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            viewModel.deleteExpiredChallenges(context: context) { success in
+                fetchAndPrintChallenges()
                 
             }
-            .edgesIgnoringSafeArea(.bottom)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .navigationDestination(for: NavigationRoute.self) { route in
-                switch route {
-                case .addChallenge:
-                    AddChallengeView(path: $path, viewModel: viewModel, mode: .add, editingItem: nil)
-                case .editChallenge(let item):
-                    AddChallengeView(path: $path, viewModel: viewModel, mode: .edit, editingItem: item)
-                case .challengeList:
-                    ChallengeListView(viewModel: viewModel, path: $path)
-                case .challengeDetail(let item):
-                    ChallengeDetailView(path: $path, item: item, viewModel: viewModel)
-                }
-                
-            }
-            .onAppear {
-                viewModel.deleteExpiredChallenges(context: context) { success in
-                    fetchAndPrintChallenges()
-                }
-                item = nil
-            }
+            item = nil
         }
     }
     
@@ -121,6 +110,6 @@ struct MainView: View {
     
 }
 
-#Preview {
-    MainView()
-}
+//#Preview {
+//    MainView()
+//}
