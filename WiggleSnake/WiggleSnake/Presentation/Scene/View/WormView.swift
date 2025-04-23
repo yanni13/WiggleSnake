@@ -13,7 +13,6 @@ struct WormView: View {
                 ImprovedWormCanvas(segments: viewModel.wormSegments)
             }
             .onAppear {
-                // 지렁이 크기와 영역 설정
                 viewModel.setBounds(CGRect(x: 0, y: 0, width: geometry.size.width, height: geometry.size.height))
                 
                 for item in listItems {
@@ -26,17 +25,14 @@ struct WormView: View {
                 }
             }
             .onChange(of: listItems) { newItems in
-                // 기존 항목을 모두 지우고 새 항목으로 업데이트
                 let oldItems = viewModel.listItems
                 
-                // 제거된 항목 처리
                 for oldItem in oldItems {
                     if !newItems.contains(where: { $0.id == oldItem.id }) {
                         viewModel.removeListItem(oldItem)
                     }
                 }
                 
-                // 추가된 항목 처리
                 for newItem in newItems {
                     if !oldItems.contains(where: { $0.id == newItem.id }) {
                         viewModel.addListItem(newItem)

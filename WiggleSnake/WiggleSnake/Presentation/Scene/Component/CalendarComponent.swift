@@ -124,9 +124,9 @@ struct CalendarComponent: View {
                             .frame(height: 60)
                             .onAppear {
                                 if isInDateRange {
-                                        print("📅 Checking \(Self.debugDateFormatter.string(from: normalizedDate))")
-                                        print("   ↳ isCompleted: \(isCompleted)")
-                                    }
+                                    print("📅 Checking \(Self.debugDateFormatter.string(from: normalizedDate))")
+                                    print("   ↳ isCompleted: \(isCompleted)")
+                                }
                                 for index in 0..<daysInMonth {
                                     let date = getDate(for: index)
                                     let normalizedDate = date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
@@ -169,7 +169,7 @@ private struct CellView: View {
     var isPreviousDayInRange: Bool = false
     var isNextDayInRange: Bool = false
     var isCompleted: Bool = false
-
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5)
@@ -257,14 +257,12 @@ private struct CellView: View {
 
 // MARK: - 내부 메서드
 private extension CalendarComponent {
-    
-    
     var today: Date {
-            let now = Date()
-            let components = Calendar.current.dateComponents([.year, .month, .day], from: now)
-            return Calendar.current.date(from: components)!
-        }
-
+        let now = Date()
+        let components = Calendar.current.dateComponents([.year, .month, .day], from: now)
+        return Calendar.current.date(from: components)!
+    }
+    
     /// 특정 해당 날짜
     private func getDate(for day: Int) -> Date {
         let calendar = Calendar.current
@@ -316,22 +314,3 @@ private extension CalendarComponent {
     
     static let weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
 }
-
-
-// MARK: - Date Extension
-extension Date {
-    func startOfDay(in timeZone: TimeZone = TimeZone(identifier: "Asia/Seoul")!) -> Date {
-        var calendar = Calendar.current
-        calendar.timeZone = timeZone
-
-        let components = calendar.dateComponents([.year, .month, .day], from: self)
-        return calendar.date(from: components) ?? self
-    }
-
-    func isSameDay(as date: Date, in timeZone: TimeZone = TimeZone(identifier: "Asia/Seoul")!) -> Bool {
-        var calendar = Calendar.current
-        calendar.timeZone = timeZone
-        return calendar.isDate(self, inSameDayAs: date)
-    }
-}
-

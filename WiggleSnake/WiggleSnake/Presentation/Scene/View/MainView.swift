@@ -12,11 +12,8 @@ struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var context
     @Binding var path: NavigationPath
-    //    @State private var path = NavigationPath()
-    //    @StateObject var viewModel = ChallengeViewModel()
     @ObservedObject var viewModel: ChallengeViewModel
     @State private var item: ListItemModel?
-    //    @State private var wormItems: [ListItemModel] = []
     
     
     var body: some View {
@@ -56,14 +53,10 @@ struct MainView: View {
                     .foregroundColor(.gray05)
             }
             .padding(.horizontal, 20)
-            
-            
-            
+
             // 지렁이 칸
             WormView(listItems: viewModel.items)
-            
-            
-            
+
             CustomBottomBtn(action: {
                 path.append(NavigationRoute.challengeList)
                 
@@ -109,7 +102,3 @@ struct MainView: View {
     }
     
 }
-
-//#Preview {
-//    MainView()
-//}
