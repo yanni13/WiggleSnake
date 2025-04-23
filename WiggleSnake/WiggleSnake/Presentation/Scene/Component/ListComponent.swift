@@ -42,7 +42,7 @@ struct ListComponent: View {
                         
                         Text(item.dateRangeText)
                             .font(.B1MediumFont())
-                            .foregroundColor(.gray05)
+                            .foregroundColor(.gray04)
                         
                     }
                     

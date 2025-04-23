@@ -180,12 +180,7 @@ struct ChallengeListView: View {
         }
         .onAppear {
             items = viewModel.fetchAllChallenges(context: context)
-            
-            //            viewModel.deleteExpiredChallenges(context: context) { success in
-            //                if success {
-            //                    items = viewModel.fetchAllChallenges(context: context)
-            //                }
-            //            }
+    
             print("🧾 viewModel.items: \(viewModel.items.count)")
             for item in viewModel.items {
                 print("👉 \(item.title), 시작: \(item.startDate), 종료: \(item.endDate), 완료 여부: \(item.isCompleted)")

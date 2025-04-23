@@ -169,7 +169,7 @@ private struct CellView: View {
     var isPreviousDayInRange: Bool = false
     var isNextDayInRange: Bool = false
     var isCompleted: Bool = false
-    
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5)
@@ -188,6 +188,7 @@ private struct CellView: View {
                 
                 
             }
+
             
             // 이전 날짜와 연결(왼쪽)
             if isInRange && isPreviousDayInRange {
@@ -216,6 +217,17 @@ private struct CellView: View {
             
             // 특별한 날짜 표시기
             if isInRange {
+                if isFirstDay == isLastDay {
+                    HStack {
+                        Rectangle()
+                            .foregroundColor(.pink02)
+                            .frame(height: 6)
+                            .cornerRadius(10)
+                            .frame(width: 50) 
+                    }
+                    .padding(.top, 30)
+                }
+                
                 if isFirstDay {
                     // 첫 번째 날짜
                     HStack {
