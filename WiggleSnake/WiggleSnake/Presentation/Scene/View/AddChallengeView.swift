@@ -19,6 +19,10 @@ struct AddChallengeView: View {
     @ObservedObject var viewModel: ChallengeViewModel
     @State private var selectedCategory: Int = -1
     @State private var date: Date = Date()
+    /// 선택한 날짜를 저장하는 변수
+    @State private var didSelectStartDate: Bool = false
+    @State private var didSelectEndDate: Bool = false
+
     
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
     @State private var isActiveCategory: Bool = false
@@ -116,8 +120,10 @@ struct AddChallengeView: View {
             .sheet(isPresented: $isActivePicker, onDismiss: {
                 if isPickerStartData {
                     viewModel.startDate = date
+                    didSelectStartDate = true
                 } else {
                     viewModel.endDate = date
+                    didSelectEndDate = true
                 }
             }) {
                 DatePicker("", selection: $date, displayedComponents: .date)
@@ -220,7 +226,7 @@ struct AddChallengeView: View {
                 }, label: {
                     Text(DateFormatter.koreanShort.string(from: viewModel.startDate))
                         .font(.H5MediumFont())
-                        .foregroundColor(Calendar.current.isDateInToday(viewModel.startDate) ? .gray03 : .gray05)
+                        .foregroundColor(didSelectStartDate ? .gray05 : .gray03)
                     
                     Image("icon_arrow_front_small")
                         .resizable()
@@ -242,7 +248,7 @@ struct AddChallengeView: View {
                 }, label: {
                     Text(DateFormatter.koreanShort.string(from: viewModel.endDate))
                         .font(.H5MediumFont())
-                        .foregroundColor(Calendar.current.isDateInToday(viewModel.endDate) ? .gray03 : .gray05)
+                        .foregroundColor(didSelectEndDate ? .gray05 : .gray03)
                     
                     Image("icon_arrow_front_small")
                         .resizable()
