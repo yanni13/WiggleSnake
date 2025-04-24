@@ -179,8 +179,6 @@ struct ChallengeListView: View {
             }
         }
         .onAppear {
-            let testDate = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!
-            viewModel.currentDate = testDate
             
             items = viewModel.fetchAllChallenges(context: context)
     
