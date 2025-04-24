@@ -179,14 +179,11 @@ struct ChallengeListView: View {
             }
         }
         .onAppear {
+            let testDate = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!
+            viewModel.currentDate = testDate
+            
             items = viewModel.fetchAllChallenges(context: context)
     
-            print("🧾 viewModel.items: \(viewModel.items.count)")
-            for item in viewModel.items {
-                print("👉 \(item.title), 시작: \(item.startDate), 종료: \(item.endDate), 완료 여부: \(item.isCompleted)")
-            }
-            print("📋 화면에 보일 filteredItems: \(filteredItems.count)")
-            
         }
         
     }

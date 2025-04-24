@@ -11,7 +11,6 @@ struct SplashView: View {
     @State private var path = NavigationPath()
     @StateObject var viewModel = ChallengeViewModel()
 
-
     var body: some View {
         NavigationStack(path: $path) {
             VStack {
@@ -20,19 +19,24 @@ struct SplashView: View {
                         .font(.H1BoldFont())
                         .foregroundColor(.gray05)
                         .lineSpacing(3)
-                        .padding(.top, 34)
+                        .padding(.top, 94)
                     
                     Spacer().frame(height: 12)
                     
                     Text("지렁이의 하루는 당신의 도전으로 시작돼요 ☀️")
                         .font(.H4MediumFont())
                         .foregroundColor(.gray05)
+                        
                 }
+                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
 
                 Spacer().frame(height: 100)
+                
                     Image("WiggleSnake")
                         .resizable()
-                        .frame(maxWidth: 300, maxHeight: 300)
+                        .frame(maxWidth: 180, maxHeight: 180)
 
                 Spacer()
                 
@@ -42,10 +46,10 @@ struct SplashView: View {
                     path.append(NavigationRoute.mainView)
                 }, label: "시작하기")
                 .buttonStyle(.plain)
+                .padding(.horizontal, 20)
 
 
             }
-            .padding(.horizontal, 20)
             .frame(maxWidth: .infinity, alignment: .leading)
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {

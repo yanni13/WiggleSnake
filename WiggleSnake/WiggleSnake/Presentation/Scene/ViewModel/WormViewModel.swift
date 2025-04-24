@@ -30,9 +30,9 @@ final class WormViewModel: ObservableObject {
     // 도전당 길이 증가량 (10cm)
     private let growthPerChallenge: Int = 10
     // 기본 길이
-    private let baseLength: Int = 5
+    private let baseLength: Int = 10
     // 최대 길이 (화면 크기에 따라 조정됨)
-    private var maxLength: Int = 400
+    private var maxLength: Int = 1000
 
     func addListItem(_ item: ListItemModel) {
         listItems.append(item)
@@ -149,11 +149,17 @@ final class WormViewModel: ObservableObject {
         // 세그먼트 사이 거리 유지
         maintainSegmentDistances()
         
-        // 지렁이 길이 조절 - 계산된 길이로 유지
-        let desiredLength = calculateWormLength()
-        while wormSegments.count > desiredLength {
+//        // 지렁이 길이 조절 - 계산된 길이로 유지
+//        let desiredLength = calculateWormLength()
+//        while wormSegments.count > desiredLength {
+//            wormSegments.removeLast()
+//        }
+        // 실제 길이 기반으로 자르기
+        let maxAllowedLength = calculateWormLength()
+        while currentWormLength() > CGFloat(maxAllowedLength), wormSegments.count > 1 {
             wormSegments.removeLast()
         }
+
         
         objectWillChange.send()
     }
@@ -203,7 +209,23 @@ final class WormViewModel: ObservableObject {
         // 화면 크기에 맞게 최대 길이 조정
         // 화면을 가득 채울 수 있는 적절한 최대 길이 계산
         let maxViewDimension = max(newBounds.width, newBounds.height)
-        maxLength = Int(maxViewDimension / segmentDistance) * 2 // 화면을 두 번 돌 수 있는 정도의 길이
+//        maxLength = Int(maxViewDimension / segmentDistance) * 2 // 화면을 두 번 돌 수 있는 정도의 길이
+        maxLength = Int((newBounds.width + newBounds.height) * 1.5)
+
         
     }
+    
+    // 현재 지렁이의 전체 실제 길이 계산
+    private func currentWormLength() -> CGFloat {
+        guard wormSegments.count >= 2 else { return 0 }
+
+        var totalLength: CGFloat = 0
+        for i in 1..<wormSegments.count {
+            let dx = wormSegments[i].x - wormSegments[i - 1].x
+            let dy = wormSegments[i].y - wormSegments[i - 1].y
+            totalLength += sqrt(dx*dx + dy*dy)
+        }
+        return totalLength
+    }
+
 }
