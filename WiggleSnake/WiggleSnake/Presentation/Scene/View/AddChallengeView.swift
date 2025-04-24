@@ -19,7 +19,10 @@ struct AddChallengeView: View {
     @ObservedObject var viewModel: ChallengeViewModel
     @State private var selectedCategory: Int = -1
     @State private var date: Date = Date()
-    
+    /// 선택한 날짜를 저장하는 변수
+    @State private var didSelectStartDate: Bool = false
+    @State private var didSelectEndDate: Bool = false
+
     /// 카테고리 바텀시트를 보여주도록 하는 상태변수
     @State private var isActiveCategory: Bool = false
     /// datepicker을 보여주도록 하는 변수
@@ -27,7 +30,6 @@ struct AddChallengeView: View {
     /// 시작일, 종료일 중 어느걸 선택하는지 구분하는 상태
     @State private var isPickerStartData = true
     /// 사용자가 데이터를 받아와서 저장할 배열
-//    @State private var items: [ListItemModel] = []
     let mode: ChallengeEditorMode
     let editingItem: ListItemModel?
     
@@ -56,7 +58,6 @@ struct AddChallengeView: View {
                 
                 
                 CustomBottomBtn(action: {
-                    // 필수 입력값이 다 들어갔다면 -> 저장
                     viewModel.formValid { success in
                         if success {
                             viewModel.saveChallenge(context: viewContext, mode: mode)
@@ -84,7 +85,6 @@ struct AddChallengeView: View {
                             print("📅 종료일: \(viewModel.endDate)")
                             
                         }
-                        
                     }
                     
                 }, label: "확인")
@@ -119,8 +119,10 @@ struct AddChallengeView: View {
             .sheet(isPresented: $isActivePicker, onDismiss: {
                 if isPickerStartData {
                     viewModel.startDate = date
+                    didSelectStartDate = true
                 } else {
                     viewModel.endDate = date
+                    didSelectEndDate = true
                 }
             }) {
                 DatePicker("", selection: $date, displayedComponents: .date)
@@ -133,15 +135,15 @@ struct AddChallengeView: View {
             
         }
         .onAppear {
-//            items = viewModel.fetchAllChallenges(context: viewContext)
-            
+            if mode == .add {
+                viewModel.title = ""
+                viewModel.memo = ""
+                viewModel.startDate = Date()
+                viewModel.endDate = Date()
+                viewModel.category = nil
+            }
             if mode == .edit, let item = editingItem {
                 viewModel.loadChallenge(from: item, context: viewContext)
-//                    viewModel.title = item.title
-//                    viewModel.memo = item.memo
-//                    viewModel.startDate = item.startDate
-//                    viewModel.endDate = item.endDate
-//                    viewModel.category = item.category
                 }
 
         }
@@ -223,7 +225,7 @@ struct AddChallengeView: View {
                 }, label: {
                     Text(DateFormatter.koreanShort.string(from: viewModel.startDate))
                         .font(.H5MediumFont())
-                        .foregroundColor(Calendar.current.isDateInToday(viewModel.startDate) ? .gray03 : .gray05)
+                        .foregroundColor(didSelectStartDate ? .gray05 : .gray03)
                     
                     Image("icon_arrow_front_small")
                         .resizable()
@@ -245,7 +247,7 @@ struct AddChallengeView: View {
                 }, label: {
                     Text(DateFormatter.koreanShort.string(from: viewModel.endDate))
                         .font(.H5MediumFont())
-                        .foregroundColor(Calendar.current.isDateInToday(viewModel.endDate) ? .gray03 : .gray05)
+                        .foregroundColor(didSelectEndDate ? .gray05 : .gray03)
                     
                     Image("icon_arrow_front_small")
                         .resizable()
@@ -301,7 +303,4 @@ struct AddChallengeView: View {
     
     
 }
-//
-//#Preview {
-//    AddChallengeView()
-//}
+

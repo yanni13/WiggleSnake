@@ -11,13 +11,15 @@ import SwiftUI
 struct MainView: View {
     /// 도전기록 추가 뷰로 이동
     @Environment(\.managedObjectContext) private var context
-    @State private var path = NavigationPath()
-    @StateObject var viewModel = ChallengeViewModel()
-    @State private var item: ListItemModel?
+    @Binding var path: NavigationPath
 
-        
+    @ObservedObject var viewModel: ChallengeViewModel
+    @State private var item: ListItemModel?
+    // 받아온 아이템들을 저장할 상태변수 -> 개별 아이템 리스트
+    @State private var items: [ListItemModel] = []
+    
+    
     var body: some View {
-        NavigationStack(path: $path) {
             VStack(alignment: .leading) {
                 
                 // 상단 버튼
@@ -46,7 +48,7 @@ struct MainView: View {
                         .foregroundColor(.gray05)
                         .lineSpacing(3)
                         .padding(.top, 34)
-                                            
+                    
                     Spacer().frame(height: 12)
                     
                     Text("오늘의 도전을 통해 지렁이를 키워주세요 ☀️")
@@ -55,41 +57,32 @@ struct MainView: View {
                 }
                 .padding(.horizontal, 20)
                 
-
-                
                 // 지렁이 칸
-                WormView()
+                WormView(listItems: viewModel.items)
                 
-
                 CustomBottomBtn(action: {
                     path.append(NavigationRoute.challengeList)
-
+                    
                 }, label: "챌린지 리스트")
                 .buttonStyle(.plain)
                 .padding(.bottom, 34)
                 .padding(.horizontal, 20)
-
+                
                 
             }
             .edgesIgnoringSafeArea(.bottom)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .navigationDestination(for: NavigationRoute.self) { route in
-                switch route {
-                case .addChallenge:
-                    AddChallengeView(path: $path, viewModel: viewModel, mode: .add, editingItem: nil)
-                case .editChallenge(let item):
-                    AddChallengeView(path: $path, viewModel: viewModel, mode: .edit, editingItem: item)
-                case .challengeList:
-                    ChallengeListView(viewModel: viewModel, path: $path)
-                case .challengeDetail(let item):
-                    ChallengeDetailView(path: $path, item: item, viewModel: viewModel)
-                }
-                
-            }
+            .navigationBarBackButtonHidden(true)
             .onAppear {
-                fetchAndPrintChallenges()
+                items = viewModel.fetchAllChallenges(context: context)
+                
+                viewModel.deleteExpiredChallenges(context: context) { success in
+                    fetchAndPrintChallenges()
+                    
+                }
+                item = nil
             }
-        }
+        
     }
     
     // MARK: 데이터 잘 불러오고 있는지 로그찍는 함수
@@ -114,8 +107,4 @@ struct MainView: View {
         }
     }
     
-}
-
-#Preview {
-    MainView()
 }

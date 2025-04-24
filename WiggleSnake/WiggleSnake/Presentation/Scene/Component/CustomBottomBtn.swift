@@ -28,7 +28,3 @@ struct CustomBottomBtn: View {
         })
     }
 }
-
-#Preview {
-    SplashView()
-}

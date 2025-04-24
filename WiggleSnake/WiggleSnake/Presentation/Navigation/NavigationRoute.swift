@@ -7,6 +7,7 @@
 import Combine
 
 enum NavigationRoute: Hashable {
+    case mainView
     case addChallenge
     case editChallenge(ListItemModel)
     case challengeList
