@@ -124,14 +124,14 @@ struct CalendarComponent: View {
                             .frame(height: 60)
                             .onAppear {
                                 if isInDateRange {
-                                    print("📅 Checking \(Self.debugDateFormatter.string(from: normalizedDate))")
-                                    print("   ↳ isCompleted: \(isCompleted)")
+                                    Log.debug("📅 Checking \(Self.debugDateFormatter.string(from: normalizedDate))")
+                                    Log.debug("   ↳ isCompleted: \(isCompleted)")
                                 }
                                 for index in 0..<daysInMonth {
                                     let date = getDate(for: index)
                                     let normalizedDate = date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
                                     let isCompleted = normalizedCompletedDates.contains(normalizedDate)
-                                    print("📅 Date: \(normalizedDate), isCompleted: \(isCompleted)")
+                                    Log.debug("📅 Date: \(normalizedDate), isCompleted: \(isCompleted)")
                                 }
                             }
                         }

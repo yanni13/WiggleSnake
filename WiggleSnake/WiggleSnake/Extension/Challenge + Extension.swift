@@ -10,7 +10,7 @@ import CoreData
 extension Challenge {
     func toChallengeRecordModels() -> [ChallengeRecordModel] {
         guard let recordSet = self.records as? Set<ChallengeRecord> else {
-            print("🚨 Challenge.records가 비어있거나 형변환 실패")
+            Log.debug("🚨 Challenge.records가 비어있거나 형변환 실패")
             return []
         }
         
@@ -32,7 +32,7 @@ extension Challenge {
               let endDate = endDate,
               let categoryRaw = category,
               let category = CategoryIcon(rawValue: categoryRaw) else {
-            print("⚠️ toListItemModel 변환 실패 - 필수 항목 누락")
+            Log.debug("⚠️ toListItemModel 변환 실패 - 필수 항목 누락")
             return nil
         }
         

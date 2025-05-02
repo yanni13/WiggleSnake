@@ -73,16 +73,16 @@ struct AddChallengeView: View {
                                 }
 
                             }
-                            print("✅ [AddChallengeView] 도전일기 저장완료")
+                            Log.debug("✅ [AddChallengeView] 도전일기 저장완료")
                             
                         } else {
                             viewModel.isValidForm = true
-                            print("❌ [AddChallengeView] 도전일기 저장 실패")
-                            print("📝 제목: \(viewModel.title)")
-                            print("📄 메모: \(viewModel.memo)")
-                            print("📂 카테고리: \(viewModel.category)")
-                            print("📅 시작일: \(viewModel.startDate)")
-                            print("📅 종료일: \(viewModel.endDate)")
+                            Log.debug("❌ [AddChallengeView] 도전일기 저장 실패")
+                            Log.debug("📝 제목: \(viewModel.title)")
+                            Log.debug("📄 메모: \(viewModel.memo)")
+                            Log.debug("📂 카테고리: \(viewModel.category)")
+                            Log.debug("📅 시작일: \(viewModel.startDate)")
+                            Log.debug("📅 종료일: \(viewModel.endDate)")
                             
                         }
                     }

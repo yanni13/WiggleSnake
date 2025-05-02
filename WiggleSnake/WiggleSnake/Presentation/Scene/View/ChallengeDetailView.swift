@@ -73,7 +73,7 @@ struct ChallengeDetailView: View {
             challenges = viewModel.items
             
             viewModel.updateTrigger = false
-            print("[ChallengeDetailView]: \(challenges)")
+            Log.debug("[ChallengeDetailView]: \(challenges)")
         }
     }
     
@@ -92,7 +92,7 @@ struct ChallengeDetailView: View {
                         self.presentationMode.wrappedValue.dismiss()
                         
                     } else {
-                        print("[ChallengeDetailView]: 삭제 실패")
+                        Log.debug("[ChallengeDetailView]: 삭제 실패")
                     }
                     
                 }

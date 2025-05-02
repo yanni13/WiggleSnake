@@ -51,7 +51,7 @@ final class ChallengeViewModel: ObservableObject {
             
         case .edit:
             guard let existingChallenge = self.existingChallenge else {
-                print("❌ existingChallenge가 nil입니다.")
+                Log.debug("❌ existingChallenge가 nil입니다.")
                 return
             }
             existingChallenge.title = self.title
@@ -66,22 +66,22 @@ final class ChallengeViewModel: ObservableObject {
         
         do {
             try context.save()
-            print("✅[AddChallengeViewModel] 저장 성공")
+            Log.debug("✅[AddChallengeViewModel] 저장 성공")
             
             // 저장 후 바로 데이터 확인
             let fetchRequest: NSFetchRequest<Challenge> = Challenge.fetchRequest()
             let challenges = try context.fetch(fetchRequest)
-            print("저장된 Challenge 수: \(challenges.count)")
+            Log.debug("저장된 Challenge 수: \(challenges.count)")
             
             // 방금 저장한 데이터 확인
             if let lastChallenge = challenges.last {
-                print("마지막으로 저장된 Challenge:")
-                print("제목: \(lastChallenge.title ?? "없음")")
-                print("메모: \(lastChallenge.memo ?? "없음")")
+                Log.debug("마지막으로 저장된 Challenge:")
+                Log.debug("제목: \(lastChallenge.title ?? "없음")")
+                Log.debug("메모: \(lastChallenge.memo ?? "없음")")
             }
             
         } catch {
-            print("❌[AddChallengeViewModel] 저장 실패: \(error)")
+            Log.error("❌[AddChallengeViewModel] 저장 실패: \(error)")
         }
     }
     
@@ -96,14 +96,14 @@ final class ChallengeViewModel: ObservableObject {
                 context.delete(challenge)
                 try context.save()
                 completion(true)
-                print("🗑️ Challenge가 삭제되었습니다.")
+                Log.debug("🗑️ Challenge가 삭제되었습니다.")
             } else {
                 completion(false)
-                print("⚠️ 해당 ID에 해당하는 Challenge를 찾을 수 없습니다.")
+                Log.debug("⚠️ 해당 ID에 해당하는 Challenge를 찾을 수 없습니다.")
             }
         } catch {
             completion(false)
-            print("❌ CoreData 삭제 실패: \(error)")
+            Log.error("❌ CoreData 삭제 실패: \(error)")
         }
     }
     
@@ -121,7 +121,7 @@ final class ChallengeViewModel: ObservableObject {
             
             self.completedDates = Set(challenges.flatMap { challenge in
                 return challenge.toChallengeRecordModels().compactMap { record in
-                    print("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
+                    Log.debug("➡️ Checking record: \(record.date) | isCompleted: \(record.isCompleted)")
                     
                     if record.isCompleted {
                         return record.date.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!)
@@ -132,7 +132,7 @@ final class ChallengeViewModel: ObservableObject {
             })            
             return items
         } catch {
-            print("CoreData fetch error: \(error)")
+            Log.error("CoreData fetch error: \(error)")
             return []
         }
         
@@ -168,12 +168,12 @@ final class ChallengeViewModel: ObservableObject {
                 
                 self.completedDates = completedDates
                 
-                print("✅ Challenge 로딩 성공: \(challenge.title ?? "")")
+                Log.debug("✅ Challenge 로딩 성공: \(challenge.title ?? "")")
             } else {
-                print("⚠️ 해당 ID에 해당하는 Challenge를 찾을 수 없습니다.")
+                Log.debug("⚠️ 해당 ID에 해당하는 Challenge를 찾을 수 없습니다.")
             }
         } catch {
-            print("❌ Challenge 불러오기 실패: \(error)")
+            Log.error("❌ Challenge 불러오기 실패: \(error)")
         }
     }
     
@@ -187,10 +187,10 @@ final class ChallengeViewModel: ObservableObject {
             if let challenge = results.first {
                 challenge.isCompleted = item.isCompleted
                 try context.save()
-                print("✅ isCompleted 상태가 CoreData에 반영되었습니다.")
+                Log.debug("✅ isCompleted 상태가 CoreData에 반영되었습니다.")
             }
         } catch {
-            print("❌ CoreData 업데이트 실패: \(error)")
+            Log.error("❌ CoreData 업데이트 실패: \(error)")
         }
     }
     
@@ -202,7 +202,7 @@ final class ChallengeViewModel: ObservableObject {
         
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         guard let normalizedDate = calendar.date(from: components) else {
-            print("❌ 날짜 정규화 실패")
+            Log.debug("❌ 날짜 정규화 실패")
             return
         }
         
@@ -223,13 +223,13 @@ final class ChallengeViewModel: ObservableObject {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZ"
                 formatter.timeZone = seoulTimeZone
-                print("✅ 저장된 기록 (KST): \(formatter.string(from: normalizedDate))")
+                Log.debug("✅ 저장된 기록 (KST): \(formatter.string(from: normalizedDate))")
                 
                 // completedDates 갱신
                 fetchCompletedDates(context: context)
             }
         } catch {
-            print("❌ 저장 실패: \(error)")
+            Log.error("❌ 저장 실패: \(error)")
         }
     }
     
@@ -242,9 +242,9 @@ final class ChallengeViewModel: ObservableObject {
             let records = try context.fetch(request)
             let completed = Set(records.map { $0.date!.startOfDay(in: TimeZone(identifier: "Asia/Seoul")!) })
             self.completedDates = completed
-            print("🎯 완료된 날짜들: \(completed)")
+            Log.debug("🎯 완료된 날짜들: \(completed)")
         } catch {
-            print("❌ ChallengeRecord fetch 실패: \(error)")
+            Log.error("❌ ChallengeRecord fetch 실패: \(error)")
         }
         
     }
@@ -266,10 +266,10 @@ final class ChallengeViewModel: ObservableObject {
                 if let challenge = try context.fetch(request).first {
                     context.delete(challenge)
                     try context.save()
-                    print("🗑️ 삭제된 챌린지: \(item.title)")
+                    Log.debug("🗑️ 삭제된 챌린지: \(item.title)")
                 }
             } catch {
-                print("❌ 삭제 실패: \(error.localizedDescription)")
+                Log.error("❌ 삭제 실패: \(error.localizedDescription)")
             }
         }
 
